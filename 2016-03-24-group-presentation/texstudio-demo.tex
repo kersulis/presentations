@@ -1,0 +1,39 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{framed}
+\usepackage{pdfpages}
+\usepackage{minted}
+\usepackage[backend=biber]{biblatex}
+\bibliography{texstudio-demo}
+
+
+\author{Jonas Kersulis}
+\title{TeXstudio demo}
+
+\begin{document}
+
+\section{Interface}\label{sec:interface}
+\begin{itemize}
+	\item Symbols
+\end{itemize} 
+
+\section{Autocomplete}\label{sec:autocomplete}
+
+\begin{align}
+\label{eq:an-equation} A &= \begin{bmatrix}
+1 & 2 \\
+0 & 3
+\end{bmatrix}
+\end{align}
+
+Referencing equation \ref{eq:an-equation}.
+
+Referencing section \ref{sec:autocomplete}.
+
+Citing a source \cite{chertkov2011a}.
+
+\end{document}

@@ -3,6 +3,15 @@
 *.iws
 *.eml
 *.swp
+*.aux
+*.bbl
+*.bcf
+*.blg
+*.log
+*.pdf
+*.pyg
+*.run.xml
+*.synctex.gz
 out/
 .DS_Store
 .svn
