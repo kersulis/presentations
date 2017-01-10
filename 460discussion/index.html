@@ -1,0 +1,183 @@
+<!doctype html>
+<html lang="en">
+
+	<head>
+		<meta charset="utf-8">
+
+		<title>EECS 460 Discussion</title>
+
+		<meta name="description" content="EECS 460 Discussion">
+		<meta name="author" content="Jonas Kersulis">
+
+		<meta name="apple-mobile-web-app-capable" content="yes">
+		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+		<link rel="stylesheet" href="../css/reveal.css">
+		<link rel="stylesheet" href="../css/theme/white.css" id="theme">
+
+		<!-- Code syntax highlighting -->
+		<link rel="stylesheet" href="../lib/css/zenburn.css">
+
+		<!-- Printing and PDF exports -->
+		<script>
+			var link = document.createElement( 'link' );
+			link.rel = 'stylesheet';
+			link.type = 'text/css';
+			link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+			document.getElementsByTagName( 'head' )[0].appendChild( link );
+		</script>
+	</head>
+
+	<body>
+		<div class="reveal">
+			<div class="slides">
+				<!-- slides-title -->
+				<section>
+					<section>
+						<h1>EECS 460 Discussion</h1>
+						<p>Winter 2017</p>
+					</section>
+					<section>
+						<h1>Introduction</h1>
+						<h2>Jonas Kersulis, GSI</h2>
+						<em>kersulis@umich.edu</em>
+						<div>
+							<ul>
+								<li>PhD student of Dr. Ian Hiskens</li>
+								<li>Power and Energy major</li>
+								<li>Controls minor</li>
+							</ul>
+						</div>
+					</section>
+					<section>
+						<h1>Meta</h1>
+						<h2>Office hours in EECS 2420</h2>
+						<ul>
+							<li>Tuesday 3-4 PM (day before hw due, hour before discussion)</li>
+							<li>Friday 1-2 PM (4th day covered)</li>
+						</ul>
+					</section>
+					<section>
+						<h2>Discussion format</h2>
+						<ol>
+							<li>Review and motivation</li>
+							<li>Problems to illustrate major concepts (similar to hw problems)</li>
+							<li>Your hw problem questions</li>
+						</ol>
+						<div class="fragment">
+							<p>At times I will encourage you to solve problems in groups.</p>
+						</div>
+						<div class="fragment">
+							<p>Requests welcome, e.g. if you're studying for the midterm and something isn't making sense, let me know and I'll make time for it.</p>
+						</div>
+						<p class="fragment"> I will post discussion notes after Monday's discussion. (No need to copy slides during discussion.)</p>
+					</section>
+				</section>
+
+				<!-- slides-week1 -->
+					<section>
+						<section>
+						<h1>Week 1 | 2017-01-09/10</h1>
+						<div>
+							<ul>
+								<li>Control system representations</li>
+								<li>Laplace transform</li>
+								<li>Partial fractions</li>
+							</ul>
+						</section>
+						<section>
+						<h2>Motivation</h2>
+							<ul>
+								<li>Describe systems using mathematics</li>
+								<li>Work in frequency domain:</li>
+								<ul>
+									<li>Common operations become easier</li>
+									<li>Closer to intuitive block form</li>
+									<li>Transfer function: input/output relationship is <em>algebraic</em></li>
+								</ul>
+							</ul>
+						<div class="fragment">
+							<p><strong>Laplace transform</strong>: tool for going from time domain to frequency domain</p>
+							$\mathcal{L}\{f(t)\} = F(s) = \int_{0^-}^\infty f(t)e^{-st}dt$
+						</div>
+						<div class="fragment">
+							<p>Ex. if $f(t) = e^{-at}u_s(t)$, $F(s) = \frac{1}{s+a}$</p>
+						</div>
+						</section>
+						<section>
+							<table>
+							  <tr>
+							    <th>Step</th>
+							    <th>Tool</th>
+							  </tr>
+							  <tr>
+							    <td>1. Express system using diff. eq.</td>
+							    <td>Physics</td>
+							  </tr>
+							  <tr>
+							    <td>2. Take $\mathcal{L}\{\cdot\}$</td>
+							    <td>Transform table</td>
+							  </tr>
+							  <tr>
+							    <td>3. Analyze</td>
+							    <td>Algebra</td>
+							  </tr>
+							  <tr>
+							    <td>4. Take $\mathcal{L}^{-1}\{\cdot\}$ to obtain time signal</td>
+							    <td>Partial fractions, transform table</td>
+							  </tr>
+							</table>
+					</section>
+					<section>
+						<h2>Problems</h2>
+						<ol>
+							<li class="fragment">Given $F(s) = \frac{2}{(s+1)(s+2)}$, find $f(t)$.
+							</li>
+							<li class="fragment">Given $F(s) = \frac{1}{s^2 + 6s + 9}$, what is $f(t)$?
+							</li>
+							<li class="fragment">Given a system with input $u(t)$, output $y(t)$, and dynamics given by $$\frac{d^3y(t)}{dt} + 12\frac{d^2y(t)}{dt} + 32\frac{dy(t)}{dt} = 32u(t),$$ <p>a. Find the transfer function.</p><p>b. Solve for the output $y(t)$ given the input $u(t) = u_s(t)$.</p><p>Assume zero initial conditions.</p>
+						</ol>
+					</section>
+				</section>
+			</div>
+		</div>
+
+		<script src="../lib/js/head.min.js"></script>
+		<script src="../js/reveal.js"></script>
+
+		<script>
+
+			// Full list of configuration options available at:
+			// https://github.com/hakimel/reveal.js#configuration
+			Reveal.initialize({
+				controls: false,
+				slideNumber: true,
+				progress: true,
+				history: true,
+				center: false,
+
+				transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+				math: {
+					mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+					config: 'TeX-AMS_HTML-full'
+				},
+
+				// Optional reveal.js plugins
+				dependencies: [
+					{ src: '../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+					{ src: '../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+					{ src: '../plugin/math/math.js', async: true },
+					{ src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+					//{ src: '../plugin/zoom-js/zoom.js', async: true },
+					//{ src: '../plugin/notes/notes.js', async: true }
+				]
+			});
+
+		</script>
+
+	</body>
+</html>
