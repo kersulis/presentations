@@ -15,15 +15,15 @@
 
 <!-- General and theme style sheets -->
 <link rel="stylesheet" href="../css/reveal.css">
-<link rel="stylesheet" href="../css/theme/simple.css" id="theme">
+<link rel="stylesheet" href="../css/theme/white.css" id="theme">
 
 <!-- Printing and PDF exports -->
 <script>
-	var link = document.createElement( 'link' );
-	link.rel = 'stylesheet';
-	link.type = 'text/css';
-	link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
-	document.getElementsByTagName( 'head' )[0].appendChild( link );
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
 </script>
 
 <!-- Bootstrap CSS -->
@@ -70,262 +70,309 @@
             </div>
             </div>
             </div>
-        </aside></section>
-        </section><section>
+        </aside>
+    </section>
+        </section>
+
+    <section>
+    <section>
+        <div class="cell border-box-sizing text_cell rendered">
+        <div class="prompt input_prompt">
+        </div>
+        <div class="inner_cell">
+        <div class="text_cell_render border-box-sizing rendered_html">
+        <h1 id="Instanton-Analysis">Transmission network effects of wind forecast deviations<a class="anchor-link" href="#Instanton-Analysis">&#182;</a></h1><p><em>Jonas Kersulis</em></p>
+        <p><em>January 13, 2017</em></p>
+
+        </div>
+        </div>
+        </div>
+    </section>
+    </section>
+
+
+    <!-- slides-motivation -->
+    <section>
+      <section>
+        <h1 id="Motivation">Motivation<a class="anchor-link" href="#Motivation">&#182;</a></h1>
+        <p>Texas has >17,000 MW of installed wind capacity. <a href="http://www.ercot.com/content/wcm/lists/89475/ERCOT_Quick_Facts_111816.pdf">(source)</a></p>
+        <p>November 2016: record peak wind generation of 15,033 MW</p>
+      </section>
+
+      <section>
+        <h2>Texas: where the people are</h2>
+        <img src="images/tx_people.png" width=600px>
+        <p><a href="http://texas.us.censusviewer.com/client">(source)</a></p>
+      </section>
+
+      <section>
+        <h2>Texas: where the wind is</h2>
+        <img src="images/tx_wind.png" width=600px>
+        <p><a href="http://apps2.eere.energy.gov/wind/windexchange/pdfs/wind_maps/tx_80m.pdf">(source)</a></p>
+      </section>
+
+      <section>
+        <h2>Texas: moving wind power to people</h2>
+        <img src="images/tx_lines.png" width=600px>
+        <p><a href="http://texas.us.censusviewer.com/client">(source)</a></p>
+      </section>
+
+      <section>
+          <h1>Research question</h1>
+          <img src="images/stylizedFeas.svg" style="float:right" width=200px>
+
+          <p class="fragment">Wind forecasts are often unreliable.</p>
+
+          <p class="fragment">Most wind fluctuations are harmless, but certain wind patterns violate system constraints.</p>
+
+        <div class="fragment">
+          <p><b>What are the smallest (most likely) problematic fluctuations (forecast deviations)? </b></p>
+
+        </div>
+          <p class="fragment" style="float:left">Use optimization to rank dangerous patterns by likelihood.</p>
+
+          <p class="fragment" style="float:left">New insight into system vulnerability allows system operators to be prepared.</p>
+        <div style="clear:both"></div>
+      </section>
+    </section>
+
+    <!-- slides-modeling -->
+    <section>
+      <section>
+        <h1>Modeling</h1>
+
+        <p>Engineers often make assumptions.</p>
+        <ul>
+          <li class="fragment">Underlying physics --> accurate model</li>
+          <li class="fragment">Various assumptions --> intermediate simpler models</li>
+          <li class="fragment">All the assumptions --> minimal model</li>
+        </ul>
+        <p class="fragment">Consider this pattern in <b>power flow</b> and <b>transmission line rating</b>.</p>
+      </section>
+    </section>
+
+      <!-- slides-powerflow -->
+      <section>
+      <section>
+        <h2>Power flow</h2>
+        <div class="fragment">
+          <h3>Accurate: AC power flow</h3>
+          <img src="images/line.svg" style="float:right" alt="">
+          <p>Current: $I_{ik} = y_{ik}(E_i-E_k),$
+          where</p>
+          $\begin{align}
+            E_i &= V_i\angle\theta_i \\
+            E_k &= V_k\angle\theta_k \\
+            y_{ik} &= g_{ik} + jb_{ik}
+          \end{align}$
+        </div>
+        <div class="fragment">
+          <p>Using $S=EI^*$, derive </p>
+          <p>$\begin{align}
+            P_{ik} &= V_iV_k(G_{ik}\cos\theta_{ik} + B_{ik}\sin\theta_{ik}) \\
+            Q_{ik} &= V_iV_k(G_{ik}\sin\theta_{ik} - B_{ik}\cos\theta_{ik}),
+            \end{align}$</p>
+            <p>where $G_{ik} + jB_{ik}$ is the admittance matrix element corresponding to line $ik$, and $\theta_{ik}=\theta_i-\theta_k$.</p>
+        </div>
+      </section>
+
+      <section>
+        <h3>Minimal: DC power flow</h3>
+        <div style="float:left">Begin with AC:</div>
+        <div style="float:right">$\begin{align}
+          P_{ik} &= V_iV_k(G_{ik}\cos\theta_{ik} + B_{ik}\sin\theta_{ik}) \\
+          Q_{ik} &= V_iV_k(G_{ik}\sin\theta_{ik} - B_{ik}\cos\theta_{ik}),
+          \end{align}$</div>
+        <div class="fragment">
+        <div style="clear:both"><hr></div>
+        <div style="float:left">Voltages are typically close to 1.0:</div>
+        <div style="float:right">$\begin{align}
+          P_{ik} &= G_{ik}\cos\theta_{ik} + B_{ik}\sin\theta_{ik} \\
+          Q_{ik} &= G_{ik}\sin\theta_{ik} - B_{ik}\cos\theta_{ik},
+          \end{align}$</div>
+        </div>
+        <div class="fragment">
+        <div style="clear:both"><hr></div>
+        <div style="float:left">Reactive flow depends mainly on voltage difference, let's ignore it:</div>
+        <div style="float:right">$\begin{align}
+          P_{ik} &= G_{ik}\cos\theta_{ik} + B_{ik}\sin\theta_{ik}
+          \end{align}$</div>
+        </div>
+        <div class="fragment">
+        <div style="clear:both"><hr></div>
+        <div style="float:left">Well, resistance is also pretty small...</div>
+        <div style="float:right">$\begin{align}
+          P_{ik} &= B_{ik}\sin\theta_{ik}
+          \end{align}$</div>
+        </div>
+        <div class="fragment">
+        <div style="clear:both"><hr></div>
+        <div style="float:left">Know what else is small? Angle differences.</div>
+        <div style="float:right">$\begin{align}
+          P_{ik} &= B_{ik}\theta_{ik}
+          \end{align}$</div>
+        </div>
+        <div style="clear:both"></div>
+        <p class="fragment">...and we've run out of assumptions to make.</p>
+      </section>
+
+      <section>
+        <h3>Intermediate: AC pf relaxations</h3>
+        <p>Lots of literature and active research.</p>
+        <p>Skipping this today.</p>
+      </section>
+
+      <section>
+        <h2>Why DC power flow?</h2>
+        <div class="fragment">
+          <ul>
+            <li><b>DC PF:</b> Linearity means fast, guaranteed solutions!</li>
+            <li><b>AC PF:</b> tougher to compute, may fail to converge at any time.</li>
+          </ul>
+        </div>
+        <p class="fragment"><b>Power flow is often embedded in our algorithms.</b> Unit commitment, economic dispatch, the algorithm I'll present later, etc.</p>
+        <div class="fragment">
+          <ul>
+            <li><b>DC PF:</b> linear constraints are easy to deal with.</li>
+            <li><b>AC PF:</b> nonlinear, non-convex constraints are not.</li>
+          </ul>
+        </div>
+      </section>
+      </section>
+
+      <!-- slides-linerating -->
+      <section>
+      <section>
+        <h2>Line rating</h2>
+        <div class="fragment">
+          <h3>Accurate: <a href="http://ieeexplore.ieee.org/document/6692858/">IEEE Standard 738</a></h3>
+          <p>Heat balance equation:
+            \begin{align}
+            \frac{dT_\text{avg}}{dt} &= \frac{1}{mC_p}\left(I^2R(T_\text{avg}) - q_c - q_r + q_s\right)
+            \end{align}</p>
+          <ul>
+            <li class="fragment">$T_{avg}$ is conductor average line temperature</li>
+            <li class="fragment">$mC_p$ is heat capacity</li>
+            <li class="fragment">$R(T_{avg})$ emphasizes dependence of resistance on temperature</li>
+            <li class="fragment"><b>convection heat loss </b>$q_c$ varies with <ul>
+              <li>conductor diameter</li>
+              <li>wind velocity</li>
+              <li>air density and viscosity</li>
+            </ul></li>
+            <li class="fragment"><b>radiated heat loss </b>$q_r$ varies with conductor emissivity and diameter according to Stefan-Boltzmann equation</li>
+            <li class="fragment"><b>solar heat gain </b>$q_s$ varies with geometry, solar intensity, and line reflectivity</li>
+          </ul>
+        </div>
+      </section>
+
+      <section>
+        <h3>Minimal: active power rating</h3>
+        <p>Assume maximum sun, minimum wind. Determine how much active power can flow indefinitely at some conservative power factor without overheating the line.</p>
+        <p>Dead simple, but leaves lots of headroom.</p>
+      </section>
+
+      <section>
+        <h3>Intermediate 1: approximate line current</h3>
+        <p>Begin with the minimal line rating model: constrain DC-approximate active power $P_{ik} = B_{ik}\theta_{ik}$.</p>
+        <div class="fragment">
+        <p>From the heat balance equation, line temperature depends on $I_{ik}^2$, not just $P_{ik}$. $I_{ik}$ varies with voltage magnitudes $V_i$ and $V_k$ in addition to $\theta_{ik}$.</p>
+        </div>
+        <div class="fragment">
+        <p>Line current approximation that is sensitive to voltage magnitudes:</p>
+          \begin{align}
+          \lvert I_{ik} \rvert^2 &\approxeq B_{ik} \left( V_i^2 + V_k^2 - 2V_iV_k\cos\theta_{ik} \right),\quad \theta_{ik} = \theta_i - \theta_k
+          \end{align}
+        </div>
+      </section>
+
+      <section>
+        <h3>Intermediate 2: linearized heat balance equation</h3>
+        <p style="float:left">Begin with heat balance equation.</p>
+        <p style="float:right">$\begin{align}
+        \frac{dT_{\text{avg},ik}}{dt} &= \frac{1}{mC_p}\left(I^2R(T_\text{avg,ik}) - q_c - q_r + q_s\right)
+        \end{align}$
+        </p>
+        <div style="clear:both"></div>
+        <div class="fragment"><hr>
+        <p style="float:left">Approximate $I^2R(T_{avg})$ (see <a href="http://ieeexplore.ieee.org/document/6824273/">Almassalkhi and Hiskens</a>).</p>
+        <p style="float:right">$\begin{align}
+        \frac{dT_{\text{avg},ik}}{dt} &= \frac{1}{mC_p}\left(r_{ik}\left(\frac{\theta_{ik}}{x_{ik}}\right)^2 - q_c - q_r + q_s\right)
+        \end{align}$</p>
+        </div>
+        <div class="fragment" style="clear:both"><hr>
+        <p>Only $q_r$ is nonlinear in temperature. Linearize about the temperature limit, and the heat balance equation is trivially integrable: $$T_{\text{avg},ik}(t) \approx ce^{at} + k$$</p>
+        </div>
+      </section>
+
+    </section>
+      </section>
+
+      <!-- slides-combinations -->
+      <section>
         <section>
+          <h2>Model combinations</h2>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Instanton-Analysis">Transmission network effects of wind forecast deviations<a class="anchor-link" href="#Instanton-Analysis">&#182;</a></h1><p><em>Jonas Kersulis</em></p>
-    <p><em>January 13, 2017</em></p>
+        <table>
+          <tr>
+            <th></th>
+            <th>DC powerflow</th>
+            <th>AC powerflow</th>
+          </tr>
+          <tr>
+            <td><b>Active power constraint</b></td>
+            <td style="color:green"><a href="http://ieeexplore.ieee.org/document/5661887/">Done by Chertkov et al.</a>, covered today</td>
+            <td><a href="http://ieeexplore.ieee.org/document/6189518/">Done, Baghsorkhi and Hiskens</a></td>
+          </tr>
+          <tr>
+            <td><b>Approximate current constraint</b></td>
+            <td style="color:green">Done, covered today</td>
+            <td>Simple modification of above</td>
+          </tr>
+          <tr>
+            <td><b>Linearized heat balance (temporal)</b></td>
+            <td style="color:green">Done, covered today</td>
+            <td>No known solution method, likely intractable</td>
+          </tr>
+          <tr>
+            <td><b>IEEE 738 standard</b></td>
+            <td>Future work?</td>
+            <td>Holy grail</td>
+          </tr>
+        </table>
 
-    </div>
-    </div>
-    </div></section><section>
+        </section>
+        </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Overview">Overview<a class="anchor-link" href="#Overview">&#182;</a></h1>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="3">
+    <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h3 id="Part-1:-Instantaneous-analysis">Part 1: Instantaneous analysis<a class="anchor-link" href="#Part-1:-Instantaneous-analysis">&#182;</a></h3><ul>
-    <li>Approximate current constraints</li>
-    </ul>
+    <section>
+    <h1>Active power constraint with DC power flow</h1>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="4">
+    <p class="fragment">Consider a transmission network with a significant number of wind farms.</p>
+    <p class="fragment">Suppose the demand forecast is accurate, and generation dispatch does not change.</p>
+    <p class="fragment">Suppose the wind forecast is not entirely accurate. Let each wind farm's active power output be an optimization variable.</p>
+        </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h3 id="Part-2:-Time-coupled-analysis">Part 2: Time-coupled analysis<a class="anchor-link" href="#Part-2:-Time-coupled-analysis">&#182;</a></h3><ul>
-    <li>New framework with new problems<ul>
-    <li>Minimize deviations -- <em>solved</em></li>
-    <li>Maximize second-order angle differences -- <em>proposed</em></li>
-    </ul>
+        <section>
+    <h3>Optimization problem</h3><ul>
+    <li>Objective
+    </li>
+    <li>System constraints
+    </li>
+    <li>Strain constraint
     </li>
     </ul>
+        </section>
+    <section>
 
-    </div>
-    </div>
-    </div>
-        </div></section>
-        </section><section>
-        <section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Introducing-instanton-analysis">Introducing instanton analysis<a class="anchor-link" href="#Introducing-instanton-analysis">&#182;</a></h1>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="6">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Wind forecasts are often unreliable. System operators cannot predict the wind's next move.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="7">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Most wind fluctuations are harmless, but certain wind patterns violate system constraints.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="8">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Instanton analysis uses optimization to rank dangerous patterns by likelihood.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="9">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>New insight into system vulnerability allows system operators to be prepared.</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section>
-        </section><section>
-        <section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Part-1:-Instantaneous-analysis">Part 1: Instantaneous analysis<a class="anchor-link" href="#Part-1:-Instantaneous-analysis">&#182;</a></h1>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="11">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Previous analysis has provided powerful insight and promising results, but the models used have been either</p>
-    <ul>
-    <li>full DC (speed with no guarantee of accuracy), or </li>
-    <li>full AC (accuracy with no guarantee of a solution). </li>
-    </ul>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="12">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>We wanted to study in-between methods that improve accuracy while maintaining nice solution properties (like convexity).</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section>
-        </section><section>
-        <section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="How-does-instantaneous-instanton-analysis-work?">How does instantaneous instanton analysis work?<a class="anchor-link" href="#How-does-instantaneous-instanton-analysis-work?">&#182;</a></h2>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="14">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Consider a transmission network with a significant number of wind farms.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><aside class="notes">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Suppose the demand forecast is accurate, and generation dispatch does not change (though generators do perform droop response to handle mismatches).</p>
-
-    </div>
-    </div>
-    </div>
-        </aside><div class="fragment" data-fragment-index="16">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Suppose the demand forecast is accurate, and generation dispatch does not change.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="17">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Suppose the wind forecast is not entirely accurate. Let each wind farm's active power output be an optimization variable.</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h3 id="Optimization-problem">Optimization problem<a class="anchor-link" href="#Optimization-problem">&#182;</a></h3><ul>
-    <li><p>Objective</p>
-    </li>
-    <li><p>System constraints</p>
-    </li>
-    <li><p>Strain constraint</p>
-    </li>
-    </ul>
-
-    </div>
-    </div>
-    </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+      <div>
     <p><strong>Objective:</strong> minimize the normed distance between the vector of wind optimization variables and their forecast values.</p>
     \begin{align}
     \min & \frac{1}{2} \left( R - R^0 \right)^\top \Lambda \left( R - R^0 \right)
-    \end{align}<p>This ensures we find a <em>likely</em> dangerous pattern.</p>
-    <p>(Note the covarianace matrix $\Lambda$.)</p>
+    \end{align}<p>This ensures we find a <em>likely</em> dangerous pattern. (Note the covarianace matrix $\Lambda$.)</p>
+      </div>
 
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="20">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+      <div class="fragment">
     <p><strong>System constraints:</strong>  power balance, angle reference, generator response parameter $\alpha$.</p>
     \begin{align}
     \text{subject to:}& \\
@@ -335,144 +382,61 @@
     R_{i} &\geq 0 && \forall i \in N_r \\
     R_{i} &= 0 && \forall i \in N\backslash N_r
     \end{align}
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="21">
+      </div>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+      <div class="fragment">
     <p><strong>Strain constraint:</strong> We add one additional constraint to force a line to saturate.</p>
     \begin{align}
     \theta_i - \theta_k & = x_{ik} P_{ik}^{lim} && \text{for each } (i,k) \in G \\
     \end{align}
-    </div>
-    </div>
-    </div>
-        </div></section><section>
+      </div>
+        </section>
+        <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Outcome">Outcome<a class="anchor-link" href="#Outcome">&#182;</a></h2>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="23">
+    <h2>Outcome</h2>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>We obtain an instanton candidate (or "dangerous wind pattern") for each line in the network.</p>
+    <p class="fragment">We obtain an instanton candidate (or "dangerous wind pattern") for each line in the network.</p>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="24">
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Each candidate has a "score" (its distance from the wind forecast).</p>
+    <p class="fragment">Each candidate has a "score" (its distance from the wind forecast).</p>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="25">
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>We call the candidate with the lowest score the <em>instanton</em>.</p>
+    <p class="fragment">We call the candidate with the lowest score the <em>instanton</em>.</p>
 
-    </div>
-    </div>
-    </div>
-        </div></section><section>
+        </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="What-does-this-look-like?">What does this look like?<a class="anchor-link" href="#What-does-this-look-like?">&#182;</a></h2>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="27">
+        <section>
+    <h2>What does this look like?</h2>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+    <div class="fragment">
     <p>Suppose we have a network with three nodes and three edges.</p>
     <p><img src="images/InstExample.svg" width=400px align="middle">
+    </div>
+    <div class="fragment">
     Assume:</p>
     <ul>
     <li>DC power flow approximation holds</li>
     <li>The conventional generator takes up all slack and is the angle reference</li>
     </ul>
+    </div>
+        </section>
 
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h3 id="Variables">Variables<a class="anchor-link" href="#Variables">&#182;</a></h3><ul>
-    <li>Two wind output decision variables: $R_{1}$ and $R_{2}$</li>
-    <li>Two bus phase angle variables: $\theta_1$ and $\theta_2$</li>
+        <section>
+    <p>Variables</p>
+    <ul>
+      <li>Two wind output decision variables: $R_{1}$ and $R_{2}$</li>
+      <li>Two bus phase angle variables: $\theta_1$ and $\theta_2$</li>
     </ul>
 
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="29">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h3 id="Power-balance-and-constraints">Power balance and constraints<a class="anchor-link" href="#Power-balance-and-constraints">&#182;</a></h3>
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="29">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+    <div class="fragment">
     <p>Power balance equations:</p>
     $$\begin{align}
     R_{1} - d_1 &= y_{12}(\theta_1 - \theta_2) + y_{1S}\theta_1 \\
     R_{2} - d_2 &= y_{12}(\theta_2 - \theta_1) + y_{2S}\theta_2 \\
     \end{align}$$
     </div>
-    </div>
-    </div>
-            </div><div class="fragment" data-fragment-index="29">
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+    <div class="fragment">
     <p>Line constraints:</p>
     $$\begin{align}
     |y_{12}(\theta_1 - \theta_2)| &\leq P^{lim} \implies & |\theta_1 - \theta_2| &\leq \frac{P^{lim}}{y_{12}} \\ \\
@@ -480,16 +444,11 @@
     |y_{2S}(\theta_2)| &\leq P^{lim} \implies & |\theta_2| &\leq \frac{P^{lim}}{y_{2S}}
     \end{align}$$
     </div>
-    </div>
-    </div>
-            </div></section><section>
+      </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h3 id="Feasible-region-of-optimization">Feasible region of optimization<a class="anchor-link" href="#Feasible-region-of-optimization">&#182;</a></h3><p>Let's plug in some numbers and plot this set of inequalities.</p>
+      <section>
+    <h3>Feasible region of optimization</h3>
+    <p>Let's plug in some numbers and plot this set of inequalities.</p>
 
     <pre><code>Plim = 1;
     y12 = 0.6;
@@ -499,233 +458,85 @@
     R1 = 0.3;
     R2 = 1.4;</code></pre>
 
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="33">
+    <img src="images/FeasRegion.svg">
+        </section>
+        </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p><img src="images/FeasRegion.svg"></p>
-    <p>(Only the first quadrant is shown.)</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section>
-        </section><section>
+        <section>
         <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Contribution:-approximate-current-constraints">Contribution: approximate current constraints<a class="anchor-link" href="#Contribution:-approximate-current-constraints">&#182;</a></h1>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="35">
+    <h1>Approximate current line rating with DC powerflow</h1>
+    <p>Recall that the DC power flow approximation involves four assumptions:</p>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Previous convex instanton analysis uses the DC power flow approximation.</p>
-    <p>This involves four assumptions:</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="36">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <ul>
+    <ul class="fragment">
     <li>No line resistance</li>
     <li>Small angle differences</li>
     </ul>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="37">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+    <div class="fragment">
+      <hr>
     <ul>
     <li>Flat voltage profile</li>
     <li>No reactive power flows</li>
     </ul>
+    </div>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="37">
+    <p class="fragment"><em>We can improve solution accuracy by getting rid of the last two assumptions.</em></p>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+        </section>
+        <section>
 
-    </div>
-    </div>
-    </div>
-            </div><div class="fragment" data-fragment-index="39">
+    <h2>Approximate line current</h2>
+    <p>DC power flow assumes a "flat" voltage profile, but we have voltage magnitude data.</p>
+    <div class="fragment">
+    <p>Let's put it to use. From before:</p>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p><em>We can improve solution accuracy by getting rid of the last two assumptions.</em></p>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Approximate-line-current">Approximate line current<a class="anchor-link" href="#Approximate-line-current">&#182;</a></h2><p>DC power flow assumes a "flat" voltage profile, but we have voltage magnitude data.</p>
-    <p>Let's put it to use.</p>
-
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="41">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Derive an approximate expression for line current:</p>
     \begin{align}
     \lvert I_{ik} \rvert^2 &\approxeq B_{ik} \left( V_i^2 + V_k^2 - 2V_iV_k\cos\theta_{ik} \right),\quad \theta_{ik} = \theta_i - \theta_k
-    \end{align}<p>(Details in paper and appendix.)</p>
+    \end{align}
+    </div>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="41">
+    <p class="fragment">We still assume no resistance, but <strong>now we allow for non-flat voltage profiles.</strong></p>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>We still assume no resistance, but <strong>now we allow for non-flat voltage profiles.</strong></p>
+            </section>
+            <section>
 
-    </div>
-    </div>
-    </div>
-            </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="How-good-is-our-approximation?">How good is our approximation?<a class="anchor-link" href="#How-good-is-our-approximation?">&#182;</a></h2><p>Let's plot the exact and approximate current expressions on the same chart.</p>
+    <h2>How good is the approximation?</h2><p>Let's plot the exact and approximate current expressions on the same chart.</p>
     $$\begin{align}
     I_{ik} &= Y_{ik}(E_i-E_k)  &\qquad \lvert I_{ik} \rvert^2 &\approxeq B_{ik} \left( V_i^2 + V_k^2 - 2V_iV_k\cos\theta_{ik} \right)
     \end{align}$$
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="44">
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+    <div class="fragment">
     <p>If resistance is zero:</p>
     <p><img src="images/magris0.png" width=600px align="middle">
     Perfect overlap.</p>
+    </div>
+        </section>
 
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+        <section>
     <p>Now let's introduce non-zero resistance. A typical line has $\lvert B_{ik}/G_{ik} \rvert \approx 4$, so let's plot that case:</p>
     <p><img src="images/magrnot0.png" width=600px></p>
     <p><strong>Our approximation is good as long as line resistance isn't too big.</strong></p>
 
-    </div>
-    </div>
-    </div></section><section>
+    </section>
+    <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Why-use-this-approximation?">Why use this approximation?<a class="anchor-link" href="#Why-use-this-approximation?">&#182;</a></h2>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="47">
+    <h2>Why use this approximation?</h2>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>It would make no sense to use the exact expression. The rest of our analysis assumes $r=0$.</p>
+    <p class="fragment">It would make no sense to use the exact expression. The rest of our analysis assumes $r=0$.</p>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="48">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+    <div class="fragment">
     <p>More importantly, our current flow approximation is better than the DC approximation.</p>
     <p><img src="images/approxvsdc.png" width=500px align="middle"></p>
+    </div>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="49">
+    <p class="fragment"><strong>Any line with a significant voltage magnitude difference across it is more vulnerable than linear (DC) instanton analysis tells us.</strong></p>
+        </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p><strong>Any line with a significant voltage magnitude difference across it is more vulnerable than linear (DC) instanton analysis tells us.</strong></p>
+        <section>
 
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Implementation-and-results">Implementation and results<a class="anchor-link" href="#Implementation-and-results">&#182;</a></h2><p>Solve the approximate current expression for angle difference:</p>
+    <h2>Implementation and results</h2>
+    <p>Solve the approximate current expression for angle difference:</p>
     \begin{align}
     \lvert I_{ik}^2 \rvert &\approxeq \frac{V_i^2 + V_k^2 - 2V_iV_k\cos \theta_{ik}}{x_{ik}^2} \\
     \implies \theta_i - \theta_k &= \cos^{-1}\left( \frac{V_i^2 + V_k^2 - (\lvert I_{ik}^{lim} \rvert x_{ik})^2}{2V_iV_k} \right)
@@ -734,534 +545,210 @@
     \theta_i - \theta_k & = x_{ik} P_{ik}^{lim}
     \end{align}<p>Simply swap out this DC constraint for our approximate current one.</p>
 
-    </div>
-    </div>
-    </div></section><section>
+    </section>
+    <section class="scrollable">
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Compare:-DC-results">Compare: DC results<a class="anchor-link" href="#Compare:-DC-results">&#182;</a></h2><p><img src="images/activeFlowGraph.svg"></p>
+    <h2>Compare: DC results</h2><p>
+    <img src="images/activeFlowGraph.svg"></p>
 
-    </div>
-    </div>
-    </div></section><section>
+    </section>
+    <section class="scrollable">
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Compare:-approximate-current-results">Compare: approximate current results<a class="anchor-link" href="#Compare:-approximate-current-results">&#182;</a></h2><p><img src="images/currentFlowGraph.svg"></p>
+    <h2>Compare: approx. $I$ results</h2>
+    <p><img src="images/currentFlowGraph.svg"></p>
 
-    </div>
-    </div>
-    </div></section><section>
+   </section>
+   <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
     <p>Differences are due to the non-flat voltage profile of the RTS-96:</p>
     <p><img src="images/voltageProfileComparison.svg" width=800px align="middle"></p>
 
-    </div>
-    </div>
-    </div></section>
-        </section><section>
+    </section>
+      </section>
+
+      <section>
         <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Part-2:-Time-varying-instanton-analysis">Part 2: Time-varying instanton analysis<a class="anchor-link" href="#Part-2:-Time-varying-instanton-analysis">&#182;</a></h1><p>We want instanton analysis to help system operators. We solicit their feedback.</p>
-    <p>Here's what John Adams of ERCOT says:</p>
+    <h1>Linearized heat balance equation with DC power flow</h1>
+    <p>3-word review of work we just covered, from John Adams of ERCOT:</p>
 
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="55">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <blockquote><p>"I don't care."</p>
+    <blockquote class="fragment"><p>"I don't care."</p>
     </blockquote>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="56">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+    <div class="fragment">
     <p>System operators allow temporary line overloads all the time.</p>
     <p>They understand that <em>lines trip due to heat-induced sag, not instantaneous current (IEEE Standard 738).</em></p>
+    </div>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="57">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>In an operating environment, instanton analysis must</p>
+    <div class="fragment">
+    <p>In an operating environment, we must</p>
     <ul>
     <li>keep track of line <em>temperature</em></li>
     <li>Accommodate changes in power flow and ambient conditions</li>
     </ul>
-    <p>This motivates a new instanton framework.</p>
+    <p>This motivates a new framework.</p>
+    </div>
+        </section>
 
-    </div>
-    </div>
-    </div>
-        </div></section>
-        </section><section>
-        <section>
+    <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Contribution:-temporal-instanton-framework">Contribution: temporal instanton framework<a class="anchor-link" href="#Contribution:-temporal-instanton-framework">&#182;</a></h1>
-    </div>
-    </div>
-    </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="What-is-temporal-instanton-analysis?">What is temporal instanton analysis?<a class="anchor-link" href="#What-is-temporal-instanton-analysis?">&#182;</a></h1>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="60">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p><strong>Previous instanton analysis: instantaneous</strong></p>
+    <h1>Instantaneous to temporal</h1>
+    <p><strong>Previous work: instantaneous</strong></p>
     <ul>
-    <li><p>Minimize forecast deviations</p>
-    </li>
-    <li><p>Power balance</p>
-    </li>
-    <li><p>Single angle difference</p>
-    </li>
+    <li>Minimize forecast deviations </li>
+    <li>Power balance </li>
+    <li>Single angle difference </li>
     </ul>
 
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="61">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
     <p><strong>New framework: temporal</strong></p>
     <ul>
-    <li><p>Minimize forecast deviations across multiple time steps</p>
+    <li>Minimize forecast deviations across multiple time steps
     </li>
-    <li><p>Power balance</p>
+    <li>Power balance
     </li>
-    <li><p>Line temperature constraint (heat added across multiple time steps)</p>
-    </li>
-    </ul>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="What-makes-it-harder?">What makes it harder?<a class="anchor-link" href="#What-makes-it-harder?">&#182;</a></h2>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="63">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p><strong>Previous instanton analysis: instantaneous</strong></p>
-    <p>Quadratic program with analytic solution.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="64">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p><strong>New framework: temporal</strong></p>
-    <p>Non-convex QCQP with multiple solutions.</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Remainder-of-talk">Remainder of talk<a class="anchor-link" href="#Remainder-of-talk">&#182;</a></h2><ul>
-    <li><p>Thermal constraint</p>
-    </li>
-    <li><p>Temporal instanton model</p>
-    </li>
-    <li><p>Temporal optimization problem</p>
-    </li>
-    <li><p>Solution</p>
-    </li>
-    <li><p>Results</p>
+    <li>Line temperature constraint (heat added across multiple time steps)
     </li>
     </ul>
+        </section>
 
-    </div>
-    </div>
-    </div></section>
-        </section><section>
         <section>
+    <h2>What makes it harder?</h2>
+    <p><strong>Instantaneous analysis:</strong> Quadratic program with analytic solution.</p>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Thermal-constraint">Thermal constraint<a class="anchor-link" href="#Thermal-constraint">&#182;</a></h1><ul>
-    <li><p>Losses</p>
+    <p><strong>Temporal analysis:</strong> Non-convex QCQP with multiple solutions.</p>
+        </section>
+
+        <section>
+    <h2>Remainder of talk</h2><ul>
+    <li>Thermal constraint
     </li>
-    <li><p>Euler integration</p>
+    <li>Temporal instanton model
     </li>
-    <li><p>Recursive relationship</p>
+    <li>Temporal optimization problem
+    </li>
+    <li>Solution
+    </li>
+    <li>Results
     </li>
     </ul>
 
-    </div>
-    </div>
-    </div></section><section>
+    </section>
+        </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Losses">Losses<a class="anchor-link" href="#Losses">&#182;</a></h2><p>Heat is a result of line losses.</p>
+        <section>
+        <section>
+    <h1>Thermal constraint</h1>
 
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="68">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Starting with the AC line loss expression, Almassalkhi and Hiskens (2014) derived this:</p>
-    \begin{align}
+		<div class="fragment">
+    <h2>Losses</h2>
+    <p>Heat is a result of line losses.</p>
+    <p>Starting with the AC line loss expression, Almassalkhi and Hiskens (2014) derived:
+    $$\begin{align}
     f_{ij}^{\text{loss}} &\approx r_{ij}\left(\frac{\theta_{ij}}{x_{ij}}\right)^2
-    \end{align}
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="69">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+    \end{align}$$</p>
+		</div>
+		<div class="fragment">
     <p>Here we make three assumptions:</p>
     <ol>
-    <li><p>Voltage magnitudes are all 1 pu</p>
+    <li>Voltage magnitudes are all 1 pu
     </li>
-    <li><p>Cosine is represented by its second-order Taylor expansion</p>
+    <li>Cosine is represented by its second-order Taylor expansion
     </li>
-    <li><p>$x_{ij} \geq 4r_{ij}$ (line reactance is at least four times as great as resistance).</p>
+    <li>$x_{ij} \geq 4r_{ij}$ (line reactance is at least four times as great as resistance).
     </li>
     </ol>
+		</div>
+        </section>
 
-    </div>
-    </div>
-    </div>
-        </div></section><section>
+        <section>
+        <h3>Skipping a long derivation...</h3>
+        <p>We can constrain the line's temperature at time $t_{n_t}$ to be equal to this limiting value by enforcing:
+      \begin{align}
+      \sum_{k=1}^{n_t} \left(\hat{\theta}_{ij}(t_k)\right)^2 &= \frac{c_1}{c_4}\left(T_\text{lim} - c_7\right),
+      \end{align}
+      where
+      \begin{align}
+      \hat{\theta}_{ij}(t_{k}) &= \theta_{ij}(t_k)\sqrt{ (e^{c_1\bar{t}})^{n_t-k+1} - (e^{c_1\bar{t}})^{n_t-k} },\end{align}
+      and $c_i$ are constants.</p>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Euler-integration">Euler integration<a class="anchor-link" href="#Euler-integration">&#182;</a></h2><p>Changes in line temperature are found by Euler integration:</p>
-    \begin{align}
-    \Delta T_{ij}[t+1] &= \tau_{ij}\Delta T_{ij}[t] + \rho_{ij}\Delta f_{ij}^\text{loss}[t] + \delta_{ij}\Delta d_{ij}[t]~,
-    \end{align}<p>where $\tau$, $\bar{\gamma}_c$, and $\rho_{ij}$ are known (skipping definitions).</p>
+        </section>
+        </section>
 
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="71">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Recursive relationship between temperature at time $t+1$ and temperature at time $t$.</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Recursive-relationship">Recursive relationship<a class="anchor-link" href="#Recursive-relationship">&#182;</a></h2><p>Repeatedly substituting into this equation, we express change in line temperature at time $t^*$ as:</p>
-    \begin{align}
-    \Delta T_{ik}[t^*] &= \frac{\rho_{ik} r_{ik}}{x_{ik}^2}\sum_{t=1}^{t^*}\tau_{ik}^{t-1}\theta_{ik}^2[t^*-t]~ + \delta_{ik} \sum_{t=1}^{t^*}\tau_{ik}^{t-1}\Delta d_{ik} [t^* - t]
-    \end{align}
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="73">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <ul>
-    <li>The first term varies with angle differences. </li>
-    </ul>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="74">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <ul>
-    <li>The second term is constant with respect to all power flow variables.</li>
-    </ul>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Moving all constants to the left-hand side, we find:</p>
-    \begin{align}
-    \Delta T_{ik}[t^*] - \delta_{ik} \sum_{t=1}^{t^*}\tau_{ik}^{t-1}\Delta d_{ik} [t^* - t]
-     = \frac{\rho_{ik}r_{ik}}{x_{ik}^2} \sum_{t=1}^{t^*} \tau_{ik}^{t-1}\theta_{ik}^2[t^* - t]
-    \end{align}<p>The RHS is a weighted, scaled two-norm of the vector of angle difference variables $\theta_{ik}[t],~ t\in \{1,\ldots,t^*\}$.</p>
-
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="76">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>We can write the temperature constraint as $\lVert \hat{\theta}_{ik}\rVert^2 = c^2$, where</p>
-    \begin{align}
-    \hat{\theta}_{ik,t} &= \tau^{\frac{t^*-t}{2}}(\theta_{i,t} - \theta_{k,t})
-    \end{align}<p>and $c$ accounts for scaling and known parameters.</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section>
-        </section><section>
+        <section>
         <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Optimization-problem">Optimization problem<a class="anchor-link" href="#Optimization-problem">&#182;</a></h1><ul>
+    <h1>Optimization problem</h1><ul>
     <li>Objective</li>
     <li>System constraints</li>
     <li>Strain constraint</li>
     </ul>
 
-    </div>
-    </div>
-    </div></section><section>
+    </section>
+    <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
     <p><strong>Objective:</strong> minimize the normed distance between the vector of wind optimization variables and their forecast values.</p>
     \begin{align}
-    \min & \sum_{t=1}^{T} dev_t^\top Q_{dev} dev_t
+    \min & \sum_{t=1}^{n_t} dev_t^\top Q_{dev} dev_t
     \end{align}<p>(Note that $Q_{obj}$ may be identity or could encode correlation.)</p>
 
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="79">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+      <div class="fragment">
     <p><strong>System constraints:</strong>  power balance, angle reference, generator response parameter $\alpha$.</p>
     \begin{align}
     \text{subject to:} \\
-    \sum_k Y_{ij} \theta_{ij,t} & = (G_{i,t} + \rho_{i,t} + x_{i,t}) - D_{i,t} ~ \forall i \in \mathcal{N},~t\in 1... T \\
-    G_t &= G_{0,t} + k\alpha_t \quad \forall t\in 1\ldots T \\
-    \theta_{ref,t} & = 0 \quad \forall t\in 1\ldots T \\
+    \sum_k Y_{ij} \theta_{ij,t} & = (G_{i,t} + \rho_{i,t} + x_{i,t}) - D_{i,t} ~ \forall i \in \mathcal{N},~t\in 1... n_t \\
+    G_t &= G_{0,t} + k\alpha_t \quad \forall t\in 1\ldots n_t \\
+    \theta_{ref,t} & = 0 \quad \forall t\in 1\ldots n_t \\
     \end{align}
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="80">
+      </div>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+      <div class="fragment">
     <p><strong>Strain constraint:</strong> Force a line to sag.</p>
     \begin{align}
-    \Delta T_{ij}[T] &= \Delta T_{ij}^\text{lim}\quad \text{for some }(i,j)\in \mathcal{G}
+    T_{ij}[n_t] &= T_{ij}^\text{lim}\quad \text{for some }(i,j)\in \mathcal{G}
     \end{align}
-    </div>
-    </div>
-    </div>
-        </div></section><section>
+      </div>
+        </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+        <section>
     <p><strong>Strain constraint:</strong> Force a line to sag.</p>
     \begin{align}
-    \Delta T_{ij}[T] &= \Delta T_{ij}^\text{lim}\quad \text{for some }(i,j)\in \mathcal{G}
+    T_{ij}[n_t] &= T_{ij}^\text{lim}\quad \text{for some }(i,j)\in \mathcal{G}
     \end{align}
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="82">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
     <p>From what we just discussed, this is really a norm constraint on a vector of scaled angle differences:</p>
     \begin{align*}
-    \lVert \hat{\theta}_{ij}\rVert^2 &= c^2~,
-    \end{align*}<p>where $c$ is based on line and ambient condition parameters, and</p>
-    \begin{align}
-    \hat{\theta}_{ij,t} &= \tau^{\frac{t^*-t}{2}}(\theta_{i,t} - \theta_{j,t})~.
-    \end{align}
-    </div>
-    </div>
-    </div>
-        </div></section>
-        </section><section>
-        <section>
+    \lVert \hat{\theta}_{ij}\rVert^2 &= c^2
+    \end{align*}
+        </section>
+        </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Recast-as-optimization-problem">Recast as optimization problem<a class="anchor-link" href="#Recast-as-optimization-problem">&#182;</a></h1><p>General form: quadratic objective function with linear and quadratic constraints. Stacking all variables into a single vector $z$, we find:</p>
+        <section>
+        <section>
+    <h1>Recast as optimization problem</h1>
+    <p>General form: quadratic objective function with linear and quadratic constraints. Stacking all variables into a single vector $z$, we find:</p>
     \begin{align}
     &&  \min z^\top Q_{obj} z &\\
     & s.t. & Az &= b  \\
-    &&  z^\top Q_{\theta}z &= c
+    &&  z^\top Q_{c}z &= c
     \end{align}
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="84">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
     <p>Let's consider each component:</p>
     <ul>
-    <li><p>Variables: $z$</p>
-    </li>
-    <li><p>Objective: $Q_{obj}$</p>
-    </li>
-    <li><p>Linear constraints: $A$ and $b$</p>
-    </li>
-    <li><p>Quadratic constraint: $Q_\theta$</p>
-    </li>
+    <li>Variables: $z$ </li>
+    <li>Objective: $Q_{obj}$ </li>
+    <li>Linear constraints: $A$ and $b$ </li>
+    <li>Quadratic constraint: $Q_c$ </li>
     </ul>
+        </section>
 
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Variables:-$z$">Variables: $z$<a class="anchor-link" href="#Variables:-$z$">&#182;</a></h2><p>Stack variables from all time steps. Put $\hat{\theta}_{ik}$ at the end.
+        <section>
+    <h2>Variables: $z$</h2><p>Stack variables from all time steps. Put $\hat{\theta}_{ik}$ at the end.
     \begin{align}
-    z &amp;= \begin{bmatrix} dev^{(1)\top} &amp; \theta^{(1)\top} &amp; \alpha^{(1)} &amp; \cdots &amp; dev^{(T)\top} &amp; \theta^{(T)\top} &amp; \alpha^{(T)} &amp; \hat{\theta}_{ik}^\top \end{bmatrix}^\top
+    z &amp;= \begin{bmatrix} dev^{(1)\top} &amp; \theta^{(1)\top} &amp; \alpha^{(1)} &amp; \cdots &amp; dev^{(n_t)\top} &amp; \theta^{(n_t)\top} &amp; \alpha^{(n_t)} &amp; \hat{\theta}_{ik}^\top \end{bmatrix}^\top
     \end{align}</p>
+    </section>
 
-    </div>
-    </div>
-    </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Objective:-$Q_{obj}$">Objective: $Q_{obj}$<a class="anchor-link" href="#Objective:-$Q_{obj}$">&#182;</a></h2><p>The objective weights only deviation variables $dev$.</p>
+    <section>
+    <h2>Objective: $Q_{obj}$</h2>
+    <p>The objective weights only deviation variables $dev$.</p>
     <p>Example: suppose there are two time steps and correlation is represented by $Q_{dev}$. Then</p>
     $$ z = \begin{bmatrix} dev^{(1)\top} & \theta^{(1)\top} & \alpha^{(1)} & dev^{(2)\top} & \theta^{(2)\top} & \alpha^{(2)} & \hat{\theta}_{ik}^\top \end{bmatrix}^\top $$<p>and $Q_{obj}$ is given by:</p>
     \begin{align*}
@@ -1274,702 +761,84 @@
     0 & 0 & 0 & 0 & 0 & 0 & 0
     \end{bmatrix}
     \end{align*}
-    </div>
-    </div>
-    </div></section><section>
+    </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Linear-constraints:-$A$-and-$b$">Linear constraints: $A$ and $b$<a class="anchor-link" href="#Linear-constraints:-$A$-and-$b$">&#182;</a></h2><p>$A$ has a block diagonal structure where each block is $(n+1)\times(n_r+n)$.</p>
+    <section>
+			<h2>Linear constraints: $A$ and $b$</h2><p>$A$ has a block diagonal structure where each block is $(n_b+1)\times(n_{d}+n_b)$.</p>
     <ul>
-    <li>The first $n$ rows describe power balance and distributed slack behavior. We have the following power balance equation for each node:</li>
+    <li>The first $n_b$ rows describe power balance and distributed slack behavior. We have the following power balance equation for each node:</li>
     </ul>
     \begin{align*}
     -dev_{i,t} + \sum\limits_{j} Y_{ij}\theta_{j,t} - k_i\alpha_{i,t} &= G_{i,t}^0 + \rho_{i,t} - D_{i,t}
     \end{align*}<ul>
-    <li>The last row in each group of $(n+1)$ fixes the angle reference to zero. </li>
+    <li>The last row in each group of $(n_b+1)$ fixes the angle reference to zero. </li>
     </ul>
 
-    </div>
-    </div>
-    </div></section><section>
+    </section>
+    <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Quadratic-constraint:-$Q_\theta$">Quadratic constraint: $Q_\theta$<a class="anchor-link" href="#Quadratic-constraint:-$Q_\theta$">&#182;</a></h2><p>Recall that the line temperature constraint in terms of $\hat{\theta}_{ij}$ is
+    <h2>Quadratic constraint: $Q_c$</h2><p>Recall that the line temperature constraint in terms of $\hat{\theta}_{ij}$ is
     \begin{align*}
     \lVert \hat{\theta}_{ij}\rVert^2 &amp;= c^2~.
     \end{align*}</p>
-    <p>Because the last $T$ elements of $z$ contain $\hat{\theta}_{ij}$, $Q_\theta$ is all zeros with a $T\times T$ identity matrix in the lower-right corner.</p>
+    <p>Because the last $n_t$ elements of $z$ contain $\hat{\theta}_{ij}$, $Q_c$ is all zeros with a $n_t\times n_t$ identity matrix in the lower-right corner.</p>
 
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="89">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
     \begin{align}
-    Q_\theta &= \begin{bmatrix} 0 & 0 \\ 0 & I\end{bmatrix}
+    Q_c &= \begin{bmatrix} 0 & 0 \\ 0 & I\end{bmatrix}
     \end{align}
-    </div>
-    </div>
-    </div>
-        </div></section>
-        </section><section>
-        <section>
+        </section>
+        </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Solution">Solution<a class="anchor-link" href="#Solution">&#182;</a></h1><ul>
-    <li><p>Quadratic equality constraint makes the problem non-convex.</p>
+        <section>
+        <section>
+    <h1>Solution</h1>
+    <ul>
+    <li>Quadratic equality constraint makes the problem non-convex.
     </li>
-    <li><p>It does look nice though.</p>
+    <li>It does look nice though.
     </li>
     </ul>
 
-    </div>
-    </div>
-    </div><aside class="notes">
+    <p>Our QCQP is similar to the "trust-region subproblem". Dr. Dan Bienstock's insight from this related problem helped us derive a solution for ours.</p>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>If our QCQP was a "trust-region subproblem", we would solve it like this:</p>
-    <ol>
-    <li><p>Translate by the point $z^*$ closest to the origin in the set $\{z:Az=b\}$.</p>
-    </li>
-    <li><p>Rotate so the first $k$ coordinates lie in $\mathcal{N}(A)$.</p>
-    </li>
-    <li><p>Rotate to diagonalize the objective.</p>
-    </li>
-    <li><p>Write the first-order conditions and solve the resulting "secular equation".</p>
-    </li>
-    </ol>
-
-    </div>
-    </div>
-    </div>
-        </aside><div class="fragment" data-fragment-index="92">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Our QCQP is similar to the "trust-region subproblem".</p>
-    <p>Dan Bienstock's insight from this related problem helped us derive a solution for ours.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="93">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
+    <div class="fragment">
     <p>Here's how we solve it:</p>
     <ol>
-    <li><p>Translation to change $Az=b$ into $Ay=0$</p>
-    </li>
-    <li><p>Kernel mapping to render linear constraints implicit</p>
-    </li>
-    <li><p>Rotation to restore constraint's norm structure</p>
-    </li>
-    <li><p>Elimination of unconstrained variables</p>
-    </li>
-    <li><p>Solution via enumeration</p>
-    </li>
+    <li>Translation to change $Az=b$ into $Ay=0$ </li>
+    <li>Kernel mapping to render linear constraints implicit </li>
+    <li>Rotation to restore constraint's norm structure </li>
+    <li>Elimination of unconstrained variables </li>
+    <li>Solution via enumeration </li>
     </ol>
+    <p>Skipping a lot here! Paper coming soon...</p>
+    </div>
+        </section>
+        </section>
 
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Divide the vector of variables into three groups:</p>
-    <ul>
-    <li>$z_1\in\mathbb{R}^{N_RT}$ contains wind deviations</li>
-    <li>$z_2\in\mathbb{R}^{(N+1)T}$ contains angle and mismatch variables</li>
-    <li>$z_3\in\mathbb{R}^T$ contains auxiliary angle difference variables (line temperature calculation).</li>
-    </ul>
-    <p>(This partition of $z$ is independent of how the variables are ordered.) With this notation, the problem becomes</p>
-    \begin{align}
-    \min\quad z_1^\top &Q_z z_1 \\
-    s.t.\quad \begin{bmatrix}A_1 & A_2 & A_3 \end{bmatrix}\begin{bmatrix} z_1 \\ z_2 \\ z_3\end{bmatrix} &= b \\
-    z_3^\top z_3 &= c,
-    \end{align}<p>where $Q_z$ is $Q_{dev}$ repeated in block-diagonal fashion $T$ times.</p>
-    <p>Several changes of variables may be used to obtain an equivalent form whose solution is straightforward.</p>
-
-    </div>
-    </div>
-    </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Step-1:-Translation">Step 1: Translation<a class="anchor-link" href="#Step-1:-Translation">&#182;</a></h2><p>Change variables from $z$ to $y=z-z^*$, where $z^*\in\{z:Az=b\}$.</p>
-    <p>This translation transforms $Az=b$ into $Ay=0$.</p>
-    <p>To prevent the change from introducing a linear term into the quadratic
-    constraint, we require $z_3^*=0$.</p>
-
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="96">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Thus, the subvectors $z_1^*$ and $z_2^*$ must satisfy</p>
-    \begin{align}
-    A_1z_1^* + A_2z_2^* &= b.
-    \end{align}
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="97">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Factorize $A$ to find a min-norm $z^*$ that satisfies this criterion.</p>
-    <p>After translation, the problem becomes</p>
-    \begin{align}
-    \min\quad y_1^\top &Q_z y_1 + 2 y_1^\top Q_z z_1^* \\
-    s.t.\quad Ay &= 0 \\
-    y_3^\top y_3 &= c.
-    \end{align}
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Step-2:-Kernel-mapping">Step 2: Kernel mapping<a class="anchor-link" href="#Step-2:-Kernel-mapping">&#182;</a></h2><p>Intuitive explanation of $Ay=0$: any solution must lie in the nullspace (kernel) of $A$.</p>
-
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="99">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Let $\dim \mathcal{N}(A) =k$ be the dimension of this nullspace.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="100">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Let $y=Nx$ where the $k$ columns of $N$ span $\mathcal{N}(A)$. This change of
-    variables is akin to a rotation, but reduces the problem dimension to $k$.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="101">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Partition $N$:</p>
-    \begin{align}
-    \begin{bmatrix} y_1 \\ y_2 \\ y_3 \end{bmatrix} = \begin{bmatrix} N_1
-      \\ N_2 \\ N_3 \end{bmatrix} x
-    \end{align}
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="102">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Change variables:</p>
-    \begin{align}
-    \min\quad  &x^\top (N_1^\top Q_zN_1) x + 2x^\top
-    (N_1^\top Q_zz_1^*) \\
-    s.t.\quad &x^\top N_3^\top N_3 x = c.
-    \end{align}<p>All feasible solutions lie in the nullspace of $A$, so the linear constraints are now implicit.</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Step-3:-Restoring-the-norm-constraint">Step 3: Restoring the norm constraint<a class="anchor-link" href="#Step-3:-Restoring-the-norm-constraint">&#182;</a></h2><p>After kernel mapping, the quadratic constraint is no longer a norm
-    constraint. This can be corrected in two steps.</p>
-
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="104">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h3 id="A.-Perform-an-eigendecomposition">A. Perform an eigendecomposition<a class="anchor-link" href="#A.-Perform-an-eigendecomposition">&#182;</a></h3>$$N_3^\top N_3 = UDU^\top$$<p>Let $\hat{x} = U^\top x$. The constraint is diagonal in terms of $\hat{x}$:</p>
-    \begin{equation}
-     x^\top N_3^\top N_3 x = \hat{x}^\top D\hat{x}
-    \end{equation}<p>where $D$ is diagonal and has at most $T$ nonzero elements.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="105">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>The right side may be expanded into:</p>
-    \begin{equation}
-    \begin{bmatrix}
-    \hat{x}_1^\top & \hat{x}_2^\top \end{bmatrix}
-    \begin{bmatrix} 0 & 0 \\ 0 & \hat{D} \end{bmatrix}
-    \begin{bmatrix}
-    \hat{x}_1 \\ \hat{x}_2
-    \end{bmatrix}
-    \end{equation}
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h3 id="B.-Change-variables">B. Change variables<a class="anchor-link" href="#B.-Change-variables">&#182;</a></h3><p>from $\hat{x}$ to $w$.</p>
-    <p>The variables $x$, $\hat{x}$ and $w$ are
-    related through:</p>
-    \begin{align}
-    \begin{bmatrix} w_1 \\ w_2 \end{bmatrix} &=
-    \begin{bmatrix} I & 0 \\ 0 & \hat{D}^{1/2} \end{bmatrix}
-    \begin{bmatrix} \hat{x}_1 \\ \hat{x}_2 \end{bmatrix} = K\hat{x} \\
-    \nonumber \implies w &= KU^\top x.
-    \end{align}
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="107">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>(Note that $x = UK^{-1}w$ because $UU^\top = I$.)</p>
-    <p><strong>In terms of $w$, the constraint takes the form of a norm:</strong></p>
-    \begin{equation}
-    \hat{x}^\top D\hat{x} = \hat{x}_2^\top \hat{D}^{1/2}\hat{D}^{1/2}\hat{x}_2
-    = w_2^\top w_2
-    \end{equation}
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>After substitution into the objective function, the full problem becomes:</p>
-    \begin{align}
-    \min\quad &w^\top Bw + w^\top b \\
-    s.t.\quad &w_2^\top w_2 = c
-    \end{align}
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="109">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>where</p>
-    <ul>
-    <li>$ B = K^{-1}U^\top N_1^\top Q_z N_1 UK^{-1} $</li>
-    <li>$ b = 2 K^{-1}U^\top N_1^\top Q_z z_1^* $</li>
-    </ul>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="110">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p><strong>Note that $w_1$ is unconstrained. We will take advantage of this next.</strong></p>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Step-4:-Eliminate-$w_1$">Step 4: Eliminate $w_1$<a class="anchor-link" href="#Step-4:-Eliminate-$w_1$">&#182;</a></h2><p>For a fixed $w_2$, <strong>we can use "partial" KKT conditions to find $w_1$ such that the objective is minimized.</strong></p>
-    <p>Expand the objective:</p>
-    \begin{align*}
-    f(w) &=
-    \begin{bmatrix} w_1^\top & w_2^\top \end{bmatrix}
-    \begin{bmatrix} B_{11} & B_{12} \\ B_{12}^\top & B_{22}\end{bmatrix}
-    \begin{bmatrix} w_1 \\ w_2 \end{bmatrix} +
-    \begin{bmatrix} w_1^\top & w_2^\top \end{bmatrix}
-    \begin{bmatrix} b_1 \\ b_2\end{bmatrix} \\
-    &=
-    w_1^\top B_{11}w_1 + 2w_1^\top B_{12}w_2 + w_2^\top B_{22}w_2 + w_1^\top b_1 + w_2^\top b_2.
-    \end{align*}
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="112">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Set the partial derivative with respect to $w_1$ equal to zero:</p>
-    \begin{align}
-    \nonumber \frac{\partial f}{\partial w_1} &= 2w_1^\top B_{11} + 2w_2^\top B_{12}^\top + b_1^\top = 0 \\
-     \implies w_1 &= -B_{11}^{-1}\left(B_{12}w_2 +
-    \frac{1}{2}b_1 \right).
-    \end{align}
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="113">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>After substitution, the objective depends only on $w_2$:</p>
-    \begin{align*}
-    f(w_2) &= w_2^\top\left(B_{22} - B_{12}^\top B_{11}^{-1}
-    B_{12}\right)w_2  + w_2^\top (b_2 - B_{12}^\top B_{11}^{-1}b_1).
-    \end{align*}<p>(The constant term was omitted.)</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>The optimization problem becomes:</p>
-    \begin{align}
-    \min\quad & w_2^\top \hat{B}w_2 + w_2^\top \hat{b} \\
-     s.t.\quad & w_2^\top w_2 = c,
-    \end{align}<p>where</p>
-    <ul>
-    <li>$ \hat{B} = B_{22} - B_{12}^\top B_{11}^{-1}B_{12} $</li>
-    <li>$ \hat{b} = b_2 - B_{12}^\top B_{11}^{-1}b_1 $</li>
-    </ul>
-
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="115">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>This is a QCQP in $T$ dimensions with a single norm constraint.</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h2 id="Step-5:-Solution-via-enumeration">Step 5: Solution via enumeration<a class="anchor-link" href="#Step-5:-Solution-via-enumeration">&#182;</a></h2><p>The problem is diagonalizable. For brevity we assume it has been diagonalized.</p>
-
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="117">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Let $v$ be the Lagrange multiplier associated with the constraint and write the first-order optimality condition:</p>
-    \begin{align}
-    \nonumber \frac{\partial \mathcal{L}(w_2,v)}{\partial w_2} &= 2\hat{B}w_2 + \hat{b} - v(2w_2) = 0 \\
-    \implies \hat{B}w_2 + \frac{1}{2}\hat{b} &= vw_2.
-    \end{align}
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="118">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>After ruling out $u=0$ and $u=D_{ii}$, this linear system yields $w_2$ for fixed $v$:</p>
-    \begin{equation}
-    w_{2,i} = \frac{\hat{b}_i/2}{v - \hat{B}_{i,i}}
-    \end{equation}
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="119">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>An optimal $w_2$ must also be feasible, so we substitute the above into the constraint to obtain the "secular equation":</p>
-    \begin{equation}
-    s(v) = \sum_{i}\left( \frac{\hat{b}_i /2}{v - \hat{B}_{i,i}}\right)^2 = c.
-    \end{equation}
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Note that $s(v)$ has one pole per unique nonzero diagonal element of
-    $\hat{B}$.</p>
-
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="121">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p><img src="images/secular.svg">
-    Solutions are intersections of $s(v)$ with the horizontal line $s(v)=c$. They can be computed numerically with a simple binary search algorithm.</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="122">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>After minimizing over the solution candidates, we can reverse all variable changes to find an optimal solution $z^*$.</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section>
-        </section><section>
         <section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Results">Results<a class="anchor-link" href="#Results">&#182;</a></h1><p>Network: wind-augmented RTS-96</p>
-    <p>Consider a scenario unfolding over three time steps</p>
-    <ol>
-    <li>First the wind forecast is 50% of some nominal value.</li>
-    <li>Next it is equal to the nominal value.</li>
-    <li>Finally it is scaled to 150% of nominal. </li>
-    </ol>
-    <p>Throughout this wind ramping, generator dispatch and demand remain constant.</p>
-    <p>Choose $c=0.03$ and $\tau=0.5$.</p>
-
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="124">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>In this scenario, <strong>the line between buses 121 and 325 is most susceptible to wind-induced sag</strong>.</p>
-    <p>In other words, of all dangerous wind patterns that could occur during the wind ramp, the most likely is a pattern that overheats the line between buses 121 and 325.</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Here is the system at the second time step:</p>
-    <p><img src="images/line118.svg"></p>
-    <p>The largest deviation in the instanton pattern is $0.73$ pu, well within the range of wind forecast values (whose maximum is $1.2$ pu).</p>
-
-    </div>
-    </div>
-    </div></section>
-        </section><section>
         <section>
+    <h1>Results for wind-augmented RTS-96 network</h1>
+          <img src="images/2015-06-24-trajectory_compare2.png">
+    </section>
+        </section>
 
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Solving-a-different-problem:-uncertainty-constrained-temperature-maximization">Solving a different problem: uncertainty-constrained temperature maximization<a class="anchor-link" href="#Solving-a-different-problem:-uncertainty-constrained-temperature-maximization">&#182;</a></h1><p>What if we let line temperature be the objective?</p>
-
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="127">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>We get a quadratic program like this:</p>
-    \begin{align}
-    && z_{ik}^* = \max~ & z^\top Q_{\theta} z \\
-    s.t. && Az &= b \\
-    && x &\leq c\cdot P0  \\
-    && x &\geq -c\cdot P0
-    \end{align}
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="128">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Not convex, but may have strong duality.</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section>
-        </section><section>
         <section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Future-work">Future work<a class="anchor-link" href="#Future-work">&#182;</a></h1><ul>
-    <li><p>Better visualization</p>
-    </li>
-    <li><p>Solution of max-temp problem</p>
-    </li>
-    <li><p>Expansion and publication of instantaneous instanton contributions</p>
-    </li>
+        <section>
+    <h1>Acknowledgements</h1><ul>
+    <li>Dr. Ian Hiskens</li>
+    <li>Dr. Misha Chertkov</li>
+    <li>Dr. Scott Backhaus</li>
+    <li>Dr. Dan Bienstock</li>
     </ul>
 
-    </div>
-    </div>
-    </div></section>
-        </section><section>
+    </section>
+        </section>
+
         <section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Acknowledgements">Acknowledgements<a class="anchor-link" href="#Acknowledgements">&#182;</a></h1><ul>
-    <li>Ian Hiskens</li>
-    <li>Misha Chertkov</li>
-    <li>Scott Backhaus</li>
-    <li>Dan Bienstock</li>
-    </ul>
-
-    </div>
-    </div>
-    </div></section>
-        </section><section>
         <section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="References">References<a class="anchor-link" href="#References">&#182;</a></h1><p>[1] M. Chertkov, F. Pan, and M. Stepanov, “Predicting failures in power grids:
+    <h1>References</h1>
+    <p>[1] M. Chertkov, F. Pan, and M. Stepanov, “Predicting failures in power grids:
     The case of static overloads,” IEEE Transactions on Smart Grid, vol. 2,
     no. 1, pp. 162–172, Mar. 2011.</p>
     <p>[2] M. Chertkov, M. Stepanov, F. Pan, and R. Baldick, “Exact and efficient
@@ -2003,204 +872,8 @@
     University of Washington, Seattle, USA. [Online]. Available:
     <a href="http://www.ee.washington.edu/research/real/gams_code.html">http://www.ee.washington.edu/research/real/gams_code.html</a></p>
 
-    </div>
-    </div>
-    </div></section>
-        </section><section>
-        <section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h1 id="Appendix:-derivation-of-approximate-current-constraint">Appendix: derivation of approximate current constraint<a class="anchor-link" href="#Appendix:-derivation-of-approximate-current-constraint">&#182;</a></h1><p>A current flow constraint:</p>
-    $$\begin{align}
-    \lvert I_{ik} \rvert &\leq I_{ik}^{max} \\
-    \lvert I_{ik} \rvert^2 &\leq (I_{ik}^{max})^2 \\
-    [Re( I_{ik} )]^2 + [Im( I_{ik} )]^2 &\leq (I_{ik}^{max})^2 \\
-    \end{align}$$
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="133">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Expand to show real and imaginary parts of line current $I_{ik}$:</p>
-    $$\begin{align}
-    Re( I_{ik} ) &= G_{ik}[Re(E_i) - Re(E_k)] - B_{ik}[Im(E_i) - Im(E_k)] \\
-    Im( I_{ik} ) &= B_{ik}[Re(E_i) - Re(E_k)] + G_{ik}[Im(E_i) - Im(E_k)] \\
-    \end{align}$$
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="134">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>These expressions are nasty, but remember we are keeping two of the four DC assumptions. Since resistance is negligible, we can set $G_{ik}=0$:</p>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="135">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    $$\begin{align}
-    Z_{ik} &= r_{ik} + jx_{ik} \\
-    Y_{ik} = G_{ik} + jB_{ik} &= Z_{ik}^{-1} \\
-    r_{ik} = 0 \implies Y_{ik} &= 0 - j\frac{1}{x_{ik}}
-    \end{align}$$
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="136">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Our assumption simplifies the expressions for real and imaginary currents:</p>
-    $$\begin{align}
-    Re( I_{ik} ) &\approxeq - B_{ik}[Im(E_i) - Im(E_k)] \\
-    Im( I_{ik} ) &\approxeq ~~~B_{ik}[Re(E_i) - Re(E_k)] \\
-    \end{align}$$
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h3 id="Current-constraint-expression-cont'd.">Current constraint expression cont'd.<a class="anchor-link" href="#Current-constraint-expression-cont'd.">&#182;</a></h3>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="136">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Add squares of real and imaginary parts to obtain current magnitude:</p>
-    $$\begin{align}
-    Re( I_{ik} )^2 &= B_{ik}^2[Im(E_i) - Im(E_k)]^2 \\
-    Im( I_{ik} )^2 &= B_{ik}^2[Re(E_i) - Re(E_k)]^2 \\
-    \lvert I_{ik} \rvert^2 = Re( I_{ik} )^2 + Im( I_{ik} )^2 &= B_{ik}^2[\left( Im(E_i) - Im(E_k) \right)^2 + \left( Re(E_i) - Re(E_k) \right)^2]
-    \end{align}$$
-    </div>
-    </div>
-    </div>
-            </div><div class="fragment" data-fragment-index="139">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Simplify:</p>
-    $$\begin{align}
-    \lvert I_{ik} \rvert^2 &= B_{ik}^2[\left( Im(E_i) - Im(E_k) \right)^2 + \left( Re(E_i) - Re(E_k) \right)^2] \\
-    &= B_{ik} \left[ Re(E_i)^2 + Im(E_i)^2 + Re(E_k)^2 + Im(E_k)^2 -2\left( Re(E_i)Re(E_k) + Im(E_i)Im(E_k) \right) \right] \\
-    &= B_{ik} \left[ V_i^2 + V_k^2 -2V_iV_k\left( \sin\theta_i\sin\theta_k + \cos\theta_i\cos\theta_k \right) \right] \\\\
-    \lvert I_{ik} \rvert^2 &\approxeq B_{ik} \left( V_i^2 + V_k^2 - 2V_iV_k\cos\theta_{ik} \right),\quad \theta_{ik} = \theta_i - \theta_k
-    \end{align}$$
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="140">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Now we have an expression for the squared current magnitude on a line (assuming the line's resistance is zero).</p>
-
-    </div>
-    </div>
-    </div>
-        </div></section><section>
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <h3 id="Where-do-the-voltage-values-come-from?">Where do the voltage values come from?<a class="anchor-link" href="#Where-do-the-voltage-values-come-from?">&#182;</a></h3>
-    </div>
-    </div>
-    </div><div class="fragment" data-fragment-index="140">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <p>Because we retain two of the DC approximation assumptions, we reason that voltages are completely decoupled from active power. Also:</p>
-
-    </div>
-    </div>
-    </div>
-            </div><div class="fragment" data-fragment-index="143">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <ul>
-    <li>All generators are PV buses that fix voltage.</li>
-    </ul>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="144">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <ul>
-    <li>Non-generator bus voltages are uniquely determined by reactive power injections at all nodes.</li>
-    </ul>
-
-    </div>
-    </div>
-    </div>
-        </div><div class="fragment" data-fragment-index="145">
-
-    <div class="cell border-box-sizing text_cell rendered">
-    <div class="prompt input_prompt">
-    </div>
-    <div class="inner_cell">
-    <div class="text_cell_render border-box-sizing rendered_html">
-    <ul>
-    <li>Thus, all voltage magnitudes are fixed and independent of angles and active power.</li>
-    </ul>
-
-    </div>
-    </div>
-    </div>
-        </div>
-    </div>
-    </div>
+    </section>
+        </section>
 
     <script>
       // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration

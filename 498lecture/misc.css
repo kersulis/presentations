@@ -98,6 +98,12 @@ html, body {
 .reveal .progress {
   position: static;
 }
+.scrollable {
+    bottom: 0px;
+    overflow-y: auto  !important;
+    overflow-x: hidden !important;
+    height: 700px;
+}
 div.input_area {
   padding: 0.06em;
 }
