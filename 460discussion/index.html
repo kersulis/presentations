@@ -141,6 +141,72 @@
 						</ol>
 					</section>
 				</section>
+
+				<section>
+						<section>
+						<h1>Week 2 | 2017-01-09/17</h1>
+						<div>
+							<ul>
+								<li>Control system representations for more complicated systems</li>
+								<li>State-space <--> transfer function</li>
+								<li>Block diagram reduction</li>
+							</ul>
+						</section>
+					<section>
+						<h2>Motivation</h2>
+						<ul>
+							<li>Often we have several states and multiple inputs or outputs.</li>
+							<li>We also frequently encounter complex systems best expressed with block diagrams.</li>
+						</ul>
+						<p>We still want to be able to find transfer functions.</p>
+						<p>Tools:</p>
+						<ul>
+							<li>State-space representation</li>
+							<li>Block diagram reduction</li>
+						</ul>
+					</section>
+					<section>
+						<h2>From lecture</h2>
+						<img src="images/lti_rep.png" width=800px>
+				</section>
+				<section>
+					<h2>From lecture</h2>
+					<img src="images/block_reduction.png" width=700px>
+				</section>
+					<section>
+						<h2>Problem 1</h2>
+							<p>Part A: find a state-space representation of the transfer function:</p>
+										<img src="images/d2tx.png" width=500px" style="border:none">
+									<p>Part B: find a state-space representation of the transfer function:</p>
+										<img src="images/d2tx2.png" width=500x" style="border:none">
+					</section>
+					<section>
+						<h2>Problem 2</h2>
+						<p>Go the other way: find the transfer function for the following state-space representation.</p>$$
+\begin{align}
+\begin{bmatrix}
+\dot{x}_1 \\ \dot{x}_2 \\ \dot{x}_3
+\end{bmatrix} &= \begin{bmatrix}
+0 & 1 & 0 \\ 0 & 0 & 1 \\ -a_3 & -a_2 & -a_1
+\end{bmatrix}\begin{bmatrix}
+x_1 \\x_2 \\x_3
+\end{bmatrix} + \begin{bmatrix}
+0 \\ 0 \\ 1
+\end{bmatrix}u \\
+y &= \begin{bmatrix}
+b_2 & b_1 & b_0
+\end{bmatrix}\begin{bmatrix}
+x_1 \\ x_2 \\ x_3
+\end{bmatrix}
+\end{align}
+$$
+					</section>
+					<section>
+						<h2>Problem 3</h2>
+						<p>Reduce the block diagram and write its transfer function.</p>
+						<img src="images/d2p3.png">
+					</section>
+				</section>
 			</div>
 		</div>
 
