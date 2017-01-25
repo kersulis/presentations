@@ -1,0 +1,367 @@
+\documentclass[10pt,letterpaper]{article}
+\usepackage[latin1]{inputenc}
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\usepackage{amssymb}
+\usepackage{graphicx}
+\usepackage{framed}
+\usepackage{pdfpages}
+\usepackage{minted}
+\usepackage{comment}
+\usepackage{subcaption}
+%\usepackage[margin=1.7in]{geometry}
+
+\author{Jonas Kersulis}
+\title{EECS Final Project}
+
+\begin{document}
+\maketitle
+
+\begin{comment}
+	%Large shifts in active power are compensated by reactive injections from STATCOMs at DG nodes. This results in counteracting reactive flows upstream according to power balance. When these flows travel through a sub-transmission LTC transformer, they can induce excessive tapping.
+
+	%The trade-off between distribution and sub-transmission voltage control has been studied. Dynamic programming was used in \cite{lu1995} and \cite{liang2001} to obtain a day-ahead schedule for LTC tap positions using load forecasts.
+	%\cite{hu2003} and \cite{park2007} replace dynamic programming with faster heuristic methods. None of these papers consider the effects of variable generation; the LTC schedules they obtain are not robust to forecast inaccuracy. \cite{park2007} acknowledges the unreliability of LTC dispatches and recommends that only MSCs be dispatches offline.
+    
+    %Samples of PV and load data with 1-minute resolution are shown in Figures 1.3, 3.8, and 3.9.
+    
+    %Reproduce Figure 5.6? Reproduce pareto curves.
+    
+    %Discuss tap changing transformer dynamical model(s), implement in Julia. Done.
+    
+    %Build network, feed load and renewable forecast data into system model and simulate OLTC dynamics.
+    
+\end{comment}
+
+\begin{abstract}
+For many decades load tap changing (LTC) transformers and voltage regulators have been used to keep voltages throughout sub-transmission and distribution systems within acceptable bounds. These devices are more than capable of handling the gradual, predictable demand fluctuations of conventional demand. In fact, it would be pedantic to refer to daily load fluctuations as dynamics at all. But with the rise of distributed generation (DG), the calm seas of load variation are frequently punctuated by significant, unpredictable storms of variation at sub-minute time scales. This calls for control schemes capable of acting on continually-updating forecast information to coordinate voltage control devices, prevent unnecessary transformer and voltage regulator tap operations, and minimize system losses. This paper provides an outline of the voltage control problem, viewing it as an optimization problem. Various goals and constraints are discussed. Then five methods from the literature are presented and compared. The paper concludes with ideas for future work.
+\end{abstract}
+
+\section{Introduction}
+\label{sec:introduction}
+Though LTCs are typically operated with feedback control \cite{baghsorkhi2015}, in many networks their tapping is predictable enough to be scheduled in advance. This is gradually changing with the rise of unpredictable distributed generation (DG). Uncertainty in wind and solar generation eclipses that of conventional load with several negative consequences \cite{walling2008}. How should LTC transformers, voltage regulators, and switched capacitors respond to capricious DG swings? If tapping operations were free and unrestricted, operators might use distribution LTCs to provide tight, rapid voltage control. In reality, these devices only have so many taps in their lifetimes, and the tapping range cannot compensate for every voltage deviation. If LTCs are ill-equipped to handle DG fluctuation, perhaps operators should require each renewable source to regulate its terminal voltage. This seems like a good idea, and has been tried. But the benefit of this local regulation strategy comes at a cost to the upstream sub-transmission LTC transformer, which experiences increased reactive power flows. Lax local regulation places unreasonable burden on distribution LTC transformers, while tight local regulation strains sub-transmission LTC transformers. A dynamics perspective is appropriate for studying this trade-off.
+
+The aim of this paper is to provide a broad overview of voltage control in distribution and sub-transmission networks with a focus on LTC dynamics. It is natural to represent voltage control as an optimization problem with a variety of objectives and constraints. With this in mind, the remainder of this paper is organized as follows. The physical devices involved in voltage control are introduced in Section \ref{sec:models}, and LTC transformer models and limitations are discussed. Next, various objectives are presented and compared in Section \ref{sec:objectives}. Section \ref{sec:constraints} describes various constraints. Section \ref{sec:control} summarizes four proposed solutions to the voltage control problem in the literature. The paper concludes with a call for future work to combine the best aspects of the Section \ref{sec:control} control schemes.
+
+\section{Models}
+\label{sec:models}
+Voltage regulation involves a number of devices. This section presents a few LTC models as well as an overview of other voltage control devices.
+
+\subsection{LTC transformers}
+\label{sec:ltcs}
+Load Tap Changing (LTC) transformers are prevalent throughout sub-transmission and distribution networks.\footnote{A note on terminology. Sauer and Pai often refer to ``Tap-Changing-Under-Load'' or TCUL transformers. In other places one might find ``On-Load-Tap-Changing'' (OLTC) or ``Under-Load-Tap-Changing'' (ULTC) instead. This paper uses LTC, as the preposition is less important than the fact that LTC transformers operate under load (unlike variable-turns-ratio transformers that can only be adjusted offline).} As demand and variable generation shift about, the LTC transformer's task is to keep its target voltage within an acceptable range. It accomplishes this end by altering a tap position on its coils, thereby modifying its turns ratio and terminal voltage. Tapping behavior is discrete and typically incorporates a deadband and/or time delay to curb excessive or redundant tapping. Control inputs are therefore voltage setpoints, deadbands, and time delays.\footnote{Setpoint tuning is of interest due to its simplicity and testing in real networks over the past several years \cite{li2008,stifter2012}. Setting aside communication latency, it is possible to drive the number of tap operations to zero by forcing setpoints to mirror real-time voltage fluctuations. This effectively removes the LTCs altogether. The other extreme is to fix setpoints, effectively removing the control. It is interesting to explore LTC behavior between these extremes.}
+
+LTCs have a variety of limitations. They are relatively unreliable and expensive to repair or replace \cite{baghsorkhi2015,agalgaonkar2014}. LTC lifespan, measured in number of tapping operations, is also a concern.\footnote{Estimates range from 50,000 operations (the number used for IEEE standard testing \cite{ieee1995}) to a million or more for the more recently developed vacuum type \cite{dohnal2009}.} These issues are addressed by reducing the number of tap operations through setpoint and deadband tuning, or by coordination with other voltage control devices (to transfer voltage control burden to devices like STATCOMs). Discrete behavior presents another limitation -- the LTC provides an inherently jerky response to a continuous disturbance. This issue is mitigated by deadbands and time delays to prevent rapid back-and-forth tapping. A third limitation is tap saturation, which occurs when the transformer reaches the end of its tapping range.\footnote{LTCs and voltage regulators typically have 17 or 33 tap positions covering $\pm$5-10\% around the voltage reference \cite{choi2009,agalgaonkar2014}.} This may be addressed by setpoint tuning or by penalizing extreme tap positions during scheduling as in \cite{agalgaonkar2014}. Communication presents another set of device limitations. Many LTC optimization and coordination studies assume fine-grained controllability of LTC setpoints, deadbands, and time delays; these capabilities may require modification of existing devices. All coordinated control strategies are also predicated on reasonable communication latency; see \cite{stifter2012} for a discussion of latency impacts in real-world voltage control schemes. The remainder of this section describes two long-standing and commonly used mathematical models of LTC transformer dynamics.
+
+\subsubsection{LTC Model 1: DBODE hybrid dynamical}
+Simulations in Chapter 5 of \cite{baghsorkhi2015} use a discrete version of this model with $\tau=6s$. It is referred to there as the DBODE model, and is originally from \cite{sauer1994}.
+\begin{subequations}\label{eq:bagh-ltc}
+\begin{align}
+    \frac{dn}{dt} &=
+    \begin{cases}
+        \frac{1}{\tau}(\Delta V-DB) &\mbox{if }\Delta V > DB \\
+        \frac{1}{\tau}(\Delta V+DB) &\mbox{if }\Delta V < -DB \\
+        0 & \mbox{otherwise}
+    \end{cases} \\
+    t_e &= \int\frac{dn}{dt}dt
+\end{align}
+\end{subequations}
+The derivative of tap position $n$ is dependent on input voltage $V$. The integral of this signal (``tap error'' $t_e$) is used to determine when to tap. The transformer taps when the magnitude of $t_e$ exceeds that of one tap step. Once a tap is triggered, $t_e$ is reset to 0 to prevent multiple operations. Figure \ref{fig:ltc_bagh} illustrates how this LTC model handles a sinusoidal voltage error input. See Section \ref{sec:julia-ltc} for a Julia representation of LTC Model 1.
+
+\subsubsection{LTC Model 2: discrete with time delay}
+The following LTC model is used in \cite{choi2009} and \cite{park2007}.
+\begin{subequations}\label{eq:choi-ltc}
+\begin{align}
+    \label{eq:choi-e} e(\Delta V(t),db) &=
+    \begin{cases}
+        1 & \mbox{if } \Delta V(t) > db \\
+        -1 & \mbox{if } \Delta V(t) < -db \\
+        0 & \mbox{otherwise}
+        \end{cases} \\
+    \label{eq:choi-c}c(e(t),c(t-1)) &=
+    \begin{cases}
+        c(t-1) + 1 & \mbox{if } e(t) = 1 \mbox{ and } c(t-1) \geq 0 \\
+        c(t-1) - 1 & \mbox{if } e(t) = -1 \mbox{ and } c(t-1) \leq 0 \\
+        0 & \mbox{otherwise}
+        \end{cases} \\
+    \label{eq:choi-f}f(e(t),c(t)) &=
+    \begin{cases}
+        1 & \mbox{if } e(t) = 1 \mbox{ and } c(t) > dt \\
+        -1 & \mbox{if } e(t) = -1 \mbox{ and } c(t) < -dt \\
+        0 & \mbox{otherwise}
+        \end{cases} \\
+    \label{eq:choi-tap} T(t) &= T(t-1) + \alpha_k f(e(t),c(t)).
+\end{align}
+\end{subequations}
+The input to the model is the time signal $\Delta V(t)$, the difference between reference voltage and observed voltage at each time. Equation \eqref{eq:choi-e} transforms this input signal into a signal $e(t)$ whose value is 0 whenever $\Delta V(t)$ is within the deadband, 1 above the deadband, and -1 below the deadband. Equation \eqref{eq:choi-c} implements a counter. If $e(t)$ remains 1 or -1 for more than one time step, $c$ increases. Otherwise, it resets to 0. Once the counter reaches $\pm dt$, Equation \eqref{eq:choi-f} sets the value of $f$ to $\pm 1$. Finally, Equation \eqref{eq:choi-tap} uses $f$ to adjust the tap position. Figure \ref{fig:ltc_choi} illustrates how this LTC model handles a sinusoidal voltage error input. See Section \ref{sec:julia-ltc} for a Julia representation of LTC Model 2.
+
+\begin{figure}[h!]
+	\centering
+	\begin{subfigure}[t]{0.47\textwidth}
+		\centering
+		\includegraphics[width=\linewidth]{images/ltc_bagh}
+		\caption{Model from \cite{baghsorkhi2015} described by \eqref{eq:bagh-ltc}. When the input signal (top) leaves the deadband, the tap error $t_e$ (middle) increases/decreases until its magnitude reaches a tap step. Then the tap position (bottom) increases/decreases and $t_e$ is reset. In this case, the deadband is $\pm 0.0125$ pu, the tap step is the same, $T=6$s, and there are 17 tap positions.}
+		\label{fig:ltc_bagh}
+	\end{subfigure}	\quad
+	\begin{subfigure}[t]{0.47\textwidth}
+		\includegraphics[width=\linewidth]{images/ltc_choi}
+		\caption{Model from \cite{choi2009} described by \eqref{eq:choi-ltc}. When the input signal (top) leaves the deadband, the counter value (middle) begins increasing/decreasing until it reaches a predetermined maximum magnitude. Then the tap position (bottom) increases/decreases once per second until the voltage returns to the deadband (or the highest tap position is reached). In this case, the deadband is $\pm 0.0125$ pu, the maximum counter value is 60s, and there are 17 tap positions.}
+		\label{fig:ltc_choi}
+	\end{subfigure}
+	\caption{Comparison of LTC models.}
+\end{figure}
+
+\subsection{Other voltage regulating devices}
+In some cases, voltage regulators (VRs) take the role of LTCs. These devices are typically autotransformers \cite{agalgaonkar2014} whose models may be found in \cite{kersting2012,garcia2001}. They may be placed on individual phases. They are also cheaper and easier to replace. On the other hand, voltage regulators cannot handle short-circuit currents as well as LTCs. They are therefore less well-suited to high-capacity applications. Wind and PV nodes may also engage in voltage control depending on grid operator policy and installed voltage regulation devices. Standards have adapted to PV voltage regulation capabilities \cite{basso2012}, and the reactive capabilities of wind generation have been studied \cite{camm2009}. See \cite{agalgaonkar2014} for a model of PV voltage support. Finally, STATCOMs and capacitor banks are also used to provide voltage support. Their behavior may be continuous or take the form of discrete jumps. Control inputs are voltage setpoints and on/off switches. Automatic capacitor control can be similar to LTC and VR control, with time delays and deadbands \cite{taylor1994}.
+
+\section{Objectives}
+\label{sec:objectives}
+The language of mathematical programming lends itself well to the voltage control problem. The objective is to keep voltage deviations and system losses small without causing undue strain on LTCs. But there is no ideal objective function. It can be difficult to determine the relative importance of reducing tap operations versus reducing system losses. Trade-offs abound, as do objective functions in the literature. However, most objectives include at least one of the following goals.
+
+One important goal is to minimize system losses. Losses are a nonlinear function of power flow variables, which are in turn influenced by voltage control devices. It is impossible in general to obtain a function that maps changes in LTC setpoints and deadbands to changes in system losses \cite{baghsorkhi2015}, although sensitivities and proxies exist.\footnote{For example, \cite{baghsorkhi2015} suggests allowing tap operations to drive the reactive flow between two nodes to zero in order to minimize losses.}
+
+Another goal is to minimize the number of tap operations. As with losses, it can be difficult to connect this goal to decision variables directly. One might consider each combination of transformer setpoints across all LTCs in the network, simulating the system and recording the number of taps for each configuration \cite{baghsorkhi2015}. Unfortunately, such an enumerative scheme does not scale well, and the resulting relationship between setpoint and tap operations must be re-calculated upon changes in forecast.
+
+A third goal is to prevent undesirable interactions between devices. These interactions include hunting \cite{walling2008,yorino1997} and voltage regulator runaway \cite{agalgaonkar2014}. One way to address these issues is to optimize behavior for a subset of voltage control devices using day-ahead forecast information and use the resulting dispatch to tune setpoints and deadbands of remaining devices. This way, predictable voltage variations are addressed by dispatched and rapid DG fluctuations are handled by autonomous devices (using feedback). There are other ways to prevent unwanted interactions between devices, some with negative side-effects. Replacing all feedback with coordinated dispatch, for example, can prevent the system from responding to DG fluctuations, thereby frustrating the primary goal of voltage control devices.
+
+\section{Constraints}
+\label{sec:constraints}
+\cite{agalgaonkar2014} provides a useful summary of constraints in the voltage control problem. These include:
+\begin{itemize}
+	\item Power balance. There are multiple ways to formulate the power flow constraints. The authors of \cite{agalgaonkar2014} suggest using the current injection method found in \cite{garcia2000}.
+	\item Voltage limits. The voltage at each bus in the distribution network must be kept between lower and upper limits.
+	\item Branch flow constraints. Thermal limits on power lines may be included in the formulation.
+	\item Transformer capacity constraints. Each transformer's MVA rating must be respected. \cite{agalgaonkar2014} points out that some transformers have less reverse flow capacity, so it may be necessary to include both forward and reverse constraints in meshed feeders or when DG penetration is high enough to induce significant reverse flows.
+	\item Tap limits. As discussed in Section \ref{sec:ltcs}, LTCs and voltage regulators can only tap so many times in either direction. The feasible region of optimization must not include scenarios that require a device to tap outside this range.
+	\item Renewable generation constraints. These include maximum power point tracking for solar generation and voltage regulation requirements for wind nodes.
+\end{itemize}
+While it may be possible to find reasonable voltage control strategies without accommodating all the constraints mentioned here, any proposed action should at least be checked against them. It is important to note that objective terms and constraints are interchangeable to some extent. For example, the number of tap operations is an objective in \cite{agalgaonkar2014} but a constraint in \cite{hu2003}, which specifies a maximum number of daily tap operations. Voltage limits may also be expressed as constraints or satisfied by minimizing voltage deviations in an objective function.
+
+\section{Control schemes}
+\label{sec:control}
+Many voltage control algorithms have been proposed over the years. Some strive to maintain a voltage profile at all costs; others seek to minimize losses. Some algorithms rely on day-ahead forecasts, while others operate online; some use a combination. As there is room here for just a few control schemes, the following requirements were used to filter the literature: 1) there must be some mechanism for minimizing tap operations, and 2) the control must either accommodate up-to-date forecast information or be modifiable to do so.\footnote{Not all control schemes that refer to day-ahead forecasts must be discarded. Merely switching from day-ahead to a shorter time horizon may provide sufficient robustness to forecast inaccuracy. It may therefore be possible to modify day-ahead-based control schemes by repeating or updating the analysis throughout the day.} These requirements are motivated by DG penetration and variability. As DG penetration rises, it becomes increasingly important to curtail unnecessary tap operations, and offline voltage control schemes that rely on day-ahead forecasts become increasingly ineffective. This calls for Model-Predictive Control (MPC, also known as ``receding horizon control''). With MPC, the controller runs at each time step. It uses the past trajectory and a prediction of future model behavior to develop a control that is optimal to the end of the time horizon. The first step of this control is implemented, and the process repeats at the next time step. MPC is well-suited for accommodating DG fluctuations as it can integrate up-to-date forecasts into its decision making. Thus, the control schemes considered in this section were chosen for their compatibility with an MPC framework.
+
+\subsection{Day-ahead LTC and PV control}
+In \cite{agalgaonkar2014} the objective is to optimize LTC and PV inverter setpoints to minimize tap operations. Nearly all the constraints mentioned in Section \ref{sec:constraints} are included. The optimization problem is solved using an interior point method. This framework is quite general and flexible:  it is easy to include a variety of constraints, and the objective can penalize system losses and extreme tap positions. The latter helps avoid ``runaway'' (tap saturation) behavior by designating a ``preferred zone'' in the middle of each device's tap range and penalizing tap positions outside this zone. Following is the tap-operation-minimizing objective function with piecewise-linear penalty function included:
+\begin{align}
+\nonumber f &= \left(\overbrace{W_c}^\text{tap count wt.} \underbrace{\sum_{t=2}^{N}\sum_{T=1}^{N_{tr}} \lvert \text{Tap}_{t,T} - \text{Tap}_{t-1,T} \rvert}_\text{total taps}\right) + \left( \overbrace{W_r}^\text{extreme tap wt.} \underbrace{\sum_{t=1}^{N} \lvert P_t \rvert}_\text{penalty function}\right),
+\end{align}
+where
+\begin{align*}
+P_t &\geq 0 \\
+P_t &\geq p_1\text{Tap}_t + p_2 \\
+P_t &\geq p_3\text{Tap}_t + p_4,
+\end{align*}
+and $p_1-p_4$ are penalty function parameters. In the results section, the authors describe the tuning process for weights $W_c$ and $W_r$. They also apply their control scheme to a 95-bus UK generic distribution system.\footnote{The authors defer to \cite{singh2010} for parameters and load data, but network information ultimately comes from http://www.sedg.ac.uk/ .} The network has two solar PV nodes, two voltage regulators, and a sub-transmission LTC. The authors generate load data and use 30s PV measurement data from a UK PV site. The LTC and PV nodes are coordinated using the proposed optimization method, but the two VRs are left in autonomous mode to handle forecast inaccuracy.
+
+Heavy reliance on accurate day-ahead PV forecasts makes this method ill-suited for handling large forecast inaccuracy as presented in \cite{agalgaonkar2014}. Optimization may, however, be repeated throughout the day to periodically update setpionts in light of more accurate forecast data. The method also assumes PV nodes and LTCs can communicate for coordination purposes.
+
+\subsection{Day-ahead STATCOM control}
+In \cite{park2007}, day-ahead optimization of capacitor behavior is combined with real-time autonomous LTC and VR operation. LTCs use capacitor dispatch information to adjust their voltage setpoints, thereby preventing unnecessary tap operations due to capacitor behavior. Fixing capacitor behavior prevents conflict with LTCs, which remain free to respond to forecast inaccuracy.
+
+Capacitors are dispatched by solving the following optimization problem:
+\begin{align}\label{eq:park-opt}
+\min J &= \overbrace{w_L\sum_{t=1}^{24}L_t}^\text{loss term} + \overbrace{w_V\sum_{t=1}^{24}\sum_{n=1}^{N}D_{n,t}}^\text{voltage deviation term} \\
+\nonumber & \text{subject to:} \\
+\nonumber V_\text{min} &< V_{n,t} < V_\text{max}\quad\forall n \\
+\nonumber &\sum_{t=2}^{24} \lvert \text{Tap}_{p,t} - \text{Tap}_{p,t-1}\rvert \leq MK_{T_p}\quad\forall p \\
+\nonumber &\sum_{t=2}^{24}\lvert C_{q,t}\oplus C_{q,t-1}\vert \leq MK_{C_q} \quad\forall q
+\end{align}
+The objective considers 24 hour-long periods. It weights losses with $w_L$ and the sum of voltage deviations with $w_V$. The first constraint enforces nodal voltage limits at all nodes $n$. The second constraint forces the sum of tap operations for each tapping device $p$ to be less than a specified limit, and the third limits the number of switching operations for each capacitor $q$ to at most $MK_{C_q}$. The decision variables are on/off capacitor statuses $C_{q,t}$ at all time steps. Once \eqref{eq:park-opt} is solved for the capacitor dispatch (\cite{park2007} suggests using a Genetic Algorithm), the results are communicated to tapping devices. LTCs and VRs then use this information to adjust their voltage references throughout the day as follows:
+\begin{align}
+\nonumber V_{\text{ref},p}(t) &= V_{\text{ref},p}^0 + \\
+& \frac{1}{2}\sum_{q=1}^{Q}\sum_{k=1}^{K_q} \overbrace{\Delta VC_{p,q}\cdot e^{(t-t_{q,k})/\tau_\text{ref}}}^\text{impact on $V_p$ at $t$ of $C_q$ switch at $t_{q,k}$}\cdot \underbrace{f_C(t_{q,k})}_\text{switch sign}\cdot \overbrace{u(t_{q,k} - t)}^\text{ignore past switches} \\
+f_C(t_{q,k}) &= \begin{cases}
+1 &\mbox{if cap. $q$ turns off at }t_{q,k} \\
+-1 &\mbox{if cap. $q$ turns on at }t_{q,k}
+\end{cases} \\
+\Delta VC_{n,q} &= \text{voltage deviation at bus $n$ resulting from switching }C_q.
+\end{align}
+The voltage reference of each tapping device $p$ is updated to compensate for impacts of future capacitor switching operations on its terminal voltage. In addition to the capacitor dispatch, sensitivities $\Delta VC$ (computed using power flow) must be transmitted to LTCs.
+
+This control scheme has a few advantages. First, dispatching capacitors in advance prevents undesirable interactions between them and LTC transformers or voltage regulators, and dispatch-based setpoint adjustment further reduces the likelihood of such conflicts. Also, the system is still capable of handling unforeseen forecast deviations through LTC operation. Drawbacks to this method include its communication requirements and reliance on day-ahead forecast data. Last night's capacitor dispatch may be quite sub-optimal with respect to today's DG behavior. If this becomes an issue, the LTCs are on their own; deviating from the capacitor dispatch to respond to forecast inaccuracy would invalidate the information used by LTCs to adjust their voltage setpoints. Thus, the scheme bets on a degree of accuracy in day-ahead forecasting.
+
+\subsection{LTC deadband control}
+The control scheme in \cite{choi2009} focuses exclusively on the subtransmission LTC transformer responsible for setting the single tap position that influences all connected distribution feeders. Conventional subtransmission LTC control follows \eqref{eq:choi-ltc} and is unaware of effects on downstream LTC transformers and VRs. To address this concern, \cite{choi2001} proposed to optimize the subtransmission LTC tap position by solving the following optimization problem:
+\begin{align}\label{eq:choi-opt}
+\min J &= \sum_{n=1}^{N} (V_{n,\text{max}} - V_{\text{nom}})^2 + (V_\text{nom} - V_{n,\text{min}})^2 \\
+\nonumber \text{subject to:}& \\
+\nonumber V_{n,\text{min}} &\geq V_\text{min} \\
+\nonumber V_{n,\text{max}} &\leq V_\text{max}
+\end{align}
+In other words, the subtransmission LTC tap position is set to minimize deviations from nominal voltage at all connected feeders. This problem may be approximately solved by an LP relaxation. Once a satisfactory tap position is found, \eqref{eq:choi-e} is changed to
+\begin{align*}
+e(T^*(t),T(t-1) &= \begin{cases}
+1 &\mbox{if }T^*(t) > T(t-1) \\
+-1 &\mbox{if }T^*(t) < T(t-1) \\
+0 &\mbox{otherwise}\end{cases}
+\end{align*}
+In other words, the subtransmission LTC deadband is defined in terms of the optimal tap position for the current time step and the tap position at the previous time step. This deadband-based control is sensitive to line drops on multiple connected feeders, and is therefore referred to as ``Multiple Line Drop Compensator'' (MLDC) control. The authors of \cite{choi2009} point out that MLDC control results in increased tap operations. To address this concern, they tweak the deadband control further:
+\begin{align}\label{eq:choi-e-pir}
+e(T^*(t),T(t-1) &= \begin{cases}
+1 &\mbox{if }T^*(t) > T(t-1) \mbox{ and PIR}>\varepsilon \\
+-1 &\mbox{if }T^*(t) < T(t-1) \mbox{ and PIR}>\varepsilon \\
+0 &\mbox{otherwise}\end{cases},
+\end{align}
+where
+\begin{align*}
+\text{PIR} &= 1 - \frac{J(T^*(t))}{J(T(t-1))}.
+\end{align*}
+The parameter $\varepsilon$ is used to delay less-important tap operations based on the Performance Index Ratio (PIR). If the objective values of the current optimal tap setting and previous tap setting are close enough, $e = 0$ in \eqref{eq:choi-e-pir}. Otherwise, $e=\pm1$ and the tap counter begins. The authors of \cite{choi2009} further tweak the deadband control to accommodate load diversity (weighting each feeder), then apply the full algorithm to a Korea substation model with load curves taken from three months of data.
+
+The means by which optimal tap positions are found is not as important as the control mechanism itself. One might replace \eqref{eq:choi-opt} with some other method of determining a satisfactory tap position $T^*(t)$. This may be necessary to ensure proper coordination with downstream voltage control devices. The objective function used to compute PIR values might also be altered to accommodate loss minimization or other goals. Regardless of the method used to obtain $T^*(t)$ and PIR values, deadband control has value as a means of delaying unimportant subtransmission tap operations. For example, minute-scale forecast information about an upcoming voltage rise due to significant DG output may be translated through deadband control into delay of a subtransmission tap increase that would otherwise have taken place. Thus, deadband control can curtail tap operations by improving coordination between subtransmission LTC transformers and downstream voltage control devices.
+
+\subsection{MPC with loss reduction}
+MPC is the foundation of the voltage control solution proposed in \cite{baghsorkhi2015}. The paper addresses the trade-off between subtransmission and distribution LTC transformer tap operations. Reactive flows due to DG participation in voltage control can lead to excessive subtransmission LTC tapping, while lax DG voltage control can overwhelm distribution LTCs. Such trade-offs suggest using Pareto curves to illustrate results rather than to focus on specific numbers.
+
+The control scheme adjusts voltage setpoints to simultaneously reduce tap operations and system losses. Given up-to-date DG and load forecasts, the discrete map between distribution LTC transformer tap positions and the predicted number of tap operations may be found through repeated simulation. The map between tap positions and losses may also be found. From the voltage setpoint configurations that minimize tap operations, the one that corresponds to the lowest losses is implemented. The optimal setpoint configuration is computed with respect to a two-hour time horizon and tuned every five minutes. By adjusting the permitted tuning range, the algorithm can shift between two-hour (no tuning) and five-minute (full-range tuning) performance. In this manner the algorithm can trace out the trade-off between subtransmission LTC operations and distribution LTC operations.
+\begin{figure}[h!]
+    \centering
+    \includegraphics[width=0.7\linewidth]{images/bagh_test_net}
+    \caption{Test network from \cite{baghsorkhi2015}.}
+    \label{fig:bagh_test_net}
+\end{figure}
+The optimal setpoint configuration for the simple network of Figure \ref{fig:bagh_test_net} may be expressed as a mixed-integer program whose objective function is
+\begin{align}\label{eq:bagh-obj}
+V_\text{sp}^* &= \underset{V_\text{sp}}{\arg\min}\sum_{k=1}^{t} \lvert s_\text{st}^{(k)}\rvert + \sum_{k=1}^{t}\lvert s_\text{d}^{(k)}\rvert + a\lVert Q_{21}\rVert_2,
+\end{align}
+where $t$ is the length of the time window, $s_\text{st},s_\text{d}\in \{-1,0,1\}$ represent subtransmission and distribution tap changes, and $Q_{21}$ (reactive flow into the distribution feeder) is a surrogate for system losses. The constant $a$ is chosen to make the loss term very small, making loss reduction the ``tie breaker'' between solution candidates resulting in the same number of tap operations. Constraints associated with \eqref{eq:bagh-obj} include LTC models and power flow (the full set of constraints is found on pp.124-125 of \cite{baghsorkhi2015}).
+ 
+One benefit of this control scheme is its accommodation of up-to-date forecast information. The optimization is also based on insights regarding the cause of tap operations and the relationship between system losses and LTC transformer behavior. One drawback of the method is its computational complexity. The enumeration required to obtain a mapping between all setpoint configurations and the number of tapping operations is expensive and suffers from the curse of dimensionality. 
+
+\section{Conclusion}
+\label{sec:conclusion}
+Voltage control is a difficult problem that grows slightly more difficult with each new DG node. There are a variety of competing goals, and several constraints must be considered. Of the plethora of proposed voltage control schemes, those that remain relevant in the long term will likely have two things in common: sensitivity to significant forecast inaccuracy, and minimization of unnecessary or redundant tapping operations. This paper has considered four control schemes with these properties. While some of the methods do not accommodate forecast data updates (on, say, an hourly basis), they may be modified to do so.
+
+The best elements of the control schemes presented in Section \ref{sec:control} may work well together. Partial day-ahead dispatch as presented in \cite{agalgaonkar2014} and \cite{park2007} should be incorporated to prevent unwanted interactions between voltage control devices that cannot communicate. After all, the problem is difficult enough without one hand fighting the other. The deadband control of \cite{choi2009} is useful for delaying unnecessary tap operations. It could provide a useful control input in an MPC scheme, especially if altering the subtransmission LTC voltage setpoint is undesirable. Ultimately, the MPC framework of \cite{baghsorkhi2015} is an ideal foundation, as it is capable of incorporating up-to-date forecast information. Also, the performance evaluation techniques used in \cite{baghsorkhi2015} are well-suited to the voltage control problem. It is more informative to obtain pareto curves to illuminate trade-offs between various goals than to describe tap and loss reduction for a particular network scenario.
+
+Future work should provide a level playing field for comparison between control methods. Results in the papers discussed in Section \ref{sec:control} are dependent on network and forecast data. They all report improvements over the base case (i.e. no control), but comparative work is required to ascertain their benefits relative to each other. Each method should be applied to the same network and forecast data to obtain comparable results. Computational requirements should also be documented to ensure each method is capable of operating as part of an MPC-type scheme. Finally, the numerical implementations should model communication latency effects to make the trade-off between coordination and independent operation more clear. With this comparative architecture in place, the effects of grid topology, DG penetration, and other properties may be studied.
+
+\bibliographystyle{IEEEtran}
+\bibliography{bib}
+
+\clearpage
+\section{Appendix: Code}
+\subsection{LTC models}\label{sec:julia-ltc}
+\textbf{Custom type used to represent an LTC transformer with \cite{choi2009} dynamics, followed by simulation method.}
+\begin{minted}{julia}
+"""
+LTC model used by [Choi2009](http://dx.doi.org/10.1109/TPWRS.2008.2005706)
+(see section II-A).
+"""
+type ltc_choi
+    "tap interval, per unit"
+    alpha
+    "deadband, per unit"
+    db
+    "time delay, seconds"
+    dt
+    "c(t-1), last c value"
+    last_c
+    "c(t), current c value"
+    c
+    "T(t-1), last tap position"
+    last_tap
+    "tap position"
+    tap
+    "-T:T, tap positions. e.g. -8:8 for 17 taps"
+    tap_range
+    "time, seconds"
+    t
+    "number of taps since t = 0"
+    tap_count
+end
+
+"""
+Update transformer tap position in light of new deltaV sample.
+See [Choi2009](http://dx.doi.org/10.1109/TPWRS.2008.2005706) section II-A.
+
+Inputs:
+* `deltaV`: observed voltage error at current time step (t).
+* `x`: instance of type `ltc_choi` transformer, see type spec.
+
+Behavior:
+* Updates tap position over time. Returns modified instance of the transformer object.
+"""
+function ltc_update(dV::Float64,x::ltc_choi)
+    e(dV::Float64,x::ltc_choi) = dV > x.db ? 1 : dV < -x.db ? -1 : 0
+    c(e::Int64,x::ltc_choi) =
+        (e == 1 && x.last_c >= 0) ? x.last_c + 1 :
+            (e == -1 && x.last_c <= 0) ? x.last_c - 1 : 0
+    f(e::Int64,x::ltc_choi) =
+        (e == 1 && x.c > x.dt) ? 1 :
+            (e == -1 && x.c < -x.dt) ? -1 : 0
+
+    eVal = e(dV,x)
+    # current c value becomes last value
+    x.last_c = x.c
+    # new current c value computed from e
+    x.c = c(eVal,x)
+    # current tap becomes last tap
+    x.last_tap = x.tap
+
+    new_tap = x.last_tap + f(eVal,x)
+    if in(new_tap,x.tap_range) && new_tap != x.last_tap
+        x.tap = new_tap
+        x.tap_count += 1
+    end
+    x.t += 1
+    return x
+end
+\end{minted}
+
+\textbf{Custom type used to represent an LTC transformer with \cite{baghsorkhi2015} dynamics, followed by simulation method.}
+\begin{minted}{julia}
+"""
+LTC model used by [Baghsorkhi2015](http://deepblue.lib.umich.edu/handle/2027.42/113584)
+(see section 5.3.2).
+"""
+type ltc_bagh
+    "tap interval, per unit"
+    alpha
+    "deadband"
+    db
+    "time constant"
+    tau
+    "tap error"
+    te
+    "tap position"
+    tap
+    "-T:T, tap positions. eg. -8:8 for 17 taps"
+    tap_range
+    "time, seconds"
+    t
+    "number of taps since t = 0"
+    tap_count
+end
+
+"""
+Update transformer tap position in light of new deltaV sample.
+See [Baghsorkhi2015](http://deepblue.lib.umich.edu/handle/2027.42/113584) section 5.3.2.
+
+Inputs:
+* `deltaV`: observed voltage error at current time step (t).
+* `x`: instance of type `ltc_bagh` transformer, see type spec.
+
+Behavior:
+* Updates tap position over time. Returns modified instance of the transformer object.
+"""
+function ltc_update(dV::Float64,x::ltc_bagh)
+    dndt(dV,x::ltc_bagh) =
+        dV > x.db ? (dV - x.db)/x.tau :
+        dV < - x.db ? (dV + x.db)/x.tau : 0
+    x.te += dndt(dV,x)
+    if x.te > x.alpha && x.tap <= maximum(x.tap_range)
+        x.tap += 1
+        x.tap_count += 1
+        x.te = 0
+    elseif x.te < -x.alpha && x.tap >= minimum(x.tap_range)
+        x.tap -= 1
+        x.tap_count += 1
+        x.te = 0
+    end
+    return x
+end
+\end{minted}
+
+\end{document}

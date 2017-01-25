@@ -1,0 +1,478 @@
+<!DOCTYPE html>
+<html>
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="X-UA-Compatible" content="chrome=1" />
+
+<meta name="apple-mobile-web-app-capable" content="yes" />
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+
+<title>EECS 498 Lecture</title>
+
+<script src="../lib/js/head.min.js"></script>
+<script src="../js/reveal.min.js"></script>
+
+<!-- General and theme style sheets -->
+<link rel="stylesheet" href="../css/reveal.css">
+<link rel="stylesheet" href="../css/theme/white.css" id="theme">
+
+<!-- Printing and PDF exports -->
+<script>
+  var link = document.createElement( 'link' );
+  link.rel = 'stylesheet';
+  link.type = 'text/css';
+  link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+  document.getElementsByTagName( 'head' )[0].appendChild( link );
+</script>
+
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+
+<!-- Font Awesome CSS -->
+<link rel="stylesheet" type="text/css" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.7.0/css/font-awesome.min.css">
+
+<!-- IPython CSS -->
+<link rel="stylesheet" type="text/css" href="ipython.min.css">
+
+<!-- misc. CSS -->
+<link rel="stylesheet" type="text/css" href="misc.css">
+
+</head>
+
+<body>
+
+    <div class="reveal">
+    <div class="slides">
+        <aside class="notes">
+
+            <div class="cell border-box-sizing text_cell rendered">
+            <div class="prompt input_prompt">
+            </div>
+            <div class="inner_cell">
+            <div class="text_cell_render border-box-sizing rendered_html">
+            <p>Contributions:</p>
+            <ol>
+            <li><p>Enhancement to instantaneous instanton analysis: line current formulation.</p>
+            </li>
+            <li><p>New instanton framework: temporal analysis.</p>
+            <ol>
+            <li>Minimizing deviations subject to power flow and strain constraints.</li>
+            <li>Maximizing second-order angle differences subject to deviation constraints.</li>
+            </ol>
+            </li>
+            </ol>
+            <p>Stuff I need to talk about during the presentation:</p>
+            <p>I must introduce instanton analysis. Start at the beginning. Most of these slides already exist. <em>where?</em></p>
+            <p>Instantaneous instanton stuff. These slides come from my wrap-up talk given at LANL.</p>
+            <p>New stuff: modify slides I used for previous group meeting presentation.</p>
+
+            </div>
+            </div>
+            </div>
+        </aside>
+    </section>
+        </section>
+
+    <section>
+    <section>
+        <div class="cell border-box-sizing text_cell rendered">
+        <div class="prompt input_prompt">
+        </div>
+        <div class="inner_cell">
+        <div class="text_cell_render border-box-sizing rendered_html">
+        <h1 id="Instanton-Analysis">Load-Tap-Changing Transformers and Voltage Control</h1><p><em>Jonas Kersulis</em></p>
+        <p><em>January 25, 2017</em></p>
+        <p><em><a href="http://kersulis.github.io/presentations/498lecture2">http://kersulis.github.io/presentations/498lecture2</a></em></p>
+
+        </div>
+        </div>
+        </div>
+    </section>
+    </section>
+
+    <!-- slides-motivation -->
+    <section>
+      <section>
+        <h1>1. Motivation</h1>
+        <ul>
+        <li>LTCs control voltage online.</li>
+        <li>Renewable generation fluctuations may strain them.</li>
+        <li>LTCs are expensive and complicated.</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Load Tap Changing (LTC) Transformer: a big piece of hardware</h2>
+        <iframe src="images/brochure.html" style="width:100%; height:600px"></iframe>
+      </section>
+      <section>
+              <h2>LTC: more than meets the eye</h2>
+              <p>This is a tap changer.</p>
+              <img src="images/tap_changer.jpg" style="width:500px; float:center">
+              <div class="fragment" style="float:right">
+                <p>It can vary the transformer turns ratio <em>online.</em></p>
+              <img src="images/tapping.gif">
+              </div>
+              <div style="clear:both"></div>
+      </section>
+
+      <section>
+        <h2>Role of LTCs</h2>
+        <ul>
+          <li>Respond to voltage fluctuations online.</li>
+          <li>Generation fluctuations typically known.</li>
+          <li>Load fluctuations known well by now too.</li>
+        </ul>
+        <div class="fragment">
+        <p><strong>Problem: Weather fluctuations not known.</strong></p>
+        <p>So LTCs still play a crucial role.</p>
+        </div>
+        <div class="fragment">
+          <p>Unfortunately, they are</p>
+          <ol>
+            <li>Expensive</li>
+            <li>Discrete</li>
+            <li>A major cause of system failure</li>
+          </ol>
+        </div>
+      </section>
+
+      <section>
+        <h2>Issue 1: cost</h2>
+        <img src="images/cost.png" width=700px>
+        <p style="float:right"><small><a href="https://energy.gov/sites/prod/files/Large%20Power%20Transformer%20Study%20-%20June%202012_0.pdf">Source</a></small></p>
+      </section>
+      <section>
+              <h2>Issue 1: cost</h2>
+              <img src="images/delay.png" width=800px>
+              <p style="float:right"><small>Ibid.</small></p>
+      </section>
+      <section>
+              <h2>Issue 1: cost</h2>
+              <img src="images/transport.png" width=700px>
+              <p style="float:right"><small>Ibid.</small></p>
+              <div style="clear:both"></div>
+      </section>
+
+      <section>
+        <h2>Issue 2: discrete behavior</h2>
+        <p>Continuous signal, discrete device. We need</p>
+        <ul>
+        <li>Delays</li>
+        <li>Deadbands</li>
+        <li>Coordination</li>
+        </ul>
+        <p>Details later.</p>
+      </section>
+
+      <section>
+        <h2>Issue 3: system failure</h2>
+        The <a href="http://ieeexplore.ieee.org/document/477878/">IEEE testing standard</a> considers LTC lifespan to be 50k tap operations.
+        <p>Tap-changer failure most likely cause of medium-voltage transformer failure. <small><a href="http://ieeexplore.ieee.org/document/820336/">Source</a></small></p>
+      </section>
+    </section>
+
+    <!-- slides-modeling -->
+    <section>
+      <section>
+        <h1>2. Modeling</h1>
+        <p>Consider this simple network.</p>
+        <img src="images/network.svg" width=900px>
+        <ul class="fragment">
+        <li>Far left: the grid</li>
+        <li>Next: substation LTC</li>
+        <li>Then: connection to wind and a distribution feeder</li>
+        <li>Far right: distribution LTC</li>
+        </ul>
+      </section>
+      <section>
+        <h2>LTC configuration basics</h2>
+        <img src="images/network.svg">
+        <img src="images/params.png" width=900px>
+      </section>
+      <section>
+        <h2>LTC Models</h2>
+        <p>Wait, what's a DLTC? Where do time constants come from?</p>
+        <div class="fragment">
+        <p>Consider two LTC models:</p>
+        <ul>
+        <li>DLTC: definite delay, counts time outside deadband</li>
+        <li>ITLC: inverse delay, integrates deviation from deadband</li>
+        </ul>
+        </div>
+    </section>
+    <section>
+      <h2>DLTC Model</h2>
+        <img src="images/dltc.png" width=400px style="float:right">
+      <div style="float:left;font-size:13pt">
+        \begin{align}
+        \\ \\ \\
+             d(t) &=
+            \begin{cases}
+                1 & \mbox{if } \Delta V(t) > DB \\
+                -1 & \mbox{if } \Delta V(t) < -DB \\
+                0 & \mbox{otherwise}
+                \end{cases} \\ \\ \\ \\ \\ \\
+            c(t) &=
+            \begin{cases}
+                c(t-\Delta t) + \Delta t & \mbox{if } d(t) = 1 \mbox{ and } c(t-\Delta t) \geq 0 \\
+                c(t-\Delta t) - \Delta t & \mbox{if } d(t) = -1 \mbox{ and } c(t-\Delta t) \leq 0 \\
+                0 & \mbox{otherwise}
+                \end{cases} \\ \\ \\ \\ \\ \\
+            T(t) &=
+            \begin{cases}
+                T(t-\Delta t) + 1 & \mbox{if } d(t) = 1 \mbox{ and } c(t) > C \\
+                T(t-\Delta t) - 1 & \mbox{if } d(t) = -1 \mbox{ and } c(t) < -C \\
+                T(t-\Delta t) & \mbox{otherwise, and when $T$ at limit}
+                \end{cases}
+        \end{align}
+      </div>
+    </section>
+    <section>
+      <h2>ILTC Model</h2>
+        <img src="images/iltc.png" width=400px style="float:right">
+      <div style="float:left;font-size:13pt">
+        \begin{align}
+        \\ \\ \\
+            \frac{de(t)}{dt} &=
+    \begin{cases}
+        \frac{1}{\tau}(\Delta V(t) - DB) &\mbox{if }\Delta V(t) > DB \\
+        \frac{1}{\tau}(\Delta V(t) + DB) &\mbox{if }\Delta V(t) < -DB
+    \end{cases} \\ \\ \\ \\ \\ \\
+            e(t) &=
+    \begin{cases}
+      e(t-\Delta t) + \frac{de(t)}{dt}\Delta t \qquad\mbox{if }T(t) = T(t-\Delta t) \\
+      0  \qquad\mbox{otherwise, and when $V$ in deadband} \\
+    \end{cases} \\\\ \\ \\ \\ \\ \\
+T(t) &= \begin{cases}
+      T(t-\Delta t) + 1 &\mbox{if }e(t) > \alpha \\
+      T(t-\Delta t) - 1 &\mbox{if }e(t) < -\alpha \\
+      T(t-\Delta t) &\mbox{otherwise, and when $T$ at limit}
+    \end{cases}
+        \end{align}
+      </div>
+    </section>
+
+    </section>
+
+    <section>
+      <section>
+        <h1>3. LTC Research Overview</h1>
+        <p>Ideas:</p>
+        <ul>
+          <li class="fragment">Monitor</li>
+          <li class="fragment">Modify and control</li>
+          <li class="fragment">Optimize existing controller behavior</li>
+      </section>
+
+      <section>
+        <h2>Monitor</h2>
+        <p>Lots of work in this area at <a href="http://www.itee.uq.edu.au/pes/home">University of Queensland</a>.</p>
+        <img src="images/saha.png" width=500px>
+        <div>
+        <ul>
+          <li class="fragment">Paper insulation samples (Dr. Daniel Martin)</li>
+          <li class="fragment">Tank vibration signal analysis (Lakshitha Naranpanawe)</li>
+          <li class="fragment">Machine learning on oil samples (gas content), thermal and acoustic samples (Dr. Hui Ma)</li>
+        </ul>
+        </ul>
+      </section>
+
+      <section>
+        <h2>Modify and control</h2>
+        <p>Common objectives:</p>
+        <ul>
+          <li>Minimize losses (difficult!)</li>
+          <li>Minimize tap operations (enumerate?)</li>
+          <li>Prevent undesirable interactions (hunting, voltage regulator runaway)</li>
+        </ul>
+        <div class="fragment">
+        <p>Common constraints:</p>
+        <ul>
+        <li>Power balance</li>
+        <li>Voltage limits</li>
+        <li>Branch flow constraints (even thermal limits)</li>
+        <li>Transformer capacity limits (reverse limit $<$ forward limit)</li>
+        <li>Tap limits</li>
+        <li>Renewable generation constraints (voltage regulation limits)</li>
+        </ul>
+        </div>
+        <p class="fragment">Hybrid dynamics. Heuristics and assumptions everywhere!</p>
+      </section>
+      <section>
+        <h3>In the literature</h3>
+        <p><a href="http://ieeexplore.ieee.org/document/6600912/">Agalgaonkar et al.</a>: Day-ahead LTC and PV control.</p>
+        <ul>
+          <li class="fragment">Objective: fix LTC and PV inverter setpoints to minimize tap operations.
+\begin{align}
+f &= \left(\overbrace{W_c}^\text{tap count wt.} \underbrace{\sum_{t=2}^{N}\sum_{T=1}^{N_{tr}} \lvert \text{Tap}_{t,T} - \text{Tap}_{t-1,T} \rvert}_\text{total taps}\right) + \left( \overbrace{W_r}^\text{extreme tap wt.} \underbrace{\sum_{t=1}^{N} \lvert P_t \rvert}_\text{penalty function}\right),
+\end{align}
+where
+\begin{align}
+P_t &\geq 0 \\
+P_t &\geq p_1\text{Tap}_t + p_2 \\
+P_t &\geq p_3\text{Tap}_t + p_4,
+\end{align}
+and $p_1-p_4$ are penalty function parameters.</li>
+          <li class="fragment">Constraints: many (good example of thoroughness)</li>
+        </ul>
+        <p class="fragment"><strong>Issues and assumptions</strong></p>
+        <ul class="fragment">
+          <li>Reliant on day-ahead PV forecasts</li>
+          <li>Assumes LTC setpoints are controllable</li>
+          <li>Assumes communication between LTCs and solar PV</li>
+          <li>Interior-point method</li>
+        </ul>
+      </section>
+      <section>
+        <h3>Also in the literature</h3>
+        <p><a href="http://ieeexplore.ieee.org/document/4162612/">Park et al.</a>: Day-ahead STATCOM dispatch
+        <li class="fragment">Objective: dispatch STATCOMs a day in advance, allow LTCs and VRs to act semi-autonomously.
+\begin{align}
+\min J &= \overbrace{w_L\sum_{t=1}^{24}L_t}^\text{loss term} + \overbrace{w_V\sum_{t=1}^{24}\sum_{n=1}^{N}D_{n,t}}^\text{voltage deviation term} \\
+& \text{subject to:} \\
+V_\text{min} &< V_{n,t} < V_\text{max}\quad\forall n \\
+&\sum_{t=2}^{24} \lvert \text{Tap}_{p,t} - \text{Tap}_{p,t-1}\rvert \leq MK_{T_p}\quad\forall p \\
+&\sum_{t=2}^{24}\lvert C_{q,t}\oplus C_{q,t-1}\vert \leq MK_{C_q} \quad\forall q
+              \end{align}</li>
+        <li class="fragment">LTCs and VRs use capacitor dispatch to fix setpoints in advance</li>
+        <p class="fragment"><strong>Issues and assumptions</strong></p>
+        <ul class="fragment">
+          <li>Communication requirements</li>
+          <li>Getting stuck with yesterday's forecast</li>
+          <li>Reliance on genetic algorithm</li>
+        </ul>
+      </section>
+    </section>
+
+    <section>
+      <section>
+        <h1>4. Optimization setup</h1>
+        <h2>Optimize existing controller behavior</h2>
+        <p>Rationale:</p>
+        <ul>
+        <li>Long time before new devices take over or existing LTCs are retrofitted</li>
+        <li>Communication is hard</li>
+        </ul>
+      </section>
+      <section>
+        <p>Combine</p>
+        <ul>
+          <li>Test network</li>
+          <li>Parameters introduced previously</li>
+          <li>NREL wind and solar data</li>
+        </ul>
+        <p>Illustrate</p>
+        <ul>
+          <li>Subtransmission/distribution tradeoff</li>
+          <li>Parameter sensitivity</li>
+        </ul>
+        <p><strong>Big idea: explore interaction between LTCs and renewables</strong></p>
+        <p class="fragment">Especially impact of renewable voltage regulation on LTC tapping</p>
+      </section>
+      <section>
+        <h2>NREL data</h2>
+        <p>NREL's <a href="https://mapsbeta.nrel.gov/wind-prospector/?visible=wind_3tier_site_metadata#/?aL=p7FOkl%255Bv%255D%3Dt&bL=groad&cE=0&lR=0&mC=40.21244%2C-91.625976&zL=4">Wind Prospector</a> provides simulated power data at 100m, assuming site-appropriate turbine power curves.</p>
+        <ul>
+        <li>Take one year of data at max. resolution (5 min)</li>
+        <li>Interpolate to obtain 1-min data</li>
+        <li>Similar process for NREL solar PV data</li>
+        </ul>
+        <div class="fragment">
+        <p>Ready for simulation.</p>
+        <img src="images/network.svg" width=800px">
+        <ul>
+          <li>Let $P_g$ be NREL wind or solar data</li>
+          <li>Let $Q_g$ be limited to $[-Q_g^{lim},Q_g^{lim}]$</li>
+          <ul>
+            <li>Bus 1 begins as PV (voltage specified)</li>
+            <li>If reactive power limit encountered, switch to PQ bus</li>
+          </ul>
+        </ul>
+        </div>
+      </section>
+
+      <section>
+        <h2>Simulation</h2>
+        <img src="images/network.svg" width=450px" style="float:right">
+        <p>Let's first examine extreme cases:
+        <ul>
+          <li>Case 1: loose renewable regulation, $Q_g^{lim}=0$</li>
+          <li>Case 2: tight regulation, $Q_g^{lim}=\infty$</li>
+        </ul>
+        </p>
+        <img src="images/traj-noreg.png" width=450px style="float:left">
+        <img src="images/traj-reg.png" width=450px style="float:right">
+      </section>
+
+      <section>
+        <h2>Tapping tradeoff</h2>
+        <p>Time to get a bigger picture</p>
+        <ul>
+          <li>Sweep through many values of $Q_g^{lim}$</li>
+          <li>Simulate for one year at one minute resolution</li>
+          <li>Count LTC taps and plot distribution vs. subtransmission</li>
+        </ul>
+        <img src="images/tradeoff-def.png" width=450px style="float:left">
+        <img src="images/tradeoff-inv.png" width=450px style="float:right">
+        <ul>
+          <li>Total taps decrease as renewable regulation tightens</li>
+          <li>But the subtransmission LTC taps more</li>
+        </ul>
+      </section>
+
+      <section>
+        <h2>One more level</h2>
+        <ul>
+          <li>Visualize sensitivity to LTC setpoint</li>
+          <li>Overlay multiple tradeoff curves</li>
+        </ul>
+        <img src="images/setpoint.svg" width=650px>
+      </section>
+    </section>
+    <section>
+      <h1>Conclusions</h1>
+      <ul>
+      <li>LTCs continue to play a key role in power systems.</li>
+      <li>Rise in renewables threatens LTC lifespan.</li>
+      <div class="fragment">
+      <li>We can influence tapping behavior without controlling an LTC directly.</li>
+      <li>Renewable voltage regulation balances active power fluctuation effects between distribution and subtransmission LTCs.</li>
+      </div>
+      <div class="fragment">
+      <li>The trade-off is nuanced even for simple networks.</li>
+      <li>Understanding relationships between parameters is key to developing algorithms for general networks.</li>
+      </div>
+      </ul>
+
+    <script>
+      // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+      controls: false,
+      progress: true,
+      history: true,
+      // touch: true,
+      // previewLinks: true,
+      slideNumber: true,
+
+      theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+      transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/none
+
+      math: {
+          mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+          config: 'TeX-AMS_HTML-full'
+      },
+
+      // Optional libraries used to extend on reveal.js
+      dependencies: [
+      { src: "script/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
+      { src: '../plugin/math/math.js', async: true },
+      { src: "script/reveal.js/plugin/notes/notes.js", async: true, condition: function() { return !!document.body.classList; } }
+      ]
+      });
+    </script>
+
+</body>
+
+</html>
