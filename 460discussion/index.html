@@ -264,6 +264,75 @@ i(t) &= 2e^{0.1V_R(t)}.
           </section>
         </section>
 
+        <section>
+            <section>
+            <h1>Week 4 | 2017-01-30/31</h1>
+            <div>
+              <ul>
+                <li>BIBO stability</li>
+                <li>Linearization</li>
+                <li>Steady-state error</li>
+              </ul>
+            </section>
+          <section>
+            <h2>Motivation</h2>
+            <ul>
+              <li>Stability is a key feature of control systems</li>
+            <ul>
+              <li>Assess in frequency domain -- no need to try various inputs or simulate time domain behavior</li>
+            </ul>
+            <li>Another linearization example to drive home the process. Make sure you're comfortable with linearization.</li>
+            <li>Steady-state error: how well will our control systems track various inputs?</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Problem 1</h2>
+             Determine stability of the following closed-loop systems. If given, $M(s)$ is the closed-loop transfer function.
+
+             <h2>Part A</h3>
+            $$M(s) = \frac{3}{s(s+1)(s+2)}$$
+          </section>
+          <section>
+             <h2>Part B</h3>
+             <img src="images/d4p1d.png" width=500px, style="border:none">
+             <p>where $G_1(s) = \frac{7}{2s+1}$.</p>
+          </section>
+          <section>
+             <h2>Part C</h3>
+             <img src="images/d4p1e.png" width=500px, style="border:none">
+              where $G_2(s) = \frac{7K}{2s+1}$ (answer should be in terms of $K$).
+          </section>
+
+          <section>
+            <h2>Problem 2</h2>
+Consider the system modeled by the following differential equation:
+\begin{align*}
+\frac{d^2\theta}{dt^2} + K\frac{d\theta}{dt} + \cos \theta &= u(t)
+\end{align*}
+The applied input is $u(t)$, the output is $\theta$, and we are interested in changes around the nominal input value $u_N = 0$.
+
+<h3>Part A</h3>
+<p>Linearize the system to obtain a small-signal state-space model.</p>
+          </section>
+          <section>
+            <h3>Part B</h3>
+            <p>Find the transfer function of the linearized state-space model.</p>
+          </section>
+          <section>
+            <h3>Part C</h3>
+            <p>Comment on the stability of $G(s)$ from Part B.</p>
+          </section>
+          <section>
+            <h3>Part D</h3>
+            <p>Now comment on the stability of the closed-loop system below, where $G(s)$ is the transfer function computed in Part B.</p>
+
+             <img src="images/d4p2.png" width=500px, style="border:none">
+          </section>
+
+          <section>
+            <h2>Problem 3</h2>
+            <p>Consider a unity-feedback system with forward path transfer function $G(s) = \frac{1}{s(s+2)}$ Find the steady-state error for step, ramp, and parabolic inputs.</p>
+        </section>
       </div>
     </div>
 
