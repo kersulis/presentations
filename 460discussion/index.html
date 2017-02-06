@@ -333,6 +333,120 @@ The applied input is $u(t)$, the output is $\theta$, and we are interested in ch
             <h2>Problem 3</h2>
             <p>Consider a unity-feedback system with forward path transfer function $G(s) = \frac{1}{s(s+2)}$ Find the steady-state error for step, ramp, and parabolic inputs.</p>
         </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Week 5 | 2017-02-06/07</h1>
+            <div>
+              <p>Second-order systems (GK section 5-6)</p>
+              <ul>
+                <li>Prediction of qualitative responses</li>
+                <li>Designing to meet specs</li>
+              </ul>
+              <ul class="fragment">
+                <li>Previously looked at steady-state response ($t\to\infty$).</li>
+                <li>Now looking at transient response ($t$ near 0).</li>
+              </ul>
+            </section>
+            <section>
+              <img src="images/time.jpg" style="border:none">
+            </section>
+            <section>
+              <h2 style="float:left">Second-order system</h2>
+              <img src="images/second-order.jpg" width=400px style="padding:none; border: none; float: right">
+              <p style="float:left">
+              \begin{align}
+              \frac{Y(s)}{R(s)} &= \frac{\omega_n^2}{s^2 + 2\zeta\omega_ns + \omega_n^2}
+              \end{align}</p>
+              <p class="fragment" style="float:left">Step response:
+              $$ y(t) = 1 - \frac{e^{-\zeta\omega_nt}}{\sqrt{1 - \zeta^2}}\sin\left(\omega_n\sqrt{1-\zeta^2}t + \arccos\zeta\right),~t\geq 0 $$
+              </p>
+              <p class="fragment" style="float:left">Poles:
+              \begin{align}
+              s_1,s_2 &= -\zeta\omega_n\pm j\omega_n\sqrt{1 - \zeta^2} = -\alpha \pm j\omega
+              \end{align}</p>
+              <div style="clear:both"></div>
+            </section>
+            <section>
+              <p>Poles:
+              \begin{align}
+              s_1,s_2 &= -\alpha \pm j\omega \\
+              \alpha &= \zeta\omega_n \\
+              \omega &= \omega_n\sqrt{1-\zeta^2}
+              \end{align}
+              </p>
+              <ul>
+                <li>$\alpha$ is the <i>damping factor</i></li>
+                <li>$\zeta$ is the <i>damping ratio</i></li>
+                <li>$\omega_n$ is the <i>undamped natural frequency</i></li>
+                <li>$\omega$ is the <i>damped frequency</i></li>
+              </ul>
+              </section>
+              <section>
+                <img src="images/sensitivity.jpg" width=700px style="border:none">
+              </section>
+              <section>
+                <h2>Overshoot and peak time</h2>
+                <p>From GK Section 5-6-3, percent maximum overshoot is
+                $$ 100e^{-\pi\zeta/\sqrt{1-\zeta^2}} $$
+              </p>
+              <p>Peak time is
+                $$ t_\text{max} = \frac{\pi}{\omega_n\sqrt{1-\zeta^2}} $$
+              </p>
+              </section>
+              <section>
+                <h2>Addition of poles and zeros</h2>
+                <p>Read GK Section 5-9! Also good to play with systems in MATLAB.</p>
+              </section>
+              <section>
+                <h1>Problems</h1>
+                <h2>Problem 1</h2>
+                <p>Consider the following mechanical system:</p>
+                <img src="images/d5p1.png" width=600px style="border:none">
+                <p>where $x(t)$ is displacement (and also output), $f(t)$ is the applied input with nominal $f_N = 10N$, and the nonlinear spring applies a force $f_s(t) = 2x_s^2(t)$.</p>
+              </section>
+              <section>
+                <h3>Part A</h3>
+Find the linearized state-space representation of the system. Assume that you are concerned with small changes around the equilibrium point.
+<div class="fragment">
+                <h3>Part B</h3>
+Find $\bar{G}(s) = \frac{\Delta Y(s)}{\Delta U(s)}$, the transfer function of the linearized system.
+</div>
+<div class="fragment">
+                <h3>Part C</h3>
+Comment on the stability of the linearized system.
+</div>
+<div class="fragment">
+                <h3>Part D</h3>
+Qualitatively predict the step response of this system.
+</div>
+              </section>
+              <section>
+                <h3>Part E</h3>
+Now suppose we have a design requirement: overshoot of the step response cannot exceed 5\%. Determine values of $D$ that satisfy this requirement (if any).
+<div class="fragment">
+                <h3>Part F</h3>
+While satisfying the constraint in part (e), is it possible to also achieve a peak time $T_p \leq 2$ seconds? If so, find the values of $D$ that meet both requirements.
+</div>
+<div class="fragment">
+                <h3>Part G</h3>
+Given these constraints, what type of step response will we see? Revise your predicted qualitative step response.
+</div>
+              </section>
+
+              <section>
+                <h2>Problem 2</h2>
+Suppose $D = 4.2$ in the Problem 1 system, and the transfer function is
+$$ \bar{G} = \frac{\Delta Y(s)}{\Delta U(s)} = \frac{1}{s^2 + Ds + 4\sqrt{5}} $$
+(the constant gain is gone now).
+<h3>Part A</h3>
+Suppose a zero is added at $s=-\frac{1}{a}$, so the transfer function becomes $\bar{G}(1+as)$. Qualitatively describe the change in step response we should see. Validate this using MATLAB.
+              </section>
+              <section>
+<h3>Part B</h3>
+Suppose instead a pole is added at $s=-1/\tau$, so the transfer function becomes $\frac{\bar{G}(s)}{\tau s + 1}$. Again describe the change in step response you expect, and verify with MATLAB.
+          </section>
       </div>
     </div>
 
