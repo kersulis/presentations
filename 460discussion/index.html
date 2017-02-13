@@ -447,6 +447,96 @@ Suppose a zero is added at $s=-\frac{1}{a}$, so the transfer function becomes $\
 <h3>Part B</h3>
 Suppose instead a pole is added at $s=-1/\tau$, so the transfer function becomes $\frac{\bar{G}(s)}{\tau s + 1}$. Again describe the change in step response you expect, and verify with MATLAB.
           </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Week 6 | 2017-02-13/14</h1>
+            <div>
+              <ul>
+                <li>Stability via Routh-Hurwitz</li>
+                <li>Stability via Kharitanov's Theorem</li>
+                <li>Oscillation</li>
+              </ul>
+            </section>
+            <section>
+              <h2>Routh-Hurwitz</h2>
+              <ul>
+                <li>GK 2-13 on page 78, lecture 14, handout 7</li>
+                <li>Stability properties without root finding</li>
+                <li>Just a table and computations similar to 2x2 determinants</li>
+              </ul>
+            </section>
+            <section>
+              <img src="images/d6f1.png" width=90% style="border:none">
+            </section>
+
+            <section>
+              <h2>Kharitanov's Theorem</h2>
+              <ul>
+                <li>Lecture 15</li>
+              <li>Stability properties for family of devices</li>
+              <li>Robustness to coefficient variation</li>
+              <li>Four Routh tables provides strong conclusion for infinitely many systems</li>
+              </ul>
+            </section>
+            <section>
+              <img src="images/d6f2.png" width=90% style="border:none">
+            </section>
+
+            <section>
+              <h1>Problems</h1>
+              <h2>Problem 1</h2>
+              <h3>Part A</h3>
+              <p>Assess the stability of a system with the following transfer function:</p>
+$$ G(s) = \frac{s+1}{s^2 + 4s + 1} $$
+            </section>
+            <section>
+              <h3>Part B</h3>
+              <p>Now suppose we connect the Part A system in series with a gain $K$, and introduce unity feedback.</p>
+               <img src="images/d6p1.png" width=500px style="border:none">
+               <p>Use Routh-Hurwitz to give a range of $K$ for which the closed-loop system is stable.</p>
+               <div class="fragment">
+              <h3>Part C</h3>
+              <p>Suppose $K=-4$. Comment on the stability of the system.</p>
+               </div>
+            </section>
+            <section>
+              <h3>Part D</h3>
+              <p>Suppose we don't know $K$ exactly, but we know it will lie somewhere in the range $[-2,5]$. Use Kharitanov's Theorem to show that the system will not be stable for every $K$ in this range.</p>
+            </section>
+
+            <section>
+              <h2>Problem 2</h2>
+              <p>Suppose you have eight similar devices in your system with slightly different transfer functions. You know the eight characteristic polynomials for these devices:</p>
+\begin{align*}
+s^3 + 18s^2 + 2s + 2 & \qquad
+s^3 + 18s^2 + 3s + 6 \\
+s^3 + 18s^2 + 2s + 3 &\qquad
+s^3 + 16s^2 + 2s + 4 \\
+s^3 + 18s^2 + 1s + 8 &\qquad
+s^3 + 20s^2 + 3s + 4 \\
+s^3 + 16s^2 + 3s + 5 &\qquad
+s^3 + 18s^2 + 2s + 3
+\end{align*}
+<p>You also know that the overall system will be stable if and only if all eight components are stable. Will the system be stable?</p>
+            </section>
+
+            <section>
+              <h2>Problem 3</h2>
+              <p>Consider the following transfer function of a feedback control system. Assume $K>0$.</p>
+$$ G(s) = \frac{K(s+3)}{s^4 + 7s^3 + 14s^2 + (8+K)s + 3K} $$
+<div class="fragment">
+              <h3>Part A</h3>
+              <p>Determine the range of $K$ so that the system is asymptotically stable.</p>
+</div>
+            </section>
+            <section>
+              <h3>Part B</h3>
+              <p>Determine the value of $K$ that renders the system marginally stable, and determine the frequency of oscillation, if applicable.</p>
+            </section>
+        </section>
+
       </div>
     </div>
 
