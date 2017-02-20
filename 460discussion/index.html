@@ -537,6 +537,62 @@ $$ G(s) = \frac{K(s+3)}{s^4 + 7s^3 + 14s^2 + (8+K)s + 3K} $$
             </section>
         </section>
 
+        <section>
+          <section>
+            <h1>Week 7 | 2017-02-20/21</h1>
+            <p>Double office hour: Tuesday 2-4 PM at EECS 2420</p>
+            <div>
+              <ul>
+                <li>Root locus criteria</li>
+                <li>Review of signal flow diagrams, FVT, and second-order prototype response</li>
+                <li>Your questions</li>
+              </ul>
+              <div class="fragment">
+              <p>Study hint: be proficient at things we've done several times.</p>
+              <ul>
+              <li>Differential equations to transfer functions to state-space (and back)</li>
+              <li>Linearization</li>
+              </ul>
+              </div>
+            </section>
+
+            <section>
+              <h1>Problems</h1>
+              <h2>Problem 1</h2>
+              <p>Consider the block diagram below, where $K$ is a tunable gain. Is there a value of $K$ for which $s_1 = -4 + j2$ is a pole of the closed-loop system? If so, what is that value of $K$?</p>
+              <img src="images/d7f1.png" style="border:none" width=600px>
+        </section>
+        <section>
+              <h2>Problem 2</h2>
+              <p>Consider the block diagram shown below.</p>
+              <img src="images/d7f3.png" style="border:none" width=700px>
+              <h3>Part A</h3>
+              <p>Find the transfer function $\frac{C(s)}{R(s)}$. You can use any method you like.</p>
+        </section>
+        <section>
+              <h3>Part B</h3>
+              <p>Assume that the signal labeled $A(s)$  is known. Find $C(s)$.</p>
+              <div class="fragment">
+              <h3>Part C</h3>
+              <p>Assume $G(s) = K_f>0$.</p>
+              <ol>
+              <li>Give conditions on $K_f$ and $K$ such that the overall closed-loop system is stable.</li>
+              <li>When $R(s)$ is a unit step function, what is the steady-state value of $C(s)$ (i.e. $\lim_{t\to\infty}c(t)$)? Explain the qualitative effect of $K_f$ on this steady-state value.</li>
+              <li>Explain why the extra branch with $G(s) = K_f$ might have been put into the system (hint: consider the qualitative effect of $K_f$ on the overall transfer function).</li>
+              </ol>
+              </div>
+        </section>
+        <section>
+              <h3>Part D</h3>
+              <p>Now assume $G(s) = 0$ and $K>0$.</p>
+              <ol>
+              <li>Provide conditions for $K$ that yield underdamped, critically damped, and overdamped responses.</li>
+              <li>For what value of $K$ will the real parts of the poles be -0.25? Find the corresponding imaginary parts of the poles.</li>
+              <li>What will the rise time and 5% settling time be for the value of $K$ you computed above?</li>
+              <li>Use your computations to sketch the step response.</li>
+              </ol>
+        </section>
+        </section>
       </div>
     </div>
 
