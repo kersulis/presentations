@@ -633,6 +633,74 @@ $$ G(s) = \frac{K(s+3)}{s^4 + 7s^3 + 14s^2 + (8+K)s + 3K} $$
           </section>
         </section>
 
+        <section>
+          <section>
+            <h1>Week 9 | 2017-03-13/14</h1>
+              <ul>
+                <li>Lead compensator design</li>
+                <li>PD controller design</li>
+                <li>Sensor delay effects</li>
+              </ul>
+          </section>
+
+          <section>
+            <h2>Lead compensator design</h2>
+            <p>Add positive phase to the system, shifting root locus left.</p>
+              <img src="images/d9f1.png" style="border:none" width=700px>
+          </section>
+          <section>
+            <h3>Angle of deficiency</h3>
+              <p>Phase needed to cause a chosen point to satisfy angle criterion.</p>
+              $$ \phi = -180^\circ - \sum_i \angle(s + z_i) + \sum_j \angle (s + p_j) $$
+          </section>
+          <section>
+            <h3>Bisection method</h3>
+            <p>Many ways to place the pole and zero of a lead compensator. Bisection tends to work well.</p>
+              <img src="images/d9f2.png" style="border:none" width=650px>
+              <img src="images/d9f3.png" style="border:none" width=250px>
+          </section>
+          <section>
+            <h2>PD controller design</h2>
+            <p>Add only a zero: speed response, increase overshoot</p>
+             $$ G_c(s) = K_c(s+z) $$
+             <p>Useful heuristic, analogous to bisection:</p>
+            $$ z = d_R + \frac{d_I}{\tan \phi} $$
+            <p>For lead compensator and PD controller, try to keep $K$ low. Less amplification typically means cheaper parts.</p>
+          </section>
+
+          <section>
+            <h2>Sensor delay effects</h2>
+            <p>Actual transfer function:</p>
+            $$ e^{-sT}, $$
+            <p>where $T$ is delay in seconds.</p>
+
+            <p>All-pass approximation (always has magnitude 1):</p>
+            $$ e^{-sT} \approx  \frac{\left(\frac{2n}{T} - s\right)^n}{\left(\frac{2n}{T} + s\right)^n} $$
+            <p>Sensor delay can push the system towards instability.</p>
+            <p>How much should you spend on your sensor?</p>
+          </section>
+          <section>
+            <h1>Problems</h1>
+            <h2>Problem 1</h2>
+            <p>Consider the system shown below.</p>
+
+              <img src="images/d9f1-.png" style="border:none" width=750px>
+            <h3>Part A</h3>
+            <p>Sketch the root locus ($K>0$) of the system.</p>
+          </section>
+          <section>
+            <h3>Part B</h3>
+            <p>Design a controller that causes overshoot to be no more than 10%, and 5% settling time to be no more than 2s.</p>
+            <div class="fragment">
+            <h3>Part C</h3>
+            <p>Now try to meet the spec using a PD controller.</p>
+            </div>
+            <div class="fragment">
+            <h3>Part D</h3>
+            <p>How is performance affected if there is some sensor delay? Assume a second-order (all-pass) model and a delay of $T=0.2$s.</p>
+            </div>
+          </section>
+          </section>
       </div>
     </div>
 
