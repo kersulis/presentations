@@ -701,6 +701,77 @@ $$ G(s) = \frac{K(s+3)}{s^4 + 7s^3 + 14s^2 + (8+K)s + 3K} $$
             </div>
           </section>
           </section>
+
+        <section>
+          <section>
+            <h1>Week 10 | 2017-03-20/21</h1>
+              <ul>
+                <li>Precompensator design</li>
+                <li>Phase lag compensator design</li>
+                <li>2-DoF design</li>
+              </ul>
+          </section>
+          <section>
+            <h2>Precompensator design</h2>
+            <p>Introduce $K(s)$ immediately after input.</p>
+            <ul>
+            <li>To fix transient, use $K(s)$ to cancel zeros of $G_{cl}(s)$.</li>
+            <li>To fix steady-state, calculate $e_{ss}$ and determine what $K(0)$ should be to reduce $e_{ss}$ according to spec.</li>
+            <li>Transfer functions become:</li>
+            </ul>
+\begin{align*}
+\frac{Y(s)}{R(s)} &= K(s)\frac{G(s)}{1 + G(s)} \\
+\frac{E(s)}{R(s)} &= \frac{1 + G(s) - K(s)G(s)}{1 + G(s)}~,
+\end{align*}
+          </section>
+          <section>
+            <h2>Phase lag compensation</h2>
+            <p>$$G_\text{lag}(s) = K\frac{s+z}{s+p},~p<z $$</p>
+
+            <ul>
+            <li>Draw root locus and check transient properties; fix with lead compensation if needed.</li>
+            <li>Check $e_{ss}$. If too large, determine $z/p$ for lag compensator.</li>
+            <li>Place $z$ and $p$ close to origin.</li>
+            <li>Adjust $K$ to ensure dominant poles do not move much.</li>
+            </ul>
+
+          </section>
+          <section>
+            <h2>2-DoF design</h2>
+            <p>We care about stability, steady-state error, and transient behavior. Adding a second degree of freedom lets us target multiple objectives.</p>
+          </section>
+          <section>
+            <h1>Problems</h1>
+            <h2>Problem 1</h2>
+            <p>Consider the system shown below.</p>
+
+              <img src="images/d10f1.png" style="border:none" width=850px>
+            <h3>Part A</h3>
+            <p>Roughly sketch the root locus ($K>0$) of the system.</p>
+          </section>
+          <section>
+            <h3>Part B</h3>
+            <p>Stabilize the system and include compensation so that $\zeta = 0.174$ (approx. 57% overshoot).</p>
+            <h3>Part C</h3>
+            <p>With the compensation designed in Part B, calculate the steady-state error to a step input.</p>
+          </section>
+          <section>
+            <h3>Part D</h3>
+            <p>Design a precompensator, $\bar{K}(s)$, to reduce the steady-state error to a step input by a factor of 10. See figure below.</p>
+              <img src="images/d10f3.png" style="border:none" width=950px>
+            <h3>Part E</h3>
+            <p>Repeat Part D using a phase-lag controller. See figure below.</p>
+              <img src="images/d10f4.png" style="border:none" width=950px>
+          </section>
+          <section>
+            <h3>Part F</h3>
+            <p>Verify your results in Parts D and E using MATLAB or Simulink.</p>
+            <h3>Part G</h3>
+
+            <p>Notice that the overshoot from Part E is greater than 40%. Design a precompensator $\tilde{K}(s)$ to reduce the overshoot by a factor of 10. See figure below. Verify your results with MATLAB or Simulink.</p>
+
+              <img src="images/d10f5.png" style="border:none" width=950px>
+        </section>
       </div>
     </div>
 
