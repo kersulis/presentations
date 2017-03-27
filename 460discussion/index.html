@@ -772,6 +772,51 @@ $$ G(s) = \frac{K(s+3)}{s^4 + 7s^3 + 14s^2 + (8+K)s + 3K} $$
 
               <img src="images/d10f5.png" style="border:none" width=950px>
         </section>
+        </section>
+
+        <section>
+          <section>
+            <h1>Week 11 | 2017-03-27/28</h1>
+            <p>PID controller design: cascaded PD and PI method</p>
+          </section>
+          <section>
+            <h2>PID controller design</h2>
+            $$ G_{PID} = K_P + K_Ds + K_I/s $$
+            <p>Two useful methods:</p>
+            <ol>
+            <li>Method of Root Contours (see Handout 14)</li>
+            <li>Cascading PD and PI.
+            <p>We can view this as a PD controller cascaded with a PI controller:</p>
+             \begin{align*}
+G_{PID}(s) &= K_P + K_Ds + K_I/s = (1 + \tilde{K}_Ds)(\tilde{K}_P + \tilde{K}_I/s) \\
+\implies K_P &= \tilde{K}_P + \tilde{K}_D\tilde{K}_I \\
+K_D &= \tilde{K}_D\tilde{K}_P \\
+K_I &= \tilde{K}_I
+\end{align*}
+            </li>
+            </ol>
+          </section>
+          <section>
+            <h2>Design process</h2>
+            <ol>
+            <li>PD: "anticipatory" | Section 9-2. Place the zero of the PD controller to increase damping and reduce rise time, settling time, and overshoot.</li>
+            <li>PI: "low-pass" | Section 9-3. Place the zero of the PI controller close to the origin and far from dominant poles to improve steady-state error and overshoot.</li>
+            </ol>
+          </section>
+          <section>
+            <h1>Problems</h1>
+            <h2>Problem 1</h2>
+            <p>Consider the third-order attitude control system with forward-path transfer function</p>
+            $$ G_p(s) = \frac{2.718\times 10^9 }{s(s^2 + 3408.3s + 1,204,000)} = \frac{2.718\times 10^9}{s(s+400.26)(s+3008)} $$
+            <p>Design a PID controller such that the closed-loop system meets the following specifications:</p>
+            <ul>
+            <li>Steady-state error due to a ramp input $\frac{1}{2}t^2u_s(t)\leq 0.2$.</li>
+            <li>Maximum overshoot $\leq 5\%$.</li>
+            <li>Rise time $t_r \leq 0.005s$.</li>
+            <li>5% settling time $t_s \leq 0.005s$.</li>
+            </ul>
+          </section>
+        </section>
       </div>
     </div>
 
