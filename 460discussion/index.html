@@ -832,6 +832,94 @@ K_I &= \tilde{K}_I
             </ul>
           </section>
         </section>
+
+        <section>
+          <section>
+            <h1>Week 12 | 2017-04-03/04</h1>
+            <ul>
+            <li>Lab sessions begin this week!</li>
+            <li>Bode plots</li>
+            <li>Nyquist plots</li>
+            <li>Stability margins</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Bode plots</h2>
+            <ul>
+            <li>Logarithmic plots of transfer function magnitude and phase w.r.t. frequency.</li>
+            <li>Logarithm converts multiplication and division into addition and subtraction.</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Five basic elements</h3>
+            <ol>
+            <li>Constant gain: $K$</li>
+              <ul>
+                <li>Magnitude: $20\log_{10}K ~\forall ~\omega$</li>
+                <li>Phase: $0^\circ~\forall ~\omega$</li>
+              </ul>
+            <li>Poles and zeros at the origin: $(j\omega)^n$</li>
+              <ul>
+              <li>Magnitude: $20n$ dB/decade; 0 dB at $\omega = 1$ ($n$ can be positive or negative)</li>
+              <li>Phase: $90^\circ\times n~\forall~\omega$ ($n$ can be positive or negative)</li>
+              </ul>
+            <li>Simple zeros and poles: $1+j\omega T$ and $1/(1+j\omega T)$</li>
+
+            <ul>
+            <li>Magnitude: 0 dB to left of corner frequency $1/T$; $\pm 20$ dB/decade to right (positive for zero, negative for pole)</li>
+            <li>Phase: $0^\circ$ to $\pm 90^\circ$ over the course of two decades, centered at corner frequency $1/T$ (positive for zero, negative for pole)</li>
+            </ul>
+            </ol>
+          </section>
+          <section>
+            <ul>
+            <li>4. Quadratic poles and zeros</li>
+            <ul>
+            <li>See GK 2-2-8.</li>
+            </ul>
+            <li>5. Time delay</li>
+            <ul>
+            <li>Only affects phase. See GK 2-2-9.</li>
+            </ul>
+            </ul>
+            </section>
+          <section>
+              <img src="images/d12f9.jpg" width=700px style="border: none">
+              </ul>
+          </section>
+            <section>
+              <h2>Nyquist plots</h2>
+              <ul>
+              <li>Based on Cauchy's Principle of the Argument</li>
+              <li>Define Nyquist path containing entire RHP</li>
+              <li>Map onto $L(j\omega)$ plot</li>
+              <li>Stability: enclosure of critical point</li>
+              <li>Stability margins from real-axis crossing</li>
+              </ul>
+            </section>
+            <section>
+              <h1>Problems</h1>
+              <h2>Problem 1</h2>
+              <h3>Part A</h3>
+              <p>Draw the Bode plot for the system $G(s)$ shown below.</p>
+$$ G(s) = \frac{s+3}{s(s+1)(s+2)} $$
+              <h3>Part B</h3>
+              <p>Now generate a Bode plot with Matlab and comment on stability margins.</p>
+            </section>
+            <section>
+              <h2>Problem 2</h2>
+              <h3>Part A</h3>
+              <p>Consider the system below. Sketch the Nyquist plot.</p>
+              <img src="images/d12f7.png" style="border: none" width=700px>
+              <h3>Part B</h3>
+              <p>Use the Nyquist plot to assess stability.</p>
+            </section>
+            <section>
+              <h3>Part C</h3>
+              <p>Validate your Part B stability conclusion using root locus techniques.</p>
+            </section>
+            </section>
+        </section>
       </div>
     </div>
 
