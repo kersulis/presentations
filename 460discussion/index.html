@@ -918,6 +918,77 @@ $$ G(s) = \frac{s+3}{s(s+1)(s+2)} $$
             <p>Validate your Part B stability conclusion using root locus techniques.</p>
           </section>
         </section>
+
+        <section>
+          <section>
+            <h1>Week 13 | 2017-04-10/11</h1>
+            <ul>
+              <li>Lab sessions continuing this week</li>
+              <li>Towards frequency design</li>
+              <li>Design information from Bode plots</li>
+              <li>Time delays</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Design with Bode plots</h2>
+            <p>Determine GM, PM, but can also play what-if</p>
+          </section>
+          <section>
+            <h2>Time delays</h2>
+            <p>No approximation needed with frequency domain techniques</p>
+            </section>
+            <section>
+              <h1>Problems</h1>
+              <h2>Problem 1</h2>
+              <p>The following Bode diagram of the forward-path transfer function of a unity-feedback control system was obtained experimentally.</p>
+            </section>
+            <section>
+              <img src="images/d13f1.jpg" width=700px style="border:none">
+            </section>
+            <section>
+              <h3>Part A</h3>
+              <p>Find the gain and phase margins of the system. Find the gain- and phase- crossover frequencies.</p>
+            </section>
+            <section>
+              <h3>Part B</h3>
+              <p>Repeat Part A if the gain is doubled from its nominal value.</p>
+              <div class="fragment">
+              <h3>Part C</h3>
+              <p>Repeat Part A if the gain is ten times its nominal value.</p>
+              </div>
+              <div class="fragment">
+              <h3>Part D</h3>
+              <p>Find out how much the gain must be changed from its nominal value to obtain a gain margin of 40 dB.</p>
+              </div>
+              <div class="fragment">
+              <h3>Part E</h3>
+              <p>Find out how much the loop gain must be changed from its nominal value to obtain a phase margin of 45$^\circ$.</p>
+              </div>
+            </section>
+            <section>
+              <h3>Part F</h3>
+              <p>Find the steady-state error of the system if the reference input to the system is a unity-step function.</p>
+              <div class="fragment">
+              <h3>Part G</h3>
+              <p>The forward path now has a pure time delay of $T_d$ seconds, so that the forward path transfer function is multiplied by $e^{-T_ds}$. Find the gain margin and the phase margin for $T_d = 0.1$ sec (with nominal gain).</p>
+              </div>
+              <div class="fragment">
+              <h3>Part H</h3>
+              <p>With the gain set at nominal, find the maximum time delay $T_d$ the system can tolerate without going into instability.</p>
+              </div>
+            </section>
+            <section>
+              <h2>Problem 2</h2>
+Consider the system with forward-path transfer function
+$$ \frac{100Ke^{-T_ds}}{s(s^2 + 10s + 100)} $$
+<h3>Part A</h3>
+<p>When $K=1$, determine the maximum time delay $T_d$ for the closed-loop system to be stable.</p>
+<div class="fragment">
+<h3>Part B</h3>
+<p>When the time delay is 1s, find the maximum value of $K$ for system stability.</p>
+</div>
+            </section>
+        </section>
       </div>
     </div>
 
