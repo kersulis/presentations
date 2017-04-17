@@ -989,6 +989,81 @@ $$ \frac{100Ke^{-T_ds}}{s(s^2 + 10s + 100)} $$
 </div>
             </section>
         </section>
+
+        <section>
+          <section>
+            <h1>Week 14 | 2017-04-17/18</h1>
+            <ul>
+              <li>Frequency domain interpretation of specs</li>
+              <li>Lead compensator design</li>
+              <li>Lead/lag compensator design</li>
+            </ul>
+          </section>
+          <section>
+          <h2>Frequency domain specs</h2>
+          <ul>
+          <li>It's sometimes challenging to translate time domain specs into the frequency domain.</li>
+          <li>Relationship between $\zeta$ and $PM$</li>
+          </ul>
+          </section>
+          <section>
+            <h2>Lead compensator design</h2>
+$$ G_c(s) = \frac{1+aTs}{1+Ts},\quad a > 1 $$
+<ol>
+<li>Obtain Bode plot of loop transfer function.
+            Determine gain and phase margins, $\phi_m$. Solve $a = \frac{1 + \sin\phi_m}{1 - \sin\phi_m}$</li>
+<li>Solve for $T$: $\omega_n = \frac{1}{\sqrt{a}T}$. Adjust gain.</li>
+<li>Verify design using Bode plot.</li>
+<li>Write final controller $G_c(s)$.</li>
+</ol>
+          </section>
+          <section>
+            <h2>Lead/lag compensator design</h2>
+            <ul>
+            <li>Discussed during lecture, example included in discussion notes.</li>
+            </ul>
+          </section>
+          <section>
+            <h1>Problems</h1>
+            <h2>Problem 1</h2>
+            <p>Given the system below, design a lead compensator to yield 20% overshoot and a peak time $T_p$ of 0.1 seconds.</p>
+            <img src="images/d14f1.png" width=1000px style="border: none">
+          </section>
+          <section>
+            <h2>Problem 2</h2>
+            <p>Suppose there is now a 0.01 sec delay in the Problem 1 system. Can we still achieve our design specs of 20% overshoot and $T_p = 0.1$ sec?</p>
+          </section>
+          <section>
+             <h2>Problem 3</h2>
+             <p>Identify the critical gain value for the compensated system.</p>
+             <div class="fragment">
+               <h2>Problem 4</h2>
+               <p>Verify your Problem 3 answer using root locus.</p>
+             </div>
+          </section>
+          <section>
+            <h2>Problem 5</h2>
+            <p>The system below may be used for positioning of a shaft by a command from a remote location.</p>
+            <img src="images/d14f8.png" width=100% style="border: none">
+            <img src="images/d14f12.png" width=400px style="border: none">
+          </section>
+          <section>
+            <h3>Part A</h3>
+            <p>Design a lead compensator so that the closed-loop system is as fast as possible, consistent with the following specifications:</p>
+            <ul>
+            <li>$PM\geq 60^\circ$</li>
+            <li>Open-loop gain rolled off to at least -20 dB at 60 rad/sec. This is to ensure stability robustness to unmodeled flexing in the belt connecting the load to the motor.</li>
+            </ul>
+          </section>
+          <section>
+            <h3>Part B</h3>
+            <p>Compute the steady-state positioning error caused by a unit step torque disturbance.</p>
+            <div class="fragment">
+            <h3>Part C</h3>
+            <p>If necessary, add additional compensation so that the steady-state positioning error caused by a unit step torque disturbance is $\leq 1$%.</p>
+            </div>
+          </section>
+        </section>
       </div>
     </div>
 
