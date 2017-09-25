@@ -1,0 +1,393 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <title>System-wide Metrics</title>
+  <meta name="description" content="EECS 460 Discussion">
+  <meta name="author" content="Jonas Kersulis">
+
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+
+  <link rel="stylesheet" href="../css/reveal.css">
+  <link rel="stylesheet" href="../css/theme/simple.css" id="theme">
+  <link rel="stylesheet" href="custom.css">
+
+  <!-- Code syntax highlighting -->
+  <link rel="stylesheet" href="../lib/css/zenburn.css">
+
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+      <!-- slides-title -->
+      <section>
+        <section>
+          <h1>System-wide Metrics</h1>
+          <p>2017-09-29</p>
+          <p>Jonas Kersulis</p>
+          <em>kersulis@umich.edu</em>
+        </section>
+      </section>
+      <section>
+        <section>
+          <h1>Introduction</h1>
+          <p>Same spirit as component checks</p>
+          <ol>
+            <li>Testbed: NESTA sample</li>
+            <li>Unweighted graph metrics</li>
+            <li>Set of checks</li>
+          </ol>
+        </section>
+        <section>
+          <h2>NESTA testbed</h2>
+          <ul>
+            <li>Continually updated set of public test cases</li>
+            <li>Translated to GRG format in pu, thanks to previous work!</li>
+            <li>Use representative subset
+              <ul>
+                <li>Fewer networks => more manageable</li>
+                <li>Don't take too many operating points for one topology</li>
+                <li>Cover range of sizes</li>
+              </ul>
+            </li>
+          </ul>
+        </section>
+        <section>
+          <h2>NESTA representative sample</h2>
+          <ul>
+            <li>5 PEGASE networks</li>
+            <li>4 RTE networks</li>
+            <li>3 Polish grid scenarios</li>
+            <li>2 IEEE RTS cases</li>
+            <li>5 IEEE power flow test cases</li>
+            <li>6 small publication test cases (toy networks)</li>
+          </ul>
+          <p>Size categories: tiny (<20 nodes), small (20-1k), medium (1k-5k), large (5k+)</p>
+        </section>
+        <section>
+          <h2>NESTA representative sample</h2>
+          <img src="images/size-classes.svg" width=100% style="border: 0px;">
+        </section>
+        <section>
+          <h2>Goals</h2>
+          <ul>
+            <li>Perform comprehensive graph analysis of NESTA networks.</li>
+            <li>Corroborate unusual characteristics identified by community.</li>
+            <li>Develop easy-to-use set of checks similar to parameter checks.</li>
+          </ul>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h1>Unweighted graph analysis</h1>
+          <ul>
+            <li>No edge weights, no electrical information</li>
+            <li>Graph theory still provides insight</li>
+          </ul>
+        </section>
+        <section>
+          <h2>A. Degree distribution</h2>
+          <h3>Description</h3>
+          <p>$$\text{Pr}(k=x)=\frac{n_k}{k},$$ where $n_k$ is the number of nodes with degree $k$.</p>
+        </section>
+        <section>
+          <h3>NESTA results</h3>
+          <img src="images/degree-distribution.svg" width=40%>
+        </section>
+        <section>
+          <h3>(without large PEGASE networks)</h3>
+          <img src="images/degree-distribution-nopegase.svg">
+        </section>
+        <section>
+          <h3>Warning thresholds</h3>
+          <ul>
+            <li>Most oddities picked up by max/median/mean.</li>
+            <li>Distributions mainly introduce the next few metrics.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>B. Maximum node degree</h2>
+          <h3>Description</h3>
+          <ul>
+            <li>Substations rarely have >10 connections.</li>
+            <li>High max node degree suggests network reduction.</li>
+          </ul>
+        </section>
+          <section>
+            <h3>NESTA results</h3>
+            <img src="images/size-vs-max-degree.svg" width=80%>
+            <p>Size dependence: $y=3.7\log n + 3.41$</p>
+      </section>
+        <section>
+          <ul>
+            <li>High max degree of large PEGASE cases has been pointed out.</li>
+            <li>case89 has max degree unusual for its size.</li>
+            <li>Size trend only valid for tiny-medium networks; substation connections do not grow arbitrarily numerous with network size.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Warning thresholds</h3>
+          <ul>
+            <li style="background-color: peachpuff">10 or higher: warning</li>
+            <li style="background-color: pink">Above $y=3.7\log n + 3.4$: error</li>
+          </ul>
+        </section>
+        <section>
+          <h2>C. Mean node degree</h2>
+          <h3>Description</h3>
+          <ul>
+            <li>Related to $n-1$ security</li>
+            <li>Between 2 and 3 for most networks</li>
+            <li>Some outliers, however</li>
+          </ul>
+        </section>
+        <section>
+          <h3>NESTA results</h3>
+          <img src="images/mean-degree-rugplot.svg" width=100%>
+          <ul>
+            <li>Clump around 2.4: RTE + Polish</li>
+            <li>Clump around 2.7: PEGASE + IEEE</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Warning thresholds</h3>
+          <ul>
+            <li style="background-color: peachpuff">Mean degree > 3: warning</li>
+            <li style="background-color: pink">Mean degree > 4: error</li>
+          </ul>
+        </section>
+        <section>
+          <h2>D. Median node degree</h2>
+          <h3>Description</h3>
+          <p>Not useful alone. Can only identify extreme outliers.</p>
+        </section>
+        <section>
+          <h3>NESTA results</h3>
+          <ul>
+            <li>76% have median degree 2; all other values are 3.</li>
+            <li>Largest network with median degree 3 is IEEE 300.</li>
+            <li>Removal of generator step-up transformers has no effect on this data.</li>
+          </ul>
+        </section>
+        <section>
+          <h3>Warning thresholds</h3>
+          <ul>
+            <li style="background-color: peachpuff">Median degree 3 for network with >200 nodes: warning</li>
+            <li style="background-color: pink">Median degree > 3: error</li>
+          </ul>
+        </section>
+        <section>
+          <h2>E. Degree assortativity coefficient</h2>
+          <h3>Description</h3>
+          <p>Extent to which nodes of like degree connect to each other.
+          $$ r = \frac{\sum_{xy}xy(e_{xy} - a_xa_y)}{\sigma_a^2} $$</p>
+          <ul>
+            <li>$x$, $y$: node degree values</li>
+            <li>$e_{xy}$: fraction of all edges connecting a node with degree $x$ to a node with degree $y$</li>
+            <li>$a_x$: fraction of all edges that start or end at nodes with degree $x$</li>
+            <li>$\sigma_a$: standard deviation of node degree distribution</li>
+          </ul>
+          <p>$r$ is between -1 (perfect disassortativity) and 1 (perfect assortativity).</p>
+        </section>
+        <section>
+          <h3>Illustration</h3>
+          <img src="images/assortativity-case9-case6.svg">
+          <ul>
+            <li>case9: each node connected only to others with different degree; highly disassortative</li>
+            <li>case6: two edges between degree-2 nodes, one between degree-3 nodes; less disassortative</li>
+          </ul>
+        </section>
+        <section>
+          <h3>NESTA results</h3>
+          <img src="images/degree-assortativity-vs-size.svg"width=60%>
+          <ul>
+            <li>Slight disassortative trend</li>
+            <li>Just 3 networks with $|r|>0.5$</li>
+            <li>No discernible size dependence</li>
+          </ul>
+        </section>
+        <section>
+          <p>Reproducing figure from literature (with more data points)</p>
+          <img src="images/degree-assortativity-vs-max-degree.svg">
+          <p>Paul Cuffe wrote a letter to <i>Transactions</i> noting the assortativity anomaly of the large PEGASE network.</p>
+        </section>
+        <section>
+          <h3>Warning thresholds</h3>
+          <p>Use ~1-2 standard deviations as guideline:</p>
+          <ul>
+            <li style="background-color: peachpuff">$r\notin [-0.3,~0.15]$: warning</li>
+            <li style="background-color: pink">$r\notin [-0.5,~0.3]$: error</li>
+          </ul>
+        </section>
+        <section>
+          <h2>F. Rich club coefficient</h2>
+          <h3>Description</h3>
+          <ul>
+            <li>For each degree $k$, divide number of edges between nodes of degree $\geq k$ by number of potential edges between those nodes.</li>
+            <li>Example: if a graph has 90% of all possible edges between nodes of degree 10 or greater, the rich club coefficient for $k=10$ would be 0.9.</li>
+            <li>Detects "hub of hubs" suggested by high $r$</li>
+          </ul>
+        </section>
+        <section>
+          <h3>NESTA results</h3>
+          <img src="images/rich-club.svg">
+        </section>
+        <section>
+          <h3>Warning thresholds</h3>
+          <p>Important: how many nodes are involved in the rich club? one, or dozens? Sensible starting point:</p>
+          <ul>
+            <li style="background-color: peachpuff">Consider the set $K_{0.8}$ of degrees with rich club coeff. $\geq 0.8$. Issue warning when there are at least 10 nodes with degree $k\in K_{0.8}$.</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Checking NESTA</h2>
+          <p>What happens when we apply our thresholds to NESTA networks?</p>
+        </section>
+        <section>
+          <table style="font-size: 70%">
+          <tr><th>Network          </th>  <th>       Max
+            degree               </th> <th> Mean
+              degree                </th> <th> Median
+                degree              </th> <th>    Degree
+                  assortativity    </th> <th> Rich
+                    club                   </th></tr>
+          <tr><td>case13659_pegase </td>  <td style="text-align: center; background-color: pink">e</td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: pink">e</td> <td style="text-align: center; background-color: peachpuff"> w </td></tr>
+          <tr><td>case9241_pegase  </td>  <td style="text-align: center; background-color: pink">e</td> <td style="text-align: center; background-color: peachpuff"> w </td> <td>                            </td> <td style="text-align: center; background-color: pink">e</td> <td style="text-align: center; background-color: peachpuff"> w </td></tr>
+          <tr><td>case6515_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case6495_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case6470_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case6468_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <caption>Large network system-wide checks</caption>
+          </table>
+        </section>
+        <section>
+          <table style="font-size: 70%">
+            <tr><th>Network          </th>  <th>       Max
+              degree               </th> <th> Mean
+                degree                </th> <th> Median
+                  degree              </th> <th>    Degree
+                    assortativity    </th> <th> Rich
+                      club                   </th></tr>          <tr><td>case3375wp_mp    </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case3120sp_mp    </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case3012wp_mp    </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case2869_pegase  </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff">w</td></tr>
+          <tr><td>case2868_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case2848_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff">w</td></tr>
+          <tr><td>case2746wp_mp    </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case2746wop_mp   </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case2737sop_mp   </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case2736sp_mp    </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case2383wp_mp    </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case2224_edin    </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case1951_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case1888_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case1460wp_eir   </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case1397sp_eir   </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case1394sop_eir  </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case1354_pegase  </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <caption>Medium network system-wide checks</caption>
+          </table>
+        </section>
+        <section>
+          <table style="font-size: 70%">
+            <tr><th>Network          </th>  <th>       Max
+              degree               </th> <th> Mean
+                degree                </th> <th> Median
+                  degree              </th> <th>    Degree
+                    assortativity    </th> <th> Rich
+                      club                   </th></tr>          <tr><td>case_403_rte     </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case300_ieee     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case240_wecc     </td>  <td>                               </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case189_edin     </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case162_ieee_dtc </td>  <td>                               </td> <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td style="text-align: center; background-color: pink">e</td> <td>                            </td> </tr>
+          <tr><td>case118_ieee     </td>  <td>                               </td> <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case89_pegase    </td>  <td style="text-align: center; background-color: pink">e</td> <td style="text-align: center; background-color: pink">e</td> <td>                            </td> <td style="text-align: center; background-color: pink">e</td> <td style="text-align: center; background-color: peachpuff">w</td></tr>
+          <tr><td>case73_ieee_rts  </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case57_ieee      </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> </tr>
+          <tr><td>case39_epri      </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case30_fsr       </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case30_as        </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case30_ieee      </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case29_edin      </td>  <td>                               </td> <td style="text-align: center; background-color: peachpuff"> w </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case24_ieee_rts  </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <caption>Small network system-wide checks</caption>
+          </table>
+        </section>
+        <section>
+          <table style="font-size: 70%">
+            <tr><th>Network          </th>  <th>       Max
+              degree               </th> <th> Mean
+                degree                </th> <th> Median
+                  degree              </th> <th>    Degree
+                    assortativity    </th> <th> Rich
+                      club                   </th></tr>          <tr><td>case14_ieee      </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case9_wscc       </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: pink">e</td> <td>                            </td> </tr>
+          <tr><td>case6_ww         </td>  <td>                               </td> <td style="text-align: center; background-color: peachpuff"> w </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff"> w </td> <td>                            </td> </tr>
+          <tr><td>case6_c          </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case5_pjm        </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff"> w </td> <td>                            </td> </tr>
+          <tr><td>case4_gs         </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <tr><td>case3_lmbd       </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
+          <caption>Tiny network system-wide checks</caption>
+          </table>
+        </section>
+      </section>
+
+      <section>
+        <section>
+          <h1>Weighted graph analysis</h1>
+        </section>
+        <section>
+          <h2>Electrical distance</h2>
+        </section>
+      </section>
+    </div>
+  </div>
+
+  <script src="../lib/js/head.min.js"></script>
+  <script src="../js/reveal.js"></script>
+
+  <script>
+
+  // Full list of configuration options available at:
+  // https://github.com/hakimel/reveal.js#configuration
+  Reveal.initialize({
+    controls: false,
+    slideNumber: true,
+    progress: true,
+    history: true,
+    center: false,
+
+    transition: 'slide', // none/fade/slide/convex/concave/zoom
+
+    math: {
+      mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+      config: 'TeX-AMS_HTML-full'
+    },
+
+    // Optional reveal.js plugins
+    dependencies: [
+      { src: '../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      { src: '../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: '../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      { src: '../plugin/math/math.js', async: true },
+      { src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+      //{ src: '../plugin/zoom-js/zoom.js', async: true },
+      //{ src: '../plugin/notes/notes.js', async: true }
+    ]
+  });
+  </script>
+
+</body>
+</html>
