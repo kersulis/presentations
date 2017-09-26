@@ -44,39 +44,32 @@
           <h1>Introduction</h1>
           <p>Same spirit as component checks</p>
           <ol>
-            <li>Testbed: NESTA sample</li>
+            <li>Set of networks</li>
             <li>Unweighted graph metrics</li>
             <li>Set of checks</li>
           </ol>
         </section>
         <section>
-          <h2>NESTA testbed</h2>
+          <h2>Set of networks</h2>
+          <p>41 networks total:</p>
           <ul>
-            <li>Continually updated set of public test cases</li>
-            <li>Translated to GRG format in pu, thanks to previous work!</li>
-            <li>Use representative subset
-              <ul>
-                <li>Fewer networks => more manageable</li>
-                <li>Don't take too many operating points for one topology</li>
-                <li>Cover range of sizes</li>
-              </ul>
-            </li>
+            <li>33 community test cases from NESTA</li>
+            <ul>
+              <li>5 PEGASE networks</li>
+              <li>4 RTE networks</li>
+              <li>3 Polish grid scenarios</li>
+              <li>2 IEEE RTS cases</li>
+              <li>5 IEEE power flow test cases</li>
+              <li>6 small publication test cases</li>
+            </ul>
+            <li>4 recent RTE test cases</li>
+            <li>4 synthetic test cases from Overbye group</li>
           </ul>
+          <p>Previous work made translation to GRG format in pu easy.</p>
         </section>
         <section>
-          <h2>NESTA representative sample</h2>
-          <ul>
-            <li>5 PEGASE networks</li>
-            <li>4 RTE networks</li>
-            <li>3 Polish grid scenarios</li>
-            <li>2 IEEE RTS cases</li>
-            <li>5 IEEE power flow test cases</li>
-            <li>6 small publication test cases (toy networks)</li>
-          </ul>
-          <p>Size categories: tiny (<20 nodes), small (20-1k), medium (1k-5k), large (5k+)</p>
-        </section>
-        <section>
-          <h2>NESTA representative sample</h2>
+          <h3>Networks by size</h3>
+          <p>Categories: tiny (<20 nodes), small (20-1k), medium (1k-5k), large (5k+)</p>
           <img src="images/size-classes.svg" width=100% style="border: 0px;">
         </section>
         <section>
@@ -84,7 +77,13 @@
           <ul>
             <li>Perform comprehensive graph analysis of NESTA networks.</li>
             <li>Corroborate unusual characteristics identified by community.</li>
-            <li>Develop easy-to-use set of checks similar to parameter checks.</li>
+            <li>Combine data spread with technical reasoning to develop easy-to-use set of checks (similar to parameter checks).</li>
+          </ul>
+          <h2>Challenges</h2>
+          <ul>
+            <li>Relative weight of test networks</li>
+            <li>Calibration of warning thresholds</li>
+            <li>Intuitive messages to users</li>
           </ul>
         </section>
       </section>
@@ -128,7 +127,6 @@
           <section>
             <h3>NESTA results</h3>
             <img src="images/size-vs-max-degree.svg" width=80%>
-            <p>Size dependence: $y=3.7\log n + 3.41$</p>
       </section>
         <section>
           <ul>
@@ -143,6 +141,9 @@
             <li style="background-color: peachpuff">10 or higher: warning</li>
             <li style="background-color: pink">Above $y=3.7\log n + 3.4$: error</li>
           </ul>
+          <div class="fragment">
+            <img src="images/max-degree-threshold.svg" width=70%>
+          </div>
         </section>
         <section>
           <h2>C. Mean node degree</h2>
