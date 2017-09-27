@@ -42,12 +42,19 @@
       <section>
         <section>
           <h1>Introduction</h1>
+          <p><strong>M6.1.2:</strong></p>
+          <ol>
+            <li>Definition of validated system-wide metrics</li>
+            <li>Validation of software on the 240 bus WECC test case</li>
+          </ol>
+          <div class="fragment">
           <p>Same spirit as component checks</p>
           <ol>
             <li>Set of networks</li>
             <li>Unweighted graph metrics</li>
             <li>Set of checks</li>
           </ol>
+          </div>
         </section>
         <section>
           <h2>Set of networks</h2>
@@ -77,14 +84,16 @@
           <ul>
             <li>Perform comprehensive graph analysis of NESTA networks.</li>
             <li>Corroborate unusual characteristics identified by community.</li>
-            <li>Combine data spread with technical reasoning to develop easy-to-use set of checks (similar to parameter checks).</li>
+            <li>Combine data spread with outside knowledge to develop easy-to-use set of checks (similar to parameter checks).</li>
           </ul>
+          <div class="fragment">
           <h2>Challenges</h2>
           <ul>
-            <li>Relative weight of test networks</li>
-            <li>Calibration of warning thresholds</li>
-            <li>Intuitive messages to users</li>
+            <li>Relative weight of test networks: how do we allocate trust?</li>
+            <li>Calibration of warning thresholds: avoid too tight and too lax</li>
+            <li>Intuitive messages to users: should be easy to understand any warnings</li>
           </ul>
+          </div>
         </section>
       </section>
 
@@ -99,21 +108,22 @@
         <section>
           <h2>A. Degree distribution</h2>
           <h3>Description</h3>
-          <p>$$\text{Pr}(k=x)=\frac{n_k}{k},$$ where $n_k$ is the number of nodes with degree $k$.</p>
+          <p>$$\text{Pr}(k=x)=\frac{n_k}{n},$$ where $n_k$ is the number of nodes with degree $k$.</p>
         </section>
         <section>
-          <h3>NESTA results</h3>
+          <h3>Results</h3>
           <img src="images/degree-distribution.svg" width=40%>
         </section>
         <section>
-          <h3>(without large PEGASE networks)</h3>
+          <h3>Results: 1k - 7k nodes</h3>
           <img src="images/degree-distribution-nopegase.svg">
+          <p>(large PEGASE networks omitted for scale)</p>
         </section>
         <section>
           <h3>Warning thresholds</h3>
           <ul>
             <li>Most oddities picked up by max/median/mean.</li>
-            <li>Distributions mainly introduce the next few metrics.</li>
+            <li>Distributions mainly introduce remaining metrics.</li>
           </ul>
         </section>
         <section>
@@ -125,21 +135,22 @@
           </ul>
         </section>
           <section>
-            <h3>NESTA results</h3>
+            <h3>Results</h3>
             <img src="images/size-vs-max-degree.svg" width=80%>
       </section>
         <section>
+          <h3>Results</h3>
           <ul>
             <li>High max degree of large PEGASE cases has been pointed out.</li>
             <li>case89 has max degree unusual for its size.</li>
-            <li>Size trend only valid for tiny-medium networks; substation connections do not grow arbitrarily numerous with network size.</li>
+            <li>Size trend is only valid for smaller networks; substation connections do not grow arbitrarily numerous with network size.</li>
           </ul>
         </section>
         <section>
           <h3>Warning thresholds</h3>
           <ul>
             <li style="background-color: peachpuff">10 or higher: warning</li>
-            <li style="background-color: pink">Above $y=3.7\log n + 3.4$: error</li>
+            <li style="background-color: pink">Above $y=4.22\log n + 3.87$: error</li>
           </ul>
           <div class="fragment">
             <img src="images/max-degree-threshold.svg" width=70%>
@@ -151,11 +162,10 @@
           <ul>
             <li>Related to $n-1$ security</li>
             <li>Between 2 and 3 for most networks</li>
-            <li>Some outliers, however</li>
           </ul>
         </section>
         <section>
-          <h3>NESTA results</h3>
+          <h3>Results</h3>
           <img src="images/mean-degree-rugplot.svg" width=100%>
           <ul>
             <li>Clump around 2.4: RTE + Polish</li>
@@ -164,22 +174,24 @@
         </section>
         <section>
           <h3>Warning thresholds</h3>
+          <img src="images/mean-degree-rugplot.svg" width=100%>
           <ul>
-            <li style="background-color: peachpuff">Mean degree > 3: warning</li>
-            <li style="background-color: pink">Mean degree > 4: error</li>
+            <li style="background-color: peachpuff">Mean degree > 3: warning (less than 15% of networks)</li>
+            <li style="background-color: pink">Mean degree > 4: error (just PEGASE 89)</li>
           </ul>
+          <p>How many buses are driving up the mean degree?</p>
         </section>
         <section>
           <h2>D. Median node degree</h2>
           <h3>Description</h3>
-          <p>Not useful alone. Can only identify extreme outliers.</p>
+          <p>Can only identify extreme outliers.</p>
         </section>
         <section>
-          <h3>NESTA results</h3>
+          <h3>Results</h3>
           <ul>
-            <li>76% have median degree 2; all other values are 3.</li>
+            <li>2 is by far most common median degree value. <25% of networks have median degree 3.</li>
             <li>Largest network with median degree 3 is IEEE 300.</li>
-            <li>Removal of generator step-up transformers has no effect on this data.</li>
+            <li>Removal of generator step-up transformers has little effect.</li>
           </ul>
         </section>
         <section>
@@ -195,12 +207,12 @@
           <p>Extent to which nodes of like degree connect to each other.
           $$ r = \frac{\sum_{xy}xy(e_{xy} - a_xa_y)}{\sigma_a^2} $$</p>
           <ul>
-            <li>$x$, $y$: node degree values</li>
-            <li>$e_{xy}$: fraction of all edges connecting a node with degree $x$ to a node with degree $y$</li>
-            <li>$a_x$: fraction of all edges that start or end at nodes with degree $x$</li>
-            <li>$\sigma_a$: standard deviation of node degree distribution</li>
+            <li class="fragment">$x$, $y$: node degree values</li>
+            <li class="fragment">$e_{xy}$: fraction of all edges connecting a node with degree $x$ to a node with degree $y$</li>
+            <li class="fragment">$a_x$: fraction of all edges that start or end at nodes with degree $x$</li>
+            <li class="fragment">$\sigma_a$: standard deviation of node degree distribution</li>
           </ul>
-          <p>$r$ is between -1 (perfect disassortativity) and 1 (perfect assortativity).</p>
+          <p class="fragment">$r$ is between -1 (perfect disassortativity) and 1 (perfect assortativity).</p>
         </section>
         <section>
           <h3>Illustration</h3>
@@ -211,7 +223,7 @@
           </ul>
         </section>
         <section>
-          <h3>NESTA results</h3>
+          <h3>Results</h3>
           <img src="images/degree-assortativity-vs-size.svg"width=60%>
           <ul>
             <li>Slight disassortative trend</li>
@@ -220,16 +232,17 @@
           </ul>
         </section>
         <section>
+          <h3>Results</h3>
           <p>Reproducing figure from literature (with more data points)</p>
           <img src="images/degree-assortativity-vs-max-degree.svg">
           <p>Paul Cuffe wrote a letter to <i>Transactions</i> noting the assortativity anomaly of the large PEGASE network.</p>
         </section>
         <section>
           <h3>Warning thresholds</h3>
-          <p>Use ~1-2 standard deviations as guideline:</p>
+          <p>Use 1 and 2 standard deviations as guidelines:</p>
           <ul>
-            <li style="background-color: peachpuff">$r\notin [-0.3,~0.15]$: warning</li>
-            <li style="background-color: pink">$r\notin [-0.5,~0.3]$: error</li>
+            <li style="background-color: peachpuff">$r\notin [-0.37,~0.18]$: warning</li>
+            <li style="background-color: pink">$r\notin [-0.64,~0.45]$: error</li>
           </ul>
         </section>
         <section>
@@ -237,17 +250,17 @@
           <h3>Description</h3>
           <ul>
             <li>For each degree $k$, divide number of edges between nodes of degree $\geq k$ by number of potential edges between those nodes.</li>
-            <li>Example: if a graph has 90% of all possible edges between nodes of degree 10 or greater, the rich club coefficient for $k=10$ would be 0.9.</li>
-            <li>Detects "hub of hubs" suggested by high $r$</li>
+            <li>Example: if a graph has 90% of all possible edges between nodes of degree 10 or greater, the rich club coefficient for $k=10$ is 0.9.</li>
+            <li>Detects "hub of hubs" suggested by high $r$.</li>
           </ul>
         </section>
         <section>
-          <h3>NESTA results</h3>
+          <h3>Results</h3>
           <img src="images/rich-club.svg">
         </section>
         <section>
           <h3>Warning thresholds</h3>
-          <p>Important: how many nodes are involved in the rich club? one, or dozens? Sensible starting point:</p>
+          <p>Important: how many nodes are involved in the rich club? Dozens, or just two? Sensible starting point:</p>
           <ul>
             <li style="background-color: peachpuff">Consider the set $K_{0.8}$ of degrees with rich club coeff. $\geq 0.8$. Issue warning when there are at least 10 nodes with degree $k\in K_{0.8}$.</li>
           </ul>
@@ -255,99 +268,979 @@
         <section>
           <h2>Checking NESTA</h2>
           <p>What happens when we apply our thresholds to NESTA networks?</p>
+          <div class="fragment">
+          <style  type="text/css" >
+              #T_5558644e_a372_11e7_940c_38d5470eb261row0_col0 {
+                      background-color:  pink;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row0_col1 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row0_col2 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row0_col3 {
+                      background-color:  pink;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row0_col4 {
+                      background-color:  peachpuff;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row1_col0 {
+                      background-color:  pink;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row1_col1 {
+                      background-color:  peachpuff;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row1_col2 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row1_col3 {
+                      background-color:  pink;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row1_col4 {
+                      background-color:  peachpuff;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row2_col0 {
+                      background-color:  peachpuff;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row2_col1 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row2_col2 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row2_col3 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row2_col4 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row3_col0 {
+                      background-color:  peachpuff;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row3_col1 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row3_col2 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row3_col3 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row3_col4 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row4_col0 {
+                      background-color:  peachpuff;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row4_col1 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row4_col2 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row4_col3 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row4_col4 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row5_col0 {
+                      background-color:  peachpuff;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row5_col1 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row5_col2 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row5_col3 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row5_col4 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row6_col0 {
+                      background-color:  peachpuff;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row6_col1 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row6_col2 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row6_col3 {
+                      background-color:  white;
+                  }    #T_5558644e_a372_11e7_940c_38d5470eb261row6_col4 {
+                      background-color:  white;
+                  }</style>
+          <table id="T_5558644e_a372_11e7_940c_38d5470eb261" style="font-size: 60%">
+            <caption>Large networks</caption>
+          <thead>    <tr>
+                  <th class="blank level0" ></th>
+                  <th class="col_heading level0 col0" >max_degree</th>
+                  <th class="col_heading level0 col1" >mean_degree</th>
+                  <th class="col_heading level0 col2" >median_degree</th>
+                  <th class="col_heading level0 col3" >degree_assortativity</th>
+                  <th class="col_heading level0 col4" >rich_club</th>
+              </tr></thead>
+          <tbody>    <tr>
+                  <th id="T_5558644e_a372_11e7_940c_38d5470eb261level0_row0" class="row_heading level0 row0" >nesta_case13659_pegase</th>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row0_col0" class="data row0 col0" >Error</td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row0_col1" class="data row0 col1" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row0_col2" class="data row0 col2" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row0_col3" class="data row0 col3" >Error</td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row0_col4" class="data row0 col4" >Warning</td>
+              </tr>    <tr>
+                  <th id="T_5558644e_a372_11e7_940c_38d5470eb261level0_row1" class="row_heading level0 row1" >nesta_case9241_pegase</th>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row1_col0" class="data row1 col0" >Error</td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row1_col1" class="data row1 col1" >Warning</td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row1_col2" class="data row1 col2" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row1_col3" class="data row1 col3" >Error</td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row1_col4" class="data row1 col4" >Warning</td>
+              </tr>    <tr>
+                  <th id="T_5558644e_a372_11e7_940c_38d5470eb261level0_row2" class="row_heading level0 row2" >france</th>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row2_col0" class="data row2 col0" >Warning</td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row2_col1" class="data row2 col1" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row2_col2" class="data row2 col2" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row2_col3" class="data row2 col3" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row2_col4" class="data row2 col4" ></td>
+              </tr>    <tr>
+                  <th id="T_5558644e_a372_11e7_940c_38d5470eb261level0_row3" class="row_heading level0 row3" >nesta_case6515_rte</th>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row3_col0" class="data row3 col0" >Warning</td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row3_col1" class="data row3 col1" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row3_col2" class="data row3 col2" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row3_col3" class="data row3 col3" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row3_col4" class="data row3 col4" ></td>
+              </tr>    <tr>
+                  <th id="T_5558644e_a372_11e7_940c_38d5470eb261level0_row4" class="row_heading level0 row4" >nesta_case6495_rte</th>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row4_col0" class="data row4 col0" >Warning</td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row4_col1" class="data row4 col1" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row4_col2" class="data row4 col2" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row4_col3" class="data row4 col3" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row4_col4" class="data row4 col4" ></td>
+              </tr>    <tr>
+                  <th id="T_5558644e_a372_11e7_940c_38d5470eb261level0_row5" class="row_heading level0 row5" >nesta_case6470_rte</th>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row5_col0" class="data row5 col0" >Warning</td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row5_col1" class="data row5 col1" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row5_col2" class="data row5 col2" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row5_col3" class="data row5 col3" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row5_col4" class="data row5 col4" ></td>
+              </tr>    <tr>
+                  <th id="T_5558644e_a372_11e7_940c_38d5470eb261level0_row6" class="row_heading level0 row6" >nesta_case6468_rte</th>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row6_col0" class="data row6 col0" >Warning</td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row6_col1" class="data row6 col1" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row6_col2" class="data row6 col2" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row6_col3" class="data row6 col3" ></td>
+                  <td id="T_5558644e_a372_11e7_940c_38d5470eb261row6_col4" class="data row6 col4" ></td>
+              </tr></tbody>
+          </table>
+        </div>
         </section>
         <section>
-          <table style="font-size: 70%">
-          <tr><th>Network          </th>  <th>       Max
-            degree               </th> <th> Mean
-              degree                </th> <th> Median
-                degree              </th> <th>    Degree
-                  assortativity    </th> <th> Rich
-                    club                   </th></tr>
-          <tr><td>case13659_pegase </td>  <td style="text-align: center; background-color: pink">e</td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: pink">e</td> <td style="text-align: center; background-color: peachpuff"> w </td></tr>
-          <tr><td>case9241_pegase  </td>  <td style="text-align: center; background-color: pink">e</td> <td style="text-align: center; background-color: peachpuff"> w </td> <td>                            </td> <td style="text-align: center; background-color: pink">e</td> <td style="text-align: center; background-color: peachpuff"> w </td></tr>
-          <tr><td>case6515_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case6495_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case6470_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case6468_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <caption>Large network system-wide checks</caption>
-          </table>
+        <style  type="text/css" >
+            #T_81da8f38_a372_11e7_940c_38d5470eb261row0_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row0_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row0_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row0_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row0_col4 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row1_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row1_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row1_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row1_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row1_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row2_col0 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row2_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row2_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row2_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row2_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row3_col0 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row3_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row3_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row3_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row3_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row4_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row4_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row4_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row4_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row4_col4 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row5_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row5_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row5_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row5_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row5_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row6_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row6_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row6_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row6_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row6_col4 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row7_col0 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row7_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row7_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row7_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row7_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row8_col0 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row8_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row8_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row8_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row8_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row9_col0 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row9_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row9_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row9_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row9_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row10_col0 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row10_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row10_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row10_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row10_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row11_col0 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row11_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row11_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row11_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row11_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row12_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row12_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row12_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row12_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row12_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row13_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row13_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row13_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row13_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row13_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row14_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row14_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row14_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row14_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row14_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row15_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row15_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row15_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row15_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row15_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row16_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row16_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row16_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row16_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row16_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row17_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row17_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row17_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row17_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row17_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row18_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row18_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row18_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row18_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row18_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row19_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row19_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row19_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row19_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row19_col4 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row20_col0 {
+                    background-color:  peachpuff;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row20_col1 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row20_col2 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row20_col3 {
+                    background-color:  white;
+                }    #T_81da8f38_a372_11e7_940c_38d5470eb261row20_col4 {
+                    background-color:  white;
+                }</style>
+        <table id="T_81da8f38_a372_11e7_940c_38d5470eb261" style="font-size: 60%">
+          <caption>Medium networks</caption>
+        <thead>    <tr>
+                <th class="blank level0" ></th>
+                <th class="col_heading level0 col0" >max_degree</th>
+                <th class="col_heading level0 col1" >mean_degree</th>
+                <th class="col_heading level0 col2" >median_degree</th>
+                <th class="col_heading level0 col3" >degree_assortativity</th>
+                <th class="col_heading level0 col4" >rich_club</th>
+            </tr></thead>
+        <tbody>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row0" class="row_heading level0 row0" >france_ehv_lyon_hv</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row0_col0" class="data row0 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row0_col1" class="data row0 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row0_col2" class="data row0 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row0_col3" class="data row0 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row0_col4" class="data row0 col4" >Warning</td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row1" class="row_heading level0 row1" >nesta_case3375wp_mp</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row1_col0" class="data row1 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row1_col1" class="data row1 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row1_col2" class="data row1 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row1_col3" class="data row1 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row1_col4" class="data row1 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row2" class="row_heading level0 row2" >nesta_case3120sp_mp</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row2_col0" class="data row2 col0" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row2_col1" class="data row2 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row2_col2" class="data row2 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row2_col3" class="data row2 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row2_col4" class="data row2 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row3" class="row_heading level0 row3" >nesta_case3012wp_mp</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row3_col0" class="data row3 col0" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row3_col1" class="data row3 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row3_col2" class="data row3 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row3_col3" class="data row3 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row3_col4" class="data row3 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row4" class="row_heading level0 row4" >nesta_case2869_pegase</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row4_col0" class="data row4 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row4_col1" class="data row4 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row4_col2" class="data row4 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row4_col3" class="data row4 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row4_col4" class="data row4 col4" >Warning</td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row5" class="row_heading level0 row5" >nesta_case2868_rte</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row5_col0" class="data row5 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row5_col1" class="data row5 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row5_col2" class="data row5 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row5_col3" class="data row5 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row5_col4" class="data row5 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row6" class="row_heading level0 row6" >nesta_case2848_rte</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row6_col0" class="data row6 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row6_col1" class="data row6 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row6_col2" class="data row6 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row6_col3" class="data row6 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row6_col4" class="data row6 col4" >Warning</td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row7" class="row_heading level0 row7" >nesta_case2746wp_mp</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row7_col0" class="data row7 col0" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row7_col1" class="data row7 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row7_col2" class="data row7 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row7_col3" class="data row7 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row7_col4" class="data row7 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row8" class="row_heading level0 row8" >nesta_case2746wop_mp</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row8_col0" class="data row8 col0" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row8_col1" class="data row8 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row8_col2" class="data row8 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row8_col3" class="data row8 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row8_col4" class="data row8 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row9" class="row_heading level0 row9" >nesta_case2737sop_mp</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row9_col0" class="data row9 col0" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row9_col1" class="data row9 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row9_col2" class="data row9 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row9_col3" class="data row9 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row9_col4" class="data row9 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row10" class="row_heading level0 row10" >nesta_case2736sp_mp</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row10_col0" class="data row10 col0" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row10_col1" class="data row10 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row10_col2" class="data row10 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row10_col3" class="data row10 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row10_col4" class="data row10 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row11" class="row_heading level0 row11" >nesta_case2383wp_mp</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row11_col0" class="data row11 col0" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row11_col1" class="data row11 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row11_col2" class="data row11 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row11_col3" class="data row11 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row11_col4" class="data row11 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row12" class="row_heading level0 row12" >nesta_case2224_edin</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row12_col0" class="data row12 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row12_col1" class="data row12 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row12_col2" class="data row12 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row12_col3" class="data row12 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row12_col4" class="data row12 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row13" class="row_heading level0 row13" >case_ACTIVSg2000</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row13_col0" class="data row13 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row13_col1" class="data row13 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row13_col2" class="data row13 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row13_col3" class="data row13 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row13_col4" class="data row13 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row14" class="row_heading level0 row14" >nesta_case1951_rte</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row14_col0" class="data row14 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row14_col1" class="data row14 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row14_col2" class="data row14 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row14_col3" class="data row14 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row14_col4" class="data row14 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row15" class="row_heading level0 row15" >nesta_case1888_rte</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row15_col0" class="data row15 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row15_col1" class="data row15 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row15_col2" class="data row15 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row15_col3" class="data row15 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row15_col4" class="data row15 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row16" class="row_heading level0 row16" >france_ehv</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row16_col0" class="data row16 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row16_col1" class="data row16 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row16_col2" class="data row16 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row16_col3" class="data row16 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row16_col4" class="data row16 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row17" class="row_heading level0 row17" >nesta_case1460wp_eir</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row17_col0" class="data row17 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row17_col1" class="data row17 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row17_col2" class="data row17 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row17_col3" class="data row17 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row17_col4" class="data row17 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row18" class="row_heading level0 row18" >nesta_case1397sp_eir</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row18_col0" class="data row18 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row18_col1" class="data row18 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row18_col2" class="data row18 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row18_col3" class="data row18 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row18_col4" class="data row18 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row19" class="row_heading level0 row19" >nesta_case1394sop_eir</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row19_col0" class="data row19 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row19_col1" class="data row19 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row19_col2" class="data row19 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row19_col3" class="data row19 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row19_col4" class="data row19 col4" ></td>
+            </tr>    <tr>
+                <th id="T_81da8f38_a372_11e7_940c_38d5470eb261level0_row20" class="row_heading level0 row20" >nesta_case1354_pegase</th>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row20_col0" class="data row20 col0" >Warning</td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row20_col1" class="data row20 col1" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row20_col2" class="data row20 col2" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row20_col3" class="data row20 col3" ></td>
+                <td id="T_81da8f38_a372_11e7_940c_38d5470eb261row20_col4" class="data row20 col4" ></td>
+            </tr></tbody>
+        </table>
         </section>
         <section>
-          <table style="font-size: 70%">
-            <tr><th>Network          </th>  <th>       Max
-              degree               </th> <th> Mean
-                degree                </th> <th> Median
-                  degree              </th> <th>    Degree
-                    assortativity    </th> <th> Rich
-                      club                   </th></tr>          <tr><td>case3375wp_mp    </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case3120sp_mp    </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case3012wp_mp    </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case2869_pegase  </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff">w</td></tr>
-          <tr><td>case2868_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case2848_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff">w</td></tr>
-          <tr><td>case2746wp_mp    </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case2746wop_mp   </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case2737sop_mp   </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case2736sp_mp    </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case2383wp_mp    </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case2224_edin    </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case1951_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case1888_rte     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case1460wp_eir   </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case1397sp_eir   </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case1394sop_eir  </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case1354_pegase  </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <caption>Medium network system-wide checks</caption>
-          </table>
-        </section>
-        <section>
-          <table style="font-size: 70%">
-            <tr><th>Network          </th>  <th>       Max
-              degree               </th> <th> Mean
-                degree                </th> <th> Median
-                  degree              </th> <th>    Degree
-                    assortativity    </th> <th> Rich
-                      club                   </th></tr>          <tr><td>case_403_rte     </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case300_ieee     </td>  <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case240_wecc     </td>  <td>                               </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case189_edin     </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case162_ieee_dtc </td>  <td>                               </td> <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td style="text-align: center; background-color: pink">e</td> <td>                            </td> </tr>
-          <tr><td>case118_ieee     </td>  <td>                               </td> <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case89_pegase    </td>  <td style="text-align: center; background-color: pink">e</td> <td style="text-align: center; background-color: pink">e</td> <td>                            </td> <td style="text-align: center; background-color: pink">e</td> <td style="text-align: center; background-color: peachpuff">w</td></tr>
-          <tr><td>case73_ieee_rts  </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case57_ieee      </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff">w</td> <td>                            </td> </tr>
-          <tr><td>case39_epri      </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case30_fsr       </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case30_as        </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case30_ieee      </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case29_edin      </td>  <td>                               </td> <td style="text-align: center; background-color: peachpuff"> w </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case24_ieee_rts  </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <caption>Small network system-wide checks</caption>
-          </table>
-        </section>
-        <section>
-          <table style="font-size: 70%">
-            <tr><th>Network          </th>  <th>       Max
-              degree               </th> <th> Mean
-                degree                </th> <th> Median
-                  degree              </th> <th>    Degree
-                    assortativity    </th> <th> Rich
-                      club                   </th></tr>          <tr><td>case14_ieee      </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case9_wscc       </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: pink">e</td> <td>                            </td> </tr>
-          <tr><td>case6_ww         </td>  <td>                               </td> <td style="text-align: center; background-color: peachpuff"> w </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff"> w </td> <td>                            </td> </tr>
-          <tr><td>case6_c          </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case5_pjm        </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td style="text-align: center; background-color: peachpuff"> w </td> <td>                            </td> </tr>
-          <tr><td>case4_gs         </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <tr><td>case3_lmbd       </td>  <td>                               </td> <td>                            </td> <td>                            </td> <td>                            </td> <td>                            </td> </tr>
-          <caption>Tiny network system-wide checks</caption>
-          </table>
-        </section>
+        <style  type="text/css" >
+            #T_23597d9c_a373_11e7_940c_38d5470eb261row0_col0 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row0_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row0_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row0_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row0_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row1_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row1_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row1_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row1_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row1_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row2_col0 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row2_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row2_col2 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row2_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row2_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row3_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row3_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row3_col2 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row3_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row3_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row4_col0 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row4_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row4_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row4_col3 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row4_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row5_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row5_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row5_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row5_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row5_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row6_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row6_col1 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row6_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row6_col3 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row6_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row7_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row7_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row7_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row7_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row7_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row8_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row8_col1 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row8_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row8_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row8_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row9_col0 {
+                    background-color:  pink;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row9_col1 {
+                    background-color:  pink;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row9_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row9_col3 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row9_col4 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row10_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row10_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row10_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row10_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row10_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row11_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row11_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row11_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row11_col3 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row11_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row12_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row12_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row12_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row12_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row12_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row13_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row13_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row13_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row13_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row13_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row14_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row14_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row14_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row14_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row14_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row15_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row15_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row15_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row15_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row15_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row16_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row16_col1 {
+                    background-color:  peachpuff;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row16_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row16_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row16_col4 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row17_col0 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row17_col1 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row17_col2 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row17_col3 {
+                    background-color:  white;
+                }    #T_23597d9c_a373_11e7_940c_38d5470eb261row17_col4 {
+                    background-color:  white;
+                }</style>
+        <table id="T_23597d9c_a373_11e7_940c_38d5470eb261" style="font-size: 60%">
+          <caption>Small networks</caption>
+        <thead>    <tr>
+                <th class="blank level0" ></th>
+                <th class="col_heading level0 col0" >max_degree</th>
+                <th class="col_heading level0 col1" >mean_degree</th>
+                <th class="col_heading level0 col2" >median_degree</th>
+                <th class="col_heading level0 col3" >degree_assortativity</th>
+                <th class="col_heading level0 col4" >rich_club</th>
+            </tr></thead>
+        <tbody>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row0" class="row_heading level0 row0" >case_ACTIVSg500</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row0_col0" class="data row0 col0" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row0_col1" class="data row0 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row0_col2" class="data row0 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row0_col3" class="data row0 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row0_col4" class="data row0 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row1" class="row_heading level0 row1" >marseille_sous_realtor</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row1_col0" class="data row1 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row1_col1" class="data row1 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row1_col2" class="data row1 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row1_col3" class="data row1 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row1_col4" class="data row1 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row2" class="row_heading level0 row2" >nesta_case300_ieee</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row2_col0" class="data row2 col0" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row2_col1" class="data row2 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row2_col2" class="data row2 col2" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row2_col3" class="data row2 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row2_col4" class="data row2 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row3" class="row_heading level0 row3" >nesta_case240_wecc</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row3_col0" class="data row3 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row3_col1" class="data row3 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row3_col2" class="data row3 col2" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row3_col3" class="data row3 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row3_col4" class="data row3 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row4" class="row_heading level0 row4" >case_ACTIVSg200</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row4_col0" class="data row4 col0" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row4_col1" class="data row4 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row4_col2" class="data row4 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row4_col3" class="data row4 col3" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row4_col4" class="data row4 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row5" class="row_heading level0 row5" >nesta_case189_edin</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row5_col0" class="data row5 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row5_col1" class="data row5 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row5_col2" class="data row5 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row5_col3" class="data row5 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row5_col4" class="data row5 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row6" class="row_heading level0 row6" >nesta_case162_ieee_dtc</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row6_col0" class="data row6 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row6_col1" class="data row6 col1" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row6_col2" class="data row6 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row6_col3" class="data row6 col3" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row6_col4" class="data row6 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row7" class="row_heading level0 row7" >uiuc_150bus</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row7_col0" class="data row7 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row7_col1" class="data row7 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row7_col2" class="data row7 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row7_col3" class="data row7 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row7_col4" class="data row7 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row8" class="row_heading level0 row8" >nesta_case118_ieee</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row8_col0" class="data row8 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row8_col1" class="data row8 col1" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row8_col2" class="data row8 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row8_col3" class="data row8 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row8_col4" class="data row8 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row9" class="row_heading level0 row9" >nesta_case89_pegase</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row9_col0" class="data row9 col0" >Error</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row9_col1" class="data row9 col1" >Error</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row9_col2" class="data row9 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row9_col3" class="data row9 col3" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row9_col4" class="data row9 col4" >Warning</td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row10" class="row_heading level0 row10" >nesta_case73_ieee_rts</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row10_col0" class="data row10 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row10_col1" class="data row10 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row10_col2" class="data row10 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row10_col3" class="data row10 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row10_col4" class="data row10 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row11" class="row_heading level0 row11" >nesta_case57_ieee</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row11_col0" class="data row11 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row11_col1" class="data row11 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row11_col2" class="data row11 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row11_col3" class="data row11 col3" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row11_col4" class="data row11 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row12" class="row_heading level0 row12" >nesta_case39_epri</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row12_col0" class="data row12 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row12_col1" class="data row12 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row12_col2" class="data row12 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row12_col3" class="data row12 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row12_col4" class="data row12 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row13" class="row_heading level0 row13" >nesta_case30_ieee</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row13_col0" class="data row13 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row13_col1" class="data row13 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row13_col2" class="data row13 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row13_col3" class="data row13 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row13_col4" class="data row13 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row14" class="row_heading level0 row14" >nesta_case30_fsr</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row14_col0" class="data row14 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row14_col1" class="data row14 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row14_col2" class="data row14 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row14_col3" class="data row14 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row14_col4" class="data row14 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row15" class="row_heading level0 row15" >nesta_case30_as</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row15_col0" class="data row15 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row15_col1" class="data row15 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row15_col2" class="data row15 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row15_col3" class="data row15 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row15_col4" class="data row15 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row16" class="row_heading level0 row16" >nesta_case29_edin</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row16_col0" class="data row16 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row16_col1" class="data row16 col1" >Warning</td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row16_col2" class="data row16 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row16_col3" class="data row16 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row16_col4" class="data row16 col4" ></td>
+            </tr>    <tr>
+                <th id="T_23597d9c_a373_11e7_940c_38d5470eb261level0_row17" class="row_heading level0 row17" >nesta_case24_ieee_rts</th>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row17_col0" class="data row17 col0" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row17_col1" class="data row17 col1" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row17_col2" class="data row17 col2" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row17_col3" class="data row17 col3" ></td>
+                <td id="T_23597d9c_a373_11e7_940c_38d5470eb261row17_col4" class="data row17 col4" ></td>
+            </tr></tbody>
+        </table>
+      </section>
+      <section>
+        <style  type="text/css" >
+            #T_aa63e570_a373_11e7_940c_38d5470eb261row0_col0 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row0_col1 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row0_col2 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row0_col3 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row0_col4 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row1_col0 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row1_col1 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row1_col2 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row1_col3 {
+                    background-color:  pink;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row1_col4 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row2_col0 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row2_col1 {
+                    background-color:  peachpuff;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row2_col2 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row2_col3 {
+                    background-color:  peachpuff;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row2_col4 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row3_col0 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row3_col1 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row3_col2 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row3_col3 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row3_col4 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row4_col0 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row4_col1 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row4_col2 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row4_col3 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row4_col4 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row5_col0 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row5_col1 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row5_col2 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row5_col3 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row5_col4 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row6_col0 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row6_col1 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row6_col2 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row6_col3 {
+                    background-color:  white;
+                }    #T_aa63e570_a373_11e7_940c_38d5470eb261row6_col4 {
+                    background-color:  white;
+                }</style>
+        <table id="T_aa63e570_a373_11e7_940c_38d5470eb261" style="font-size: 60%">
+          <caption>Tiny networks</caption>
+        <thead>    <tr>
+                <th class="blank level0" ></th>
+                <th class="col_heading level0 col0" >max_degree</th>
+                <th class="col_heading level0 col1" >mean_degree</th>
+                <th class="col_heading level0 col2" >median_degree</th>
+                <th class="col_heading level0 col3" >degree_assortativity</th>
+                <th class="col_heading level0 col4" >rich_club</th>
+            </tr></thead>
+        <tbody>    <tr>
+                <th id="T_aa63e570_a373_11e7_940c_38d5470eb261level0_row0" class="row_heading level0 row0" >nesta_case14_ieee</th>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row0_col0" class="data row0 col0" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row0_col1" class="data row0 col1" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row0_col2" class="data row0 col2" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row0_col3" class="data row0 col3" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row0_col4" class="data row0 col4" ></td>
+            </tr>    <tr>
+                <th id="T_aa63e570_a373_11e7_940c_38d5470eb261level0_row1" class="row_heading level0 row1" >nesta_case9_wscc</th>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row1_col0" class="data row1 col0" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row1_col1" class="data row1 col1" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row1_col2" class="data row1 col2" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row1_col3" class="data row1 col3" >Error</td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row1_col4" class="data row1 col4" ></td>
+            </tr>    <tr>
+                <th id="T_aa63e570_a373_11e7_940c_38d5470eb261level0_row2" class="row_heading level0 row2" >nesta_case6_ww</th>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row2_col0" class="data row2 col0" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row2_col1" class="data row2 col1" >Warning</td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row2_col2" class="data row2 col2" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row2_col3" class="data row2 col3" >Warning</td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row2_col4" class="data row2 col4" ></td>
+            </tr>    <tr>
+                <th id="T_aa63e570_a373_11e7_940c_38d5470eb261level0_row3" class="row_heading level0 row3" >nesta_case6_c</th>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row3_col0" class="data row3 col0" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row3_col1" class="data row3 col1" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row3_col2" class="data row3 col2" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row3_col3" class="data row3 col3" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row3_col4" class="data row3 col4" ></td>
+            </tr>    <tr>
+                <th id="T_aa63e570_a373_11e7_940c_38d5470eb261level0_row4" class="row_heading level0 row4" >nesta_case5_pjm</th>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row4_col0" class="data row4 col0" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row4_col1" class="data row4 col1" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row4_col2" class="data row4 col2" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row4_col3" class="data row4 col3" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row4_col4" class="data row4 col4" ></td>
+            </tr>    <tr>
+                <th id="T_aa63e570_a373_11e7_940c_38d5470eb261level0_row5" class="row_heading level0 row5" >nesta_case4_gs</th>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row5_col0" class="data row5 col0" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row5_col1" class="data row5 col1" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row5_col2" class="data row5 col2" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row5_col3" class="data row5 col3" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row5_col4" class="data row5 col4" ></td>
+            </tr>    <tr>
+                <th id="T_aa63e570_a373_11e7_940c_38d5470eb261level0_row6" class="row_heading level0 row6" >nesta_case3_lmbd</th>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row6_col0" class="data row6 col0" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row6_col1" class="data row6 col1" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row6_col2" class="data row6 col2" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row6_col3" class="data row6 col3" ></td>
+                <td id="T_aa63e570_a373_11e7_940c_38d5470eb261row6_col4" class="data row6 col4" ></td>
+            </tr></tbody>
+        </table>
+      </section>
       </section>
 
       <section>
         <section>
           <h1>Weighted graph analysis</h1>
+          Unweighted graph metrics provide quick, easy-to-understand check
+          Experts may be interested in more sophisticated graph metrics
         </section>
         <section>
           <h2>Electrical distance</h2>
