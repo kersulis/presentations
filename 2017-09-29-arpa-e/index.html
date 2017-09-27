@@ -36,7 +36,7 @@
           <h1>System-wide Metrics</h1>
           <p>2017-09-29</p>
           <p>Jonas Kersulis</p>
-          <em>kersulis@umich.edu</em>
+          <em><a href=mailto:kersulis@umich.edu>kersulis@umich.edu</a></em>
         </section>
       </section>
       <section>
@@ -55,7 +55,7 @@
         <section>
           <h2>Goals</h2>
           <ul>
-            <li>Perform system-wide analysis of many networks.</li>
+            <li>Perform graph analysis of many networks.</li>
             <li>Corroborate unusual characteristics identified by community.</li>
             <li>Combine data spread with outside knowledge to develop easy-to-use set of checks (similar to parameter checks).</li>
           </ul>
@@ -63,8 +63,8 @@
             <h2>Challenges</h2>
             <ul>
               <li>Relative weight of test networks: how to allocate trust?</li>
-              <li>Calibration of warning thresholds: not too tight or too lax</li>
-              <li>Intuitive messages to users: should be easy to understand warnings</li>
+              <li>Warning thresholds: not too tight or too lax</li>
+              <li>Intuitive warnings, should be easy to understand</li>
             </ul>
           </div>
         </section>
@@ -95,10 +95,11 @@
 
       <section>
         <section>
-          <h1>Unweighted graph analysis</h1>
+          <h1>Derivation of metrics</h1>
           <ul>
-            <li>No edge weights, no electrical information</li>
-            <li>Graph theory still provides insight</li>
+            <li>Stick with unweighted for now; no electrical information.</li>
+            <li>Graph theory still provides insight.</li>
+            <li>Straightforward warnings highlight unusual connectivity and density patterns.</li>
           </ul>
         </section>
         <section>
@@ -112,35 +113,32 @@
         </section>
         <section>
           <h3>Results: 1k - 7k nodes</h3>
-          <img src="images/degree-distribution-nopegase.svg">
-          <p>(large PEGASE networks omitted for scale)</p>
-        </section>
-        <section>
+          <img src="images/degree-distribution-nopegase.svg" width=90% style="margin: 0">
+          <p></p>
+          <div class="fragment">
           <h3>Warning thresholds</h3>
           <ul>
             <li>Most oddities picked up by max/median/mean.</li>
             <li>Distributions mainly introduce remaining metrics.</li>
           </ul>
+          </div>
         </section>
         <section>
           <h2>B. Maximum node degree</h2>
-          <h3>Description</h3>
-          <ul>
+          <h3 style="margin: 0">Description</h3>
+          <ul style="font-size: 60%">
             <li>Substations rarely have >10 connections.</li>
             <li>High max node degree suggests network reduction.</li>
           </ul>
         </section>
           <section>
             <h3>Results</h3>
-            <img src="images/size-vs-max-degree.svg" width=80%>
-      </section>
-        <section>
-          <h3>Results</h3>
-          <ul>
-            <li>High max degree of large PEGASE cases has been pointed out.</li>
-            <li>case89 has max degree unusual for its size.</li>
-            <li>Size trend is only valid for smaller networks; substation connections do not grow arbitrarily numerous with network size.</li>
-          </ul>
+            <img src="images/size-vs-max-degree.svg" width=70%>
+            <ul style="font-size: 80%">
+              <li>High max degree of large PEGASE cases has been pointed out.</li>
+              <li>case89 has max degree unusual for its size.</li>
+              <li>Size trend is only valid for smaller networks; substation connections do not grow arbitrarily numerous with network size.</li>
+            </ul>
         </section>
         <section>
           <h3>Warning thresholds</h3>
@@ -157,14 +155,14 @@
             <li>Related to $n-1$ security</li>
             <li>Between 2 and 3 for most networks</li>
           </ul>
-        </section>
-        <section>
+          <div class="fragment">
           <h3>Results</h3>
           <img src="images/mean-degree-rugplot.svg" width=100%>
           <ul>
             <li>Clump around 2.4: RTE + Polish</li>
             <li>Clump around 2.7: PEGASE + IEEE</li>
           </ul>
+          </div>
         </section>
         <section>
           <h3>Warning thresholds</h3>
@@ -179,21 +177,21 @@
           <h2>D. Median node degree</h2>
           <h3>Description</h3>
           <p>Can only identify extreme outliers.</p>
-        </section>
-        <section>
+          <div class="fragment">
           <h3>Results</h3>
           <ul>
             <li>2 is by far most common median degree value. <25% of networks have median degree 3.</li>
             <li>Largest network with median degree 3 is IEEE 300.</li>
             <li>Removal of generator step-up transformers has little effect.</li>
           </ul>
-        </section>
-        <section>
+          </div>
+          <div class="fragment">
           <h3>Warning thresholds</h3>
           <ul>
             <li style="background-color: peachpuff">Median degree 3 for network with >200 nodes: warning</li>
             <li style="background-color: pink">Median degree > 3: error</li>
           </ul>
+          </div>
         </section>
         <section>
           <h2>E. Degree assortativity coefficient</h2>
@@ -259,8 +257,17 @@
             <li style="background-color: peachpuff">Consider the set $K_{0.8}$ of degrees with rich club coeff. $\geq 0.8$. Issue warning when there are at least 10 nodes with degree $k\in K_{0.8}$.</li>
           </ul>
         </section>
+      </section>
+      <section>
         <section>
-          <h2>Running checks</h2>
+          <h1>Application of metrics</h1>
+          <ul>
+            <li>Running the code</li>
+            <li>Output from checking all test cases</li>
+          </ul>
+        </section>
+        <section>
+          <h2>Running the code</h2>
           <p style="font-size: 70%">Compute and check metrics on GRG-format networks in a directory:</p>
             <pre style="line-height: 1em;">
               <code class="python" style="font-size: 80%; padding: 0">
@@ -269,6 +276,7 @@
     msg = grg_metrics.analyze_metrics(metrics)
             </code>
           </pre>
+          <div class="fragment">
           <p style="font-size: 70%">Summarize warnings for a particular network:</p>
           <pre style="line-height: 1em;">
             <code class="python" style="font-size: 80%; padding: 0">
@@ -280,6 +288,8 @@
     rich_club
             </code>
           </pre>
+          </div>
+          <div class="fragment">
           <p style="font-size: 70%">Read full warning message:</p>
           <pre style="line-height: 1em;">
             <code class="python" style="font-size: 80%; padding: 0">
@@ -287,11 +297,12 @@
     "Warning: 'nesta_case240_wecc' has median degree 3, which is rare for networks larger than 200 buses."
           </code>
         </pre>
+        </div>
 
         </section>
         <section>
           <h2>Applying checks to test networks</h2>
-          <p>What happens when we apply our thresholds to the full set of networks?</p>
+          <p>Use the checks on the test networks used to develop them.</p>
           <div class="fragment">
           <style  type="text/css" >
               #T_5558644e_a372_11e7_940c_38d5470eb261row0_col0 {
@@ -1262,13 +1273,81 @@
 
       <section>
         <section>
-          <h1>Weighted graph analysis</h1>
-          Unweighted graph metrics provide quick, easy-to-understand check
-          Experts may be interested in more sophisticated graph metrics
+          <h1>Discussion</h1>
+          <ul>
+            <li>Other potential metrics we investigated</li>
+            <li>Future work</li>
+          </ul>
         </section>
         <section>
-          <h2>Electrical distance</h2>
+          <h2>Other potential metrics</h2>
+
+          <h3>Spectral graph analysis</h3>
+          <p><strong>No electrical data</strong></p>
+          <ul style="font-size:90%">
+            <li>Algebraic connectivity (Fiedler value): second-smallest Laplacian Eigenvalue</li>
+            <li>Adjacency spectral radius: largest Eigenvalue of adjacency matrix</li>
+          </ul>
+          <p><strong>With electrical data</strong></p>
+          <ul style="font-size:90%">
+            <li>Admittance matrix spectrum</li>
+            <li>Injection shift factor spectrum</li>
+          </ul>
         </section>
+        <section>
+          <p>Interesting data...</p>
+          <img src="images/adj-spectral-radius-vs-size.svg">
+        <!-- <section>
+          <h4>Interesting data...</h4>
+          <p style="font-size: 80%">Largest admittance matrix Eigenvalue</p>
+          <img src="images/max-admittance-eva.svg">
+        </section> -->
+        <div class="fragment">
+        <p style="font-size: 80%">...but:</p>
+          <ul style="font-size: 80%">
+            <li>Long computation</li>
+            <li>Requires more graph theory background to interpret</li>
+            <li>Tends to flag the same networks anyway</li>
+          </ul>
+          </div>
+        </section>
+        <section>
+          <h3>Weighted graph analysis</h3>
+          <p style="font-size: 80%">Electrical distance information is rich:</p>
+          <img src="images/isf-layout.svg" width=60%>
+          <p style="font-size: 80%">Tough to distill into intuitive, actionable metrics.</p>
+        </section>
+        <section>
+          <h3>Clique analysis</h3>
+          <ul>
+            <li>A clique is a fully-connected subgraph.</li>
+            <li>Cliques can overlap.</li>
+          </ul>
+          <img src="images/clique-graph-scaling.svg" width=70%>
+        </section>
+        <section>
+          <h2>Future work</h2>
+          <p>Our metrics can detect unusual connectivity patterns and modeling errors, but we'd really like metrics that predict computational behavior.</p>
+          <div class="fragment">
+          <p>Metrics that didn't pan out were still worth studying! Example:</p>
+          <ul>
+            <li>Large semidefinite constraints may be decomposed to improve SDP solver performance.</li>
+            <li>Decomposition must be done in terms of cliques.</li>
+            <li>Clique analysis may help predict SDP performance, and yield better decomposition techniques.</li>
+          </ul>
+          </div>
+        </section>
+      </section>
+      <section>
+        <h1>Conclusion</h1>
+        <ul>
+          <li class="fragment">We identified a set of system-wide metrics that are easy to use and understand, and backed by analysis of a large collection of networks.</li>
+          <li class="fragment">Other potential metrics tend to take longer to compute, while being more opaque.</li>
+          <li class="fragment">Metrics with the power to predict computational behavior motivate exciting future work!</li>
+        </ul>
+        <div class="fragment">
+          <h1>Questions?</h1>
+        </div>
       </section>
     </div>
   </div>
