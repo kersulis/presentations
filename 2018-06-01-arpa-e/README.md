@@ -14,3 +14,5 @@ pandoc -s -t revealjs -c custom.css --slide-level 2 --mathjax -V theme=white ind
 - `-V theme=white` tells Pandoc to set a reveal.js-specific variable (`-V`) called `theme` to `white`, which sets the presentation theme to white.
 - `index.md` is the input Markdown file we want to convert
 - `-o index.html` tells Pandoc to export our reveal.js HTML file with the name "index.html".
+
+Use `-V revealjs-url=http://lab.hakim.se/reveal-js` to use online hosted reveal.js.
