@@ -1,0 +1,21 @@
+.reveal {
+  font-size: 30px
+}
+.reveal h1 {
+  font-size: 3em;
+}
+.reveal h2 {
+  font-size: 2em;
+  text-align: left;
+  font-weight: bold;
+}
+.scrollable {
+  overflow-y: auto !important;
+  overflow-x: hidden !important;
+  height: 700px;
+}
+img {
+  border: 0px !important;
+  box-shadow: 0 0 0px !important;
+}
+td { white-space:pre }

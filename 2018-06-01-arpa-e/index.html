@@ -1,0 +1,255 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="Jonas Kersulis">
+  <meta name="dcterms.date" content="2018-06-01">
+  <title>Load Profiles and Metrics</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="reveal.js/css/reveal.css">
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="reveal.js/css/theme/white.css" id="theme">
+  <link rel="stylesheet" href="custom.css"/>
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal.js/css/print/pdf.css' : 'reveal.js/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+  <!--[if lt IE 9]>
+  <script src="reveal.js/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section id="title-slide">
+  <h1 class="title">Load Profiles and Metrics</h1>
+  <p class="author">Jonas Kersulis</p>
+  <p class="date">June 1, 2018</p>
+</section>
+
+<section><section id="introduction" class="title-slide slide level1"><h1>Introduction</h1></section><section id="deliverables" class="slide level2">
+<h2>Deliverables</h2>
+<ul>
+<li>Grant proposal refers to load profile times series metrics</li>
+</ul>
+</section><section id="comparison-to-system-wide-metrics" class="slide level2">
+<h2>Comparison to system-wide metrics</h2>
+<ul>
+<li>Same strategy
+<ol type="1">
+<li>Study data to distinguish physical phenomena from synthetic features</li>
+<li>Distill into minimal set of metrics for efficiency.</li>
+</ol></li>
+<li>Less data
+<ol type="1">
+<li>Last time we had forty networks.</li>
+<li>This time we have a handful of datasets</li>
+<li>Approximately 40 original load profiles.</li>
+</ol></li>
+<li>Less literature
+<ol type="1">
+<li>More focused on short-term forecasting</li>
+<li>Discovering as we go</li>
+</ol></li>
+</ul>
+</section></section>
+<section><section id="data-sources" class="title-slide slide level1"><h1>Data sources</h1></section><section id="a.-wecc" class="slide level2">
+<h2>A. WECC</h2>
+<h3 id="source">Source</h3>
+<ul>
+<li>Source: CAISO</li>
+<li>Western US (summer-peaking region)</li>
+<li>8,784 hourly timestamps spanning 2004</li>
+<li>Two forms
+<ul>
+<li>Bus-level disaggregation</li>
+<li>Aggregated version with just the 21 original load profiles</li>
+</ul></li>
+</ul>
+</section><section id="b.-rts-96" class="slide level2">
+<h2>B. RTS 96</h2>
+<ul>
+<li>Bus-level “disaggregation” of one load profile (of questionable provenance)</li>
+<li>8,736 hourly timestamps spanning 1996 (except Dec. 30-31, so 364 days)</li>
+</ul>
+</section><section id="c.-rte" class="slide level2">
+<h2>C. RTE</h2>
+<ul>
+<li>Source: RTE</li>
+<li>France (winter-peaking region)</li>
+<li>Area-level aggregation for 12 divisions</li>
+<li>80,304 half-hourly timestamps spanning 2013 to July 2017 (578 days).</li>
+<li>Realistic, broad, recent.</li>
+</ul>
+</section><section id="d.-rts-gmlc" class="slide level2">
+<h2>D. RTS GMLC</h2>
+<ul>
+<li>Source: RTS GMLC project on GitHub</li>
+<li>3 synthesized load profiles, one for each RTS 96 area</li>
+<li>105,408 5-minute timestamps spanning 2020 (366 days)</li>
+</ul>
+</section></section>
+<section><section id="data-details" class="title-slide slide level1"><h1>Data details</h1></section><section id="original-vs-derived" class="slide level2">
+<h2>Original vs derived</h2>
+<ul>
+<li>Original: directly from measurement/synthesis</li>
+<li>Derived: dependent on original (e.g. scaled version)</li>
+</ul>
+</section><section id="original-vs-derived-1" class="slide level2">
+<h2>Original vs derived</h2>
+<ul>
+<li>WECC: 21 original time series, disaggregated to bus level via load participation factors.</li>
+<li>RTS 96: 1 original load profile.</li>
+<li>RTE: 12.</li>
+<li>RTS GMLC: 3 original (apparently synthesized) load profiles.</li>
+</ul>
+<p><em>~35 total original load profiles, but ~200 total load profiles across the 4 datasets.</em></p>
+</section><section id="tidy-datasets" class="slide level2">
+<h2>Tidy datasets</h2>
+<ul>
+<li>Each dataset now available in “tidy” form</li>
+<li>Single DataFrame object that can be exported to any tabular data format.</li>
+</ul>
+<p><em>Significant for RTE data especially, which was spread across dozens of TSV files in four directories using two different character encodings.</em></p>
+</section></section>
+<section><section id="time-domain-analysis" class="title-slide slide level1"><h1>Time domain analysis</h1></section><section id="seasonal-variation" class="slide level2">
+<h2>Seasonal variation</h2>
+<p><em>WECC</em></p>
+<p><img src="images/wecc_seaon_weekday.svg" width=700px></p>
+</section><section class="slide level2">
+
+<p><em>RTS 96</em></p>
+<p><img src="images/rts96_seaon_weekday.svg" width=700px></p>
+</section><section class="slide level2">
+
+<p><em>RTE</em></p>
+<p><img src="images/rte_temperature_population_spread.svg" width=800px></p>
+</section><section id="cross-correlation-analysis" class="slide level2">
+<h2>Cross-correlation analysis</h2>
+<h3 id="cross-correlation-matrices">Cross-correlation matrices</h3>
+</section><section class="slide level2">
+
+<h3 id="wecc"><em>WECC</em></h3>
+<p><img src="images/wecc_corr.svg" width=500px></p>
+</section><section class="slide level2">
+
+<h3 id="aggregated-wecc"><em>Aggregated WECC</em></h3>
+<p><img src="images/wecc_agg_corr.svg" width=400px></p>
+</section><section class="slide level2">
+
+<h3 id="rts-96"><em>RTS 96</em></h3>
+<p><img src="images/rts96_corr.svg" width=600px></p>
+</section><section class="slide level2">
+
+<h3 id="correlation-coefficient-distributions">Correlation coefficient distributions</h3>
+<p><img src="images/corr_distplot.svg" width=600px></p>
+</section><section class="slide level2">
+
+<h3 id="deriving-a-correlation-metric">Deriving a correlation metric</h3>
+<p><img src="images/metric_corr_threshold.svg" width=600px></p>
+</section><section class="slide level2">
+
+<h3 id="cross-correlation-metric-results">Cross-correlation metric results</h3>
+<p>Fraction of correlation coefficients above 0.98:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Dataset</th>
+<th>Fraction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>wecc</td>
+<td>91.59%</td>
+</tr>
+<tr class="even">
+<td>rts96</td>
+<td>0.00%</td>
+</tr>
+<tr class="odd">
+<td>wecc_agg</td>
+<td>100.00%</td>
+</tr>
+<tr class="even">
+<td>rte</td>
+<td>98.48%</td>
+</tr>
+<tr class="odd">
+<td>ercot</td>
+<td>97.22%</td>
+</tr>
+<tr class="even">
+<td>gmlc</td>
+<td>100.00%</td>
+</tr>
+</tbody>
+</table>
+</section><section id="sigular-values" class="slide level2">
+<h2>Sigular values</h2>
+<p><img src="images/svd.svg" width=600px></p>
+</section><section class="slide level2">
+
+<h3 id="effects-of-aggregation">Effects of aggregation</h3>
+<p><img src="images/singular_value_wecc.svg" width=600px></p>
+</section><section class="slide level2">
+
+<h3 id="discussion-of-repeated-eigenvalues">Discussion of repeated Eigenvalues</h3>
+</section></section>
+<section><section id="frequency-domain-analysis" class="title-slide slide level1"><h1>Frequency domain analysis</h1></section></section>
+<section><section id="generating-realistic-load-profiles" class="title-slide slide level1"><h1>Generating realistic load profiles</h1></section></section>
+<section><section id="conclusions" class="title-slide slide level1"><h1>Conclusions</h1></section></section>
+    </div>
+  </div>
+
+  <script src="reveal.js/lib/js/head.min.js"></script>
+  <script src="reveal.js/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Push each slide change to the browser history
+        history: true,
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'reveal.js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'reveal.js/plugin/zoom-js/zoom.js', async: true },
+          { src: 'reveal.js/plugin/math/math.js', async: true },
+          { src: 'reveal.js/plugin/notes/notes.js', async: true }
+        ]
+      });
+    </script>
+    </body>
+</html>
