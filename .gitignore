@@ -20,3 +20,5 @@ tmp/**
 node_modules/
 .sass-cache
 .ipynb_checkpoints/
+/2018-06-01-arpa-e/reveal.js
+.tags*
