@@ -16,7 +16,7 @@
       span.underline{text-decoration: underline;}
       div.column{display: inline-block; vertical-align: top; width: 50%;}
   </style>
-  <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/theme/white.css" id="theme">
+  <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/theme/simple.css" id="theme">
   <link rel="stylesheet" href="custom.css"/>
   <!-- Printing and PDF exports -->
   <script>
@@ -40,124 +40,217 @@
   <p class="date">June 1, 2018</p>
 </section>
 
-<section><section id="introduction" class="title-slide slide level1"><h1>Introduction</h1></section><section id="deliverables" class="slide level2">
-<h2>Deliverables</h2>
+<section><section id="introduction" class="title-slide slide level1"><h1>Introduction</h1></section><section id="goals" class="slide level2">
+<h2>Goals</h2>
 <ul>
-<li>Grant proposal refers to load profile times series metrics</li>
+<li>Analyze and develop metrics for load profiles</li>
+<li>Make good use of valuable RTE time series data</li>
 </ul>
 </section><section id="comparison-to-system-wide-metrics" class="slide level2">
 <h2>Comparison to system-wide metrics</h2>
 <ul>
-<li>Same strategy
+<li>Similar strategy
 <ol type="1">
-<li>Study data to distinguish physical phenomena from synthetic features</li>
-<li>Distill into minimal set of metrics for efficiency.</li>
+<li>Search broadly for data</li>
+<li>Use analysis, prior knowledge to distinguish physical from synthetic</li>
+<li>Distill into minimal set of metrics</li>
 </ol></li>
-<li>Less data
+<li>Data
 <ol type="1">
-<li>Last time we had forty networks.</li>
-<li>This time we have a handful of datasets</li>
-<li>Approximately 40 original load profiles.</li>
+<li>Last time we had forty networks</li>
+<li>This time we have approximately 40 original load profiles</li>
 </ol></li>
-<li>Less literature
+<li>Literature
 <ol type="1">
 <li>More focused on short-term forecasting</li>
 <li>Discovering as we go</li>
+<li>Using less domain-specific literature, more from general time series analysis</li>
 </ol></li>
 </ul>
-</section></section>
-<section><section id="data-sources" class="title-slide slide level1"><h1>Data sources</h1></section><section id="a.-wecc" class="slide level2">
-<h2>A. WECC</h2>
-<h3 id="source">Source</h3>
+</section><section id="comparison-to-system-wide-metrics-1" class="slide level2">
+<h2>Comparison to system-wide metrics</h2>
 <ul>
-<li>Source: CAISO</li>
-<li>Western US (summer-peaking region)</li>
-<li>8,784 hourly timestamps spanning 2004</li>
-<li>Two forms
-<ul>
-<li>Bus-level disaggregation</li>
-<li>Aggregated version with just the 21 original load profiles</li>
-</ul></li>
+<li>System-wide metrics: tough to see raw data (illustrate graph structure), but easy to reduce to scalars and distributions</li>
+<li>Time series metrics: easy to see raw data, but harder to reduce to scalars and distributions</li>
+<li>Dynamic behavior</li>
 </ul>
-</section><section id="b.-rts-96" class="slide level2">
-<h2>B. RTS 96</h2>
+</section></section>
+<section><section id="data" class="title-slide slide level1"><h1>Data</h1></section><section id="original-vs-derived" class="slide level2">
+<h2>Original vs derived</h2>
 <ul>
-<li>Bus-level “disaggregation” of one load profile (of questionable provenance)</li>
+<li>Original load profile: directly from measurement or synthesis</li>
+<li>Derived time series: dependent on original load profile</li>
+<li>“Time series” refers to either</li>
+</ul>
+</section><section id="wecc-caiso-western-us" class="slide level2">
+<h2>WECC (CAISO, Western US)</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li>21 original load profiles, 132 time series</li>
+<li>8,784 hourly timestamps spanning 2004 (leap year)</li>
+<li>Disaggregation via load participation factors</li>
+<li>We have aggregated version with only the 21 original load profiles</li>
+</ul>
+</div><div class="column" style="width:60%;">
+<figure>
+<img data-src="images/wecc_season_weekday.svg" alt="A WECC time series" style="width:100.0%" /><figcaption><em>A WECC time series</em></figcaption>
+</figure>
+</div>
+</div>
+</section><section id="rts-96" class="slide level2">
+<h2>RTS 96</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li>1 original load profile, 51 time series</li>
+<li>The sole original load profile looks strange</li>
 <li>8,736 hourly timestamps spanning 1996 (except Dec. 30-31, so 364 days)</li>
 </ul>
-</section><section id="c.-rte" class="slide level2">
-<h2>C. RTE</h2>
+</div><div class="column" style="width:60%;">
+<figure>
+<img data-src="images/rts96_season_weekday.svg" alt="One year of one series" style="width:100.0%" /><figcaption><em>One year of one series</em></figcaption>
+</figure>
+</div>
+</div>
+</section><section id="rte-france" class="slide level2">
+<h2>RTE (France)</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
 <ul>
-<li>Source: RTE</li>
-<li>France (winter-peaking region)</li>
-<li>Area-level aggregation for 12 divisions</li>
-<li>80,304 half-hourly timestamps spanning 2013 to July 2017 (578 days).</li>
-<li>Realistic, broad, recent.</li>
+<li>12 original load profiles, 12 total time series</li>
+<li>12 French administrative divisions</li>
+<li>80,304 half-hourly timestamps spanning 2013 to July 2017 (578 days)</li>
+<li>Realistic, broad, recent</li>
 </ul>
-</section><section id="d.-rts-gmlc" class="slide level2">
-<h2>D. RTS GMLC</h2>
+</div><div class="column" style="width:60%;">
+<figure>
+<img data-src="images/rte_season_weekday.svg" alt="One year of one series" style="width:100.0%" /><figcaption><em>One year of one series</em></figcaption>
+</figure>
+</div>
+</div>
+</section><section id="ercot-texas" class="slide level2">
+<h2>ERCOT (Texas)</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
 <ul>
-<li>Source: RTS GMLC project on GitHub</li>
-<li>3 synthesized load profiles, one for each RTS 96 area</li>
-<li>105,408 5-minute timestamps spanning 2020 (366 days)</li>
+<li>8 original load profiles, 8 total time series</li>
+<li>Corresponds to 8 ERCOT weather zones</li>
+<li>143,135 hourly timestamps spanning 2002 - April 2018 (16 years)</li>
 </ul>
-</section></section>
-<section><section id="data-details" class="title-slide slide level1"><h1>Data details</h1></section><section id="original-vs-derived" class="slide level2">
-<h2>Original vs derived</h2>
+</div><div class="column" style="width:60%;">
+<figure>
+<img data-src="images/ercot_season_weekday.svg" alt="One year of one series" style="width:100.0%" /><figcaption><em>One year of one series</em></figcaption>
+</figure>
+</div>
+</div>
+</section><section id="rts-gmlc-on-github" class="slide level2">
+<h2>RTS GMLC (on GitHub)</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
 <ul>
-<li>Original: directly from measurement/synthesis</li>
-<li>Derived: dependent on original (e.g. scaled version)</li>
+<li>3 synthesized load profiles corresponding to RTS network areas</li>
+<li>105,408 5-minute timestamps spanning the year 2020 (366 days)</li>
 </ul>
-</section><section id="original-vs-derived-1" class="slide level2">
-<h2>Original vs derived</h2>
+</div><div class="column" style="width:60%;">
+<figure>
+<img data-src="images/gmlc_season_weekday.svg" alt="One year of one series" style="width:100.0%" /><figcaption><em>One year of one series</em></figcaption>
+</figure>
+</div>
+</div>
+</section><section id="summary" class="slide level2">
+<h2>Summary</h2>
 <ul>
-<li>WECC: 21 original time series, disaggregated to bus level via load participation factors.</li>
-<li>RTS 96: 1 original load profile.</li>
-<li>RTE: 12.</li>
-<li>RTS GMLC: 3 original (apparently synthesized) load profiles.</li>
+<li>~40 total original load profiles</li>
+<li>~200 total time series</li>
 </ul>
-<p><em>~35 total original load profiles, but ~200 total load profiles across the 4 datasets.</em></p>
-</section><section id="tidy-datasets" class="slide level2">
-<h2>Tidy datasets</h2>
+</section><section id="supplementary-data-for-rte-analysis" class="slide level2">
+<h2>Supplementary data for RTE analysis</h2>
+<ul>
+<li>zone-level temperature data from TAMU agriculture database</li>
+<li>zone population data from France’s INSEE</li>
+</ul>
+</section><section class="slide level2">
+
+<p><img data-src="images/rte_temperature_population_spread.svg" /></p>
+</section><section id="basic-data-observations" class="slide level2">
+<h2>Basic data observations</h2>
+<ul>
+<li>Basic shape depends on region</li>
+<li>Early morning peak often connected to weekdays</li>
+<li>Flatness in absolute units connected to population</li>
+<li>Daily fluctuations connected to population, temperature</li>
+</ul>
+</section><section id="incidental-product" class="slide level2">
+<h2>Incidental product</h2>
 <ul>
 <li>Each dataset now available in “tidy” form</li>
 <li>Single DataFrame object that can be exported to any tabular data format.</li>
+<li>RTE data was spread across dozens of TSV files in four directories, using two different character encodings</li>
 </ul>
-<p><em>Significant for RTE data especially, which was spread across dozens of TSV files in four directories using two different character encodings.</em></p>
 </section></section>
-<section><section id="time-domain-analysis" class="title-slide slide level1"><h1>Time domain analysis</h1></section><section id="seasonal-variation" class="slide level2">
-<h2>Seasonal variation</h2>
-<p><em>WECC</em></p>
-<p><img src="images/wecc_seaon_weekday.svg" width=700px></p>
+<section><section id="individual-time-series-analysis" class="title-slide slide level1"><h1>Individual time series analysis</h1></section><section id="fourier-transform" class="slide level2">
+<h2>Fourier transform</h2>
+<p><em>Obvious to check, but not very useful</em></p>
+<ul>
+<li>Load profiles are nonlinear, nonstationary</li>
+<li>Sinusoidal basis functions unaware of inherent load profile characteristics</li>
+<li>More useful for renewable data</li>
+</ul>
 </section><section class="slide level2">
 
-<p><em>RTS 96</em></p>
-<p><img src="images/rts96_seaon_weekday.svg" width=700px></p>
+<p><img src="images/fft_zoom.svg" width=800px></p>
+</section><section id="spectrogram" class="slide level2">
+<h2>Spectrogram</h2>
+<ul>
+<li>Illustrate time-varying frequency spectrum</li>
+<li>Motivate models that account for nonstationary behavior</li>
+</ul>
 </section><section class="slide level2">
 
 <p><em>RTE</em></p>
-<p><img src="images/rte_temperature_population_spread.svg" width=800px></p>
-</section><section id="cross-correlation-analysis" class="slide level2">
+<p><img src="images/rte_spectrogram.png" width=1000px></p>
+</section><section class="slide level2">
+
+<p><em>ERCOT</em></p>
+<p><img src="images/ercot_spectrogram.png" width=1000px></p>
+</section><section id="singular-spectrum-analysis" class="slide level2">
+<h2>Singular spectrum analysis</h2>
+<ul>
+<li>Based on principal component ideas</li>
+<li>Model-free, non-parametric</li>
+<li>SSA components not necessarily harmonic, advantage over FFT</li>
+<li>“Adaptive spectral filters associated with dominant oscillations” (Bonizzi2014), suitable for nonlinear or nonstationary signals</li>
+</ul>
+</section><section id="procedure" class="slide level2">
+<h2>Procedure</h2>
+<ul>
+<li>Choose window length <span class="math inline">\(L &lt; N/2\)</span>, where <span class="math inline">\(N\)</span> is time series length</li>
+<li>Generate “trajectory matrix” of lagged vectors (Hankel matrix) from zero-mean signal (embeds time signal in <span class="math inline">\(L\)</span>-dimensional vector space)</li>
+</ul>
+</section></section>
+<section><section id="time-domain-analysis" class="title-slide slide level1"><h1>Time domain analysis</h1></section><section id="cross-correlation-analysis" class="slide level2">
 <h2>Cross-correlation analysis</h2>
+</section><section class="slide level2">
+
 <h3 id="cross-correlation-matrices">Cross-correlation matrices</h3>
+<div class="columns">
+<div class="column" style="width:50%;">
+<p><em>Aggregated WECC</em></p>
+<p><img src="images/wecc_agg_corr.svg"></p>
+</div><div class="column" style="width:50%;">
+<p><em>Disaggregated WECC</em></p>
+<p><img src="images/wecc_corr.svg"></p>
+</div>
+</div>
 </section><section class="slide level2">
 
-<h3 id="wecc"><em>WECC</em></h3>
-<p><img src="images/wecc_corr.svg" width=500px></p>
-</section><section class="slide level2">
-
-<h3 id="aggregated-wecc"><em>Aggregated WECC</em></h3>
-<p><img src="images/wecc_agg_corr.svg" width=400px></p>
-</section><section class="slide level2">
-
-<h3 id="rts-96"><em>RTS 96</em></h3>
+<h3 id="rts-96-1"><em>RTS 96</em></h3>
 <p><img src="images/rts96_corr.svg" width=600px></p>
 </section><section class="slide level2">
 
 <h3 id="correlation-coefficient-distributions">Correlation coefficient distributions</h3>
 <p><img src="images/corr_distplot.svg" width=600px></p>
-</section><section class="slide level2">
-
 <h3 id="deriving-a-correlation-metric">Deriving a correlation metric</h3>
 <p><img src="images/metric_corr_threshold.svg" width=600px></p>
 </section><section class="slide level2">
@@ -198,8 +291,8 @@
 </tr>
 </tbody>
 </table>
-</section><section id="sigular-values" class="slide level2">
-<h2>Sigular values</h2>
+</section><section id="singular-values" class="slide level2">
+<h2>Singular values</h2>
 <p><img src="images/svd.svg" width=600px></p>
 </section><section class="slide level2">
 
@@ -209,7 +302,6 @@
 
 <h3 id="discussion-of-repeated-eigenvalues">Discussion of repeated Eigenvalues</h3>
 </section></section>
-<section><section id="frequency-domain-analysis" class="title-slide slide level1"><h1>Frequency domain analysis</h1></section></section>
 <section><section id="generating-realistic-load-profiles" class="title-slide slide level1"><h1>Generating realistic load profiles</h1></section></section>
 <section><section id="conclusions" class="title-slide slide level1"><h1>Conclusions</h1></section></section>
     </div>
