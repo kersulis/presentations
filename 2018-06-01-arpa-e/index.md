@@ -220,7 +220,7 @@ A value below 100% suggests disaggregation.
 :::
 :::::
 
-## Effects of aggregation
+## Effects of disaggregation
 ![Correspondence between first 21 values for each dataset](images/singular_value_wecc.svg)
 
 ## Singular value metric
