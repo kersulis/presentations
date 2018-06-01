@@ -160,16 +160,15 @@ _Disaggregated WECC_
 ::::::::::::::
 
 ## Bad dataset
-_RTS 96_
-
 :::::::::::::: {.columns}
 ::: {.column width="30%"}
+_RTS 96_
 
 - Copying across areas
 - Note color scale
 :::
 ::: {.column width="70%"}
-![](images/rts96_corr.svg){ width="80%"}
+![](images/rts96_corr.svg){ width="70%"}
 :::
 :::::::
 
@@ -180,7 +179,7 @@ _RTS 96_
 - High correlation in RTE (winter-peaking region)
 :::
 ::: {.column width="70%"}
-![](images/corr_distplot.svg)
+![](images/corr_distplot.svg){ width="70%" }
 :::
 :::::::
 
@@ -260,7 +259,7 @@ _Obvious to check, but not very useful_
 ## DFT results
 - 1/day and 1/week peaks, harmonics
 
-![](images/fft_zoom.svg){ width="80%" }
+![](images/fft_zoom.svg){ width="70%" }
 
 ## DFT summary
 
@@ -284,7 +283,7 @@ _Obvious to check, but not very useful_
 ## Normalized RTE load profiles
 _Gray trace: 7-day moving average_
 
-![](images/rte_spectrogram.png)
+![](images/rte_spectrogram.png){ width="90%"}
 
 # Singular spectrum analysis
 
@@ -320,13 +319,13 @@ Output: SSA components (signal separated into oscillatory components, noise isol
 ![](images/embedding_dimension_rte.png){ width=70% }
 
 ## WECC SSA components
-![](images/wecc_ssa24.png){ width="75%" }
+![](images/wecc_ssa24.png){ width="70%" }
 
 ## RTE SSA components
-![](images/rte_1h_ssa24.png){ width="75%" }
+![](images/rte_1h_ssa24.png){ width="70%" }
 
 ## RTS 96  SSA components
-![](images/rts96_ssa24.png){ width="75%" }
+![](images/rts96_ssa24.png){ width="70%" }
 
 ## SSA metric?
 - Nice to efficiently separate trend, 1/day, 2/day, and noise components
