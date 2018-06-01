@@ -18,7 +18,7 @@ date: June 1, 2018
     1. Last time: forty networks
     2. This time: roughly 40 original load profiles
 - Literature
-    1. More focused on short-term forecasting
+    1. Power systems focused on short-term forecasting
     2. Discovering as we go
     3. Less domain-specific literature
 
@@ -225,7 +225,7 @@ A value below 100% suggests disaggregation.
 
 ## Singular value metric
 
-Fraction of singular values below 0.998:
+Fraction of singular values above $10^{-9}$:
 
 | Dataset  | Fraction |
 |----------|----------|
