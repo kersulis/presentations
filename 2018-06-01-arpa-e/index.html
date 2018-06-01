@@ -5,7 +5,7 @@
   <meta name="generator" content="pandoc">
   <meta name="author" content="Jonas Kersulis">
   <meta name="dcterms.date" content="2018-06-01">
-  <title>Load Profiles and Metrics</title>
+  <title>Time Series Metrics</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -35,7 +35,7 @@
     <div class="slides">
 
 <section id="title-slide">
-  <h1 class="title">Load Profiles and Metrics</h1>
+  <h1 class="title">Time Series Metrics</h1>
   <p class="author">Jonas Kersulis</p>
   <p class="date">June 1, 2018</p>
 </section>
@@ -49,48 +49,49 @@
 </section><section id="comparison-to-system-wide-metrics" class="slide level2">
 <h2>Comparison to system-wide metrics</h2>
 <ul>
-<li>Similar strategy
+<li>Strategy
 <ol type="1">
-<li>Search broadly for data</li>
-<li>Use analysis, prior knowledge to distinguish physical from synthetic</li>
+<li>Obtain large, diverse dataset</li>
+<li>Use analysis, prior knowledge to distinguish physical characteristics from synthetic</li>
 <li>Distill into minimal set of metrics</li>
 </ol></li>
 <li>Data
 <ol type="1">
-<li>Last time we had forty networks</li>
-<li>This time we have approximately 40 original load profiles</li>
+<li>Last time: forty networks</li>
+<li>This time: roughly 40 original load profiles</li>
 </ol></li>
 <li>Literature
 <ol type="1">
 <li>More focused on short-term forecasting</li>
 <li>Discovering as we go</li>
-<li>Using less domain-specific literature, more from general time series analysis</li>
+<li>Less domain-specific literature</li>
 </ol></li>
 </ul>
-</section><section id="comparison-to-system-wide-metrics-1" class="slide level2">
-<h2>Comparison to system-wide metrics</h2>
+</section><section id="different-challenges" class="slide level2">
+<h2>Different challenges</h2>
 <ul>
 <li>System-wide metrics: tough to see raw data (illustrate graph structure), but easy to reduce to scalars and distributions</li>
 <li>Time series metrics: easy to see raw data, but harder to reduce to scalars and distributions</li>
 <li>Dynamic behavior</li>
 </ul>
 </section></section>
-<section><section id="data" class="title-slide slide level1"><h1>Data</h1></section><section id="original-vs-derived" class="slide level2">
+<section><section id="i.-data" class="title-slide slide level1"><h1>I. Data</h1></section><section id="original-vs-derived" class="slide level2">
 <h2>Original vs derived</h2>
 <ul>
 <li>Original load profile: directly from measurement or synthesis</li>
 <li>Derived time series: dependent on original load profile</li>
 <li>“Time series” refers to either</li>
 </ul>
-</section><section id="wecc-caiso-western-us" class="slide level2">
+</section></section>
+<section><section id="five-load-profile-datasets" class="title-slide slide level1"><h1>Five load profile datasets</h1></section><section id="wecc-caiso-western-us" class="slide level2">
 <h2>WECC (CAISO, Western US)</h2>
 <div class="columns">
 <div class="column" style="width:40%;">
 <ul>
 <li>21 original load profiles, 132 time series</li>
 <li>8,784 hourly timestamps spanning 2004 (leap year)</li>
-<li>Disaggregation via load participation factors</li>
-<li>We have aggregated version with only the 21 original load profiles</li>
+<li>Disaggregated via load participation factors</li>
+<li>Also have aggregated version with just original load profiles</li>
 </ul>
 </div><div class="column" style="width:60%;">
 <figure>
@@ -109,7 +110,7 @@
 </ul>
 </div><div class="column" style="width:60%;">
 <figure>
-<img data-src="images/rts96_season_weekday.svg" alt="One year of one series" style="width:100.0%" /><figcaption><em>One year of one series</em></figcaption>
+<img data-src="images/rts96_season_weekday.svg" alt="An RTS 96 time series" style="width:100.0%" /><figcaption><em>An RTS 96 time series</em></figcaption>
 </figure>
 </div>
 </div>
@@ -125,7 +126,7 @@
 </ul>
 </div><div class="column" style="width:60%;">
 <figure>
-<img data-src="images/rte_season_weekday.svg" alt="One year of one series" style="width:100.0%" /><figcaption><em>One year of one series</em></figcaption>
+<img data-src="images/rte_season_weekday.svg" alt="One year of an RTE series" style="width:100.0%" /><figcaption><em>One year of an RTE series</em></figcaption>
 </figure>
 </div>
 </div>
@@ -140,7 +141,7 @@
 </ul>
 </div><div class="column" style="width:60%;">
 <figure>
-<img data-src="images/ercot_season_weekday.svg" alt="One year of one series" style="width:100.0%" /><figcaption><em>One year of one series</em></figcaption>
+<img data-src="images/ercot_season_weekday.svg" alt="One year of an ERCOT series" style="width:100.0%" /><figcaption><em>One year of an ERCOT series</em></figcaption>
 </figure>
 </div>
 </div>
@@ -154,109 +155,95 @@
 </ul>
 </div><div class="column" style="width:60%;">
 <figure>
-<img data-src="images/gmlc_season_weekday.svg" alt="One year of one series" style="width:100.0%" /><figcaption><em>One year of one series</em></figcaption>
+<img data-src="images/gmlc_season_weekday.svg" alt="A GMLC series" style="width:100.0%" /><figcaption><em>A GMLC series</em></figcaption>
 </figure>
 </div>
 </div>
 </section><section id="summary" class="slide level2">
 <h2>Summary</h2>
 <ul>
-<li>~40 total original load profiles</li>
-<li>~200 total time series</li>
-</ul>
-</section><section id="supplementary-data-for-rte-analysis" class="slide level2">
-<h2>Supplementary data for RTE analysis</h2>
+<li>~40 original load profiles</li>
+<li>~200 time series</li>
+<li>Each dataset now available in “tidy” form as a portable DataFrame object
 <ul>
-<li>zone-level temperature data from TAMU agriculture database</li>
-<li>zone population data from France’s INSEE</li>
-</ul>
-</section><section class="slide level2">
-
-<p><img data-src="images/rte_temperature_population_spread.svg" /></p>
-</section><section id="basic-data-observations" class="slide level2">
-<h2>Basic data observations</h2>
-<ul>
-<li>Basic shape depends on region</li>
-<li>Early morning peak often connected to weekdays</li>
-<li>Flatness in absolute units connected to population</li>
-<li>Daily fluctuations connected to population, temperature</li>
-</ul>
-</section><section id="incidental-product" class="slide level2">
-<h2>Incidental product</h2>
-<ul>
-<li>Each dataset now available in “tidy” form</li>
-<li>Single DataFrame object that can be exported to any tabular data format.</li>
-<li>RTE data was spread across dozens of TSV files in four directories, using two different character encodings</li>
+<li>RTE data was spread across dozens of TSV files in four directories using two different character encodings…</li>
+</ul></li>
 </ul>
 </section></section>
-<section><section id="individual-time-series-analysis" class="title-slide slide level1"><h1>Individual time series analysis</h1></section><section id="fourier-transform" class="slide level2">
-<h2>Fourier transform</h2>
-<p><em>Obvious to check, but not very useful</em></p>
+<section><section id="additional-france-data" class="title-slide slide level1"><h1>Additional France data</h1></section><section id="temperature-and-population" class="slide level2">
+<h2>Temperature and population</h2>
 <ul>
-<li>Load profiles are nonlinear, nonstationary</li>
-<li>Sinusoidal basis functions unaware of inherent load profile characteristics</li>
-<li>More useful for renewable data</li>
+<li>division-level temperature data from TAMU agricultural database</li>
+<li>division population data from France’s INSEE</li>
 </ul>
 </section><section class="slide level2">
 
-<p><img src="images/fft_zoom.svg" width=800px></p>
-</section><section id="spectrogram" class="slide level2">
-<h2>Spectrogram</h2>
+<p><img data-src="images/rte_temperature_population_spread.svg" style="width:100.0%" /></p>
+</section><section id="a-few-observations" class="slide level2">
+<h2>A few observations</h2>
 <ul>
-<li>Illustrate time-varying frequency spectrum</li>
-<li>Motivate models that account for nonstationary behavior</li>
+<li>Region: summer-peaking vs winter-peaking</li>
+<li>Early morning peak often associated with weekdays</li>
+<li>RTE: flatness connected to population</li>
+<li>Daily level connected to temperature</li>
 </ul>
-</section><section class="slide level2">
-
+</section></section>
+<section><section id="ii.-dataset-internal-consistency" class="title-slide slide level1"><h1>II. Dataset internal consistency</h1></section></section>
+<section><section id="cross-correlation-analysis" class="title-slide slide level1"><h1>Cross-correlation analysis</h1></section><section id="realistic-cross-correlation" class="slide level2">
+<h2>Realistic cross-correlation</h2>
+<div class="columns">
+<div class="column" style="width:50%;">
 <p><em>RTE</em></p>
-<p><img src="images/rte_spectrogram.png" width=1000px></p>
-</section><section class="slide level2">
-
+<p><img data-src="images/rte_corr.svg" style="width:100.0%" /></p>
+</div><div class="column" style="width:50%;">
 <p><em>ERCOT</em></p>
-<p><img src="images/ercot_spectrogram.png" width=1000px></p>
-</section><section id="singular-spectrum-analysis" class="slide level2">
-<h2>Singular spectrum analysis</h2>
-<ul>
-<li>Based on principal component ideas</li>
-<li>Model-free, non-parametric</li>
-<li>SSA components not necessarily harmonic, advantage over FFT</li>
-<li>“Adaptive spectral filters associated with dominant oscillations” (Bonizzi2014), suitable for nonlinear or nonstationary signals</li>
-</ul>
-</section><section id="procedure" class="slide level2">
-<h2>Procedure</h2>
-<ul>
-<li>Choose window length <span class="math inline">\(L &lt; N/2\)</span>, where <span class="math inline">\(N\)</span> is time series length</li>
-<li>Generate “trajectory matrix” of lagged vectors (Hankel matrix) from zero-mean signal (embeds time signal in <span class="math inline">\(L\)</span>-dimensional vector space)</li>
-</ul>
-</section></section>
-<section><section id="time-domain-analysis" class="title-slide slide level1"><h1>Time domain analysis</h1></section><section id="cross-correlation-analysis" class="slide level2">
-<h2>Cross-correlation analysis</h2>
-</section><section class="slide level2">
-
-<h3 id="cross-correlation-matrices">Cross-correlation matrices</h3>
+<p><img data-src="images/ercot_corr.svg" /></p>
+</div>
+</div>
+</section><section id="effects-of-disaggregation" class="slide level2">
+<h2>Effects of disaggregation</h2>
 <div class="columns">
 <div class="column" style="width:50%;">
 <p><em>Aggregated WECC</em></p>
-<p><img src="images/wecc_agg_corr.svg"></p>
+<p><img data-src="images/wecc_agg_corr.svg" /></p>
 </div><div class="column" style="width:50%;">
 <p><em>Disaggregated WECC</em></p>
-<p><img src="images/wecc_corr.svg"></p>
+<p><img data-src="images/wecc_corr.svg" /></p>
 </div>
 </div>
-</section><section class="slide level2">
-
-<h3 id="rts-96-1"><em>RTS 96</em></h3>
-<p><img src="images/rts96_corr.svg" width=600px></p>
-</section><section class="slide level2">
-
-<h3 id="correlation-coefficient-distributions">Correlation coefficient distributions</h3>
-<p><img src="images/corr_distplot.svg" width=600px></p>
-<h3 id="deriving-a-correlation-metric">Deriving a correlation metric</h3>
-<p><img src="images/metric_corr_threshold.svg" width=600px></p>
-</section><section class="slide level2">
-
-<h3 id="cross-correlation-metric-results">Cross-correlation metric results</h3>
-<p>Fraction of correlation coefficients above 0.98:</p>
+</section><section id="bad-dataset" class="slide level2">
+<h2>Bad dataset</h2>
+<p><em>RTS 96</em></p>
+<div class="columns">
+<div class="column" style="width:30%;">
+<ul>
+<li>Copying across areas</li>
+<li>Note color scale</li>
+</ul>
+</div><div class="column" style="width:70%;">
+<p><img data-src="images/rts96_corr.svg" style="width:80.0%" /></p>
+</div>
+</div>
+</section><section id="correlation-coefficient-distributions" class="slide level2">
+<h2>Correlation coefficient distributions</h2>
+<div class="columns">
+<div class="column" style="width:30%;">
+<ul>
+<li>RTS 96 stands out</li>
+<li>High correlation in RTE (winter-peaking region)</li>
+</ul>
+</div><div class="column" style="width:70%;">
+<p><img data-src="images/corr_distplot.svg" /></p>
+</div>
+</div>
+</section><section id="deriving-a-cross-correlation-metric" class="slide level2">
+<h2>Deriving a cross-correlation metric</h2>
+<figure>
+<img data-src="images/metric_corr_threshold.svg" alt="0.98 is a suitable threshold" /><figcaption>0.98 is a suitable threshold</figcaption>
+</figure>
+</section><section id="cross-correlation-metric" class="slide level2">
+<h2>Cross-correlation metric</h2>
+<p>Fraction of correlation coefficients below 0.98:</p>
 <table>
 <thead>
 <tr class="header">
@@ -291,19 +278,254 @@
 </tr>
 </tbody>
 </table>
-</section><section id="singular-values" class="slide level2">
-<h2>Singular values</h2>
-<p><img src="images/svd.svg" width=600px></p>
-</section><section class="slide level2">
-
-<h3 id="effects-of-aggregation">Effects of aggregation</h3>
-<p><img src="images/singular_value_wecc.svg" width=600px></p>
-</section><section class="slide level2">
-
-<h3 id="discussion-of-repeated-eigenvalues">Discussion of repeated Eigenvalues</h3>
+<p>A value below 100% suggests disaggregation.</p>
 </section></section>
-<section><section id="generating-realistic-load-profiles" class="title-slide slide level1"><h1>Generating realistic load profiles</h1></section></section>
-<section><section id="conclusions" class="title-slide slide level1"><h1>Conclusions</h1></section></section>
+<section><section id="singular-values" class="title-slide slide level1"><h1>Singular values</h1></section><section id="idea" class="slide level2">
+<h2>Idea</h2>
+<ul>
+<li>Treat each load profile dataset as one data matrix (each column is a time series)</li>
+<li>Obtain singular values from the SVD</li>
+<li>Look for small values or “plateaus”</li>
+</ul>
+</section><section id="singular-value-distributions" class="slide level2">
+<h2>Singular value distributions</h2>
+<div class="columns">
+<div class="column" style="width:30%;">
+<ul>
+<li>WECC, RTS 96 stand out again</li>
+<li>“Plateaus”</li>
+</ul>
+</div><div class="column" style="width:70%;">
+<p><img data-src="images/svd.svg" style="width:100.0%" /></p>
+</div>
+</div>
+</section><section id="effects-of-aggregation" class="slide level2">
+<h2>Effects of aggregation</h2>
+<figure>
+<img data-src="images/singular_value_wecc.svg" alt="Correspondence between first 21 values for each dataset" /><figcaption>Correspondence between first 21 values for each dataset</figcaption>
+</figure>
+</section><section id="singular-value-metric" class="slide level2">
+<h2>Singular value metric</h2>
+<p>Fraction of singular values below 0.998:</p>
+<table>
+<thead>
+<tr class="header">
+<th>Dataset</th>
+<th>Fraction</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>wecc</td>
+<td>97%</td>
+</tr>
+<tr class="even">
+<td>rts96</td>
+<td>33%</td>
+</tr>
+<tr class="odd">
+<td>wecc_agg</td>
+<td>100%</td>
+</tr>
+<tr class="even">
+<td>rte_1h</td>
+<td>100%</td>
+</tr>
+<tr class="odd">
+<td>ercot</td>
+<td>100%</td>
+</tr>
+<tr class="even">
+<td>gmlc</td>
+<td>100%</td>
+</tr>
+</tbody>
+</table>
+</section><section id="repeated-singular-values" class="slide level2">
+<h2>Repeated singular values</h2>
+<ul>
+<li>Metric idea: detect singular value plateaus</li>
+<li>Some significance to repeated singular values</li>
+<li>Not obvious how to make it robust though</li>
+</ul>
+</section></section>
+<section><section id="iii.-time-series-analysis" class="title-slide slide level1"><h1>III. Time series analysis</h1></section><section id="path-to-ssa-and-sarima" class="slide level2">
+<h2>Path to SSA and SARIMA</h2>
+<ol type="1">
+<li>Fourier transform</li>
+<li>Spectrogram</li>
+<li>Singular spectrum analysis (SSA)</li>
+<li>Seasonal Auto-Regressive Integrated Moving Average (SARIMA)</li>
+</ol>
+</section></section>
+<section><section id="fourier-transform" class="title-slide slide level1"><h1>Fourier transform</h1></section><section id="dft-results" class="slide level2">
+<h2>DFT results</h2>
+<ul>
+<li>1/day and 1/week peaks, harmonics</li>
+</ul>
+<p><img data-src="images/fft_zoom.svg" style="width:80.0%" /></p>
+</section><section id="dft-summary" class="slide level2">
+<h2>DFT summary</h2>
+<ul>
+<li>metric idea: use key DFT components to summarize load profiles</li>
+<li>Fails to capture time-varying behavior</li>
+<li>Does reveal disaggregation</li>
+</ul>
+<p><img data-src="images/dft_summary.png" style="width:70.0%" /></p>
+</section></section>
+<section><section id="spectrogram" class="title-slide slide level1"><h1>Spectrogram</h1></section><section id="normalized-ercot-load-profiles" class="slide level2">
+<h2>Normalized ERCOT load profiles</h2>
+<p><img data-src="images/ercot_spectrogram.png" /></p>
+<ul>
+<li>Strong 1/day component in summer</li>
+</ul>
+</section><section id="normalized-rte-load-profiles" class="slide level2">
+<h2>Normalized RTE load profiles</h2>
+<p><em>Gray trace: 7-day moving average</em></p>
+<p><img data-src="images/rte_spectrogram.png" /></p>
+</section></section>
+<section><section id="singular-spectrum-analysis" class="title-slide slide level1"><h1>Singular spectrum analysis</h1></section><section id="overview" class="slide level2">
+<h2>Overview</h2>
+<ul>
+<li>Based on principal component ideas</li>
+<li>Model-free, non-parametric</li>
+</ul>
+<p>In place of sinusoidal basis signals, SSA provides</p>
+<blockquote>
+<p>“Adaptive spectral filters associated with dominant oscillations” (Bonizzi2014)</p>
+</blockquote>
+<p>suitable for nonlinear or nonstationary signals</p>
+</section><section id="procedure" class="slide level2">
+<h2>Procedure</h2>
+<p>Given a centered, length-<span class="math inline">\(N\)</span> time series:</p>
+<ol type="1">
+<li>Choose window length <span class="math inline">\(M &lt; N/2\)</span>.</li>
+<li>Generate “trajectory matrix” of lagged vectors.</li>
+<li>Apply SVD to trajectory matrix to obtain eigentriples <span class="math inline">\(U_i, s_i, V_i\)</span>.</li>
+<li>Use eigengaps to group eigentriples.</li>
+<li>Invert embedding process via diagonal averaging.</li>
+</ol>
+<p>Output: SSA components (signal separated into oscillatory components, noise isolated)</p>
+</section><section id="choosing-embedding-dimension-m" class="slide level2">
+<h2>Choosing embedding dimension <span class="math inline">\(M\)</span></h2>
+<ul>
+<li>Higher <span class="math inline">\(M\)</span>: capture greater periods, cleanly isolate noise</li>
+<li>Lower <span class="math inline">\(M\)</span>: eigengrouping easier, analysis faster</li>
+<li>What is the dimension of the signal space?</li>
+<li>Choose multiple of inherent periodicity (Miranian2013)</li>
+<li><span class="math inline">\(M=24\)</span> makes grouping obvious</li>
+</ul>
+<p><img data-src="images/embedding_dimension_rte.png" style="width:70.0%" /></p>
+</section><section id="wecc-ssa-components" class="slide level2">
+<h2>WECC SSA components</h2>
+<p><img data-src="images/wecc_ssa24.png" style="width:75.0%" /></p>
+</section><section id="rte-ssa-components" class="slide level2">
+<h2>RTE SSA components</h2>
+<p><img data-src="images/rte_1h_ssa24.png" style="width:75.0%" /></p>
+</section><section id="rts-96-ssa-components" class="slide level2">
+<h2>RTS 96 SSA components</h2>
+<p><img data-src="images/rts96_ssa24.png" style="width:75.0%" /></p>
+</section><section id="ssa-metric" class="slide level2">
+<h2>SSA metric?</h2>
+<ul>
+<li>Nice to efficiently separate trend, 1/day, 2/day, and noise components</li>
+<li>Difficult to reduce to a few numbers</li>
+<li>Tool for understanding data</li>
+<li>Ongoing: understand effects of time resolution, geographic region, etc.</li>
+</ul>
+</section></section>
+<section><section id="sarima-models" class="title-slide slide level1"><h1>SARIMA models</h1></section><section id="overview-1" class="slide level2">
+<h2>Overview</h2>
+<ul>
+<li>Common in time series analysis, some precedent in power systems</li>
+<li>ARIMA is a flexible model for stationary time series
+<ul>
+<li>AutoRegressive (AR): regress on lagged versions of signal</li>
+<li>Integrated (I): differencing performed to attain stationarity</li>
+<li>Moving Average (MA): error term computed from past error terms</li>
+</ul></li>
+<li>Seasonal ARIMA (SARIMA) simply multiplies a second ARIMA model that captures seasonal variation.</li>
+</ul>
+</section><section id="procedure-1" class="slide level2">
+<h2>Procedure</h2>
+<ul>
+<li>Tough to choose AR and MA orders for the base and seasonal ARIMA models</li>
+<li>Brute force using Akaike information criterion</li>
+<li>Repeat for each column of RTE to identify one good SARIMA model structure</li>
+<li>Fit all load profiles to this structure, compare parameter values</li>
+</ul>
+</section><section id="sarima-1-1-0x1-0-0-24" class="slide level2">
+<h2>SARIMA (1, 1, 0)x(1, 0, 0, 24)</h2>
+<p><img data-src="images/sarima_pairplot_scaled.svg" /></p>
+</section><section id="sarima-forecast-for-normandie" class="slide level2">
+<h2>SARIMA forecast for Normandie</h2>
+<p><img data-src="images/arima_forecast.svg" style="width:80.0%" /></p>
+</section><section id="sarima-metric" class="slide level2">
+<h2>SARIMA metric?</h2>
+<ul>
+<li>Primarily a tool for modeling and forecasting</li>
+<li>Physical meaning of model parameters more obscure than SSA components</li>
+</ul>
+</section></section>
+<section><section id="future-work" class="title-slide slide level1"><h1>Future work</h1></section><section id="comparing-ssa-and-sarima" class="slide level2">
+<h2>Comparing SSA and SARIMA</h2>
+<ul>
+<li>Both models can separate signal and noise. Study residuals…</li>
+<li>Both are also used to forecast</li>
+</ul>
+</section><section id="generating-realistic-load-profiles" class="slide level2">
+<h2>Generating realistic load profiles</h2>
+<ul>
+<li>Make indistinguishable synthetic RTE dataset</li>
+<li>Make a better RTS 96 dataset</li>
+</ul>
+</section></section>
+<section><section id="conclusions" class="title-slide slide level1"><h1>Conclusions</h1></section><section id="mix-of-metrics-and-results" class="slide level2">
+<h2>Mix of metrics and results</h2>
+<ul>
+<li>Dataset internal consistency metrics can detect disaggregation
+<ul>
+<li>Cross-correlation</li>
+<li>Data matrix singular values</li>
+</ul></li>
+<li>Individual time series analyses isolate signal dynamics from noise
+<ul>
+<li>Basic DFT</li>
+<li>Spectrogram</li>
+<li>Singular spectrum analysis (SSA)</li>
+<li>Seasonal AutoRegressive Integrated Moving Average (SARIMA) models</li>
+</ul></li>
+<li>Future work includes publication and load profile generation</li>
+</ul>
+</section></section>
+<section><section id="appendix-day-classification" class="title-slide slide level1"><h1>Appendix: day classification</h1></section><section id="approach" class="slide level2">
+<h2>Approach</h2>
+<ol type="1">
+<li>Assume each day belongs to one of four categories:
+<ol type="1">
+<li>summer weekday</li>
+<li>summer weekend</li>
+<li>winter weekday</li>
+<li>winter weekend</li>
+</ol></li>
+<li>Use prior knowledge of region to assemble training days for each category.</li>
+<li>Use SVD to find subspace for each day type.</li>
+<li>Project test data onto these subspaces. The nearest subspace becomes the test day label.</li>
+</ol>
+</section><section id="classifying-days-in-ile-de-france" class="slide level2">
+<h2>Classifying days in Ile-de-France</h2>
+<div class="columns">
+<div class="column" style="width:30%;">
+<ul>
+<li>Tough to distinguish winter weekends from summer days</li>
+<li>Refine initial assumption about season boundaries in light of predictions</li>
+<li>Add temperature data to enhance method</li>
+</ul>
+</div><div class="column" style="width:70%;">
+<p><img data-src="images/classify_rte_day.svg" /></p>
+</div>
+</div>
+</section></section>
     </div>
   </div>
 
@@ -315,6 +537,10 @@
       // Full list of configuration options available at:
       // https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: false,
+        // Display the page number of the current slide
+        slideNumber: true,
         // Push each slide change to the browser history
         history: true,
         math: {
