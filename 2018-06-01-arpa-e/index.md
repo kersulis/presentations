@@ -344,9 +344,9 @@ Output: SSA components (signal separated into oscillatory components, noise isol
 - Seasonal ARIMA (SARIMA) simply multiplies a second ARIMA model that captures seasonal variation.
 
 ## Procedure
-- Tough to choose AR and MA orders for the base and seasonal ARIMA models
-- Brute force using Akaike information criterion
-- Repeat for each column of RTE to identify one good SARIMA model structure
+- Choose AR and MA orders for the base and seasonal ARIMA models
+    - Brute force using Akaike information criterion
+- Repeat for each column of RTE to identify one good SARIMA model
 - Fit all load profiles to this structure, compare parameter values
 
 ## SARIMA (1, 1, 0)x(1, 0, 0, 24)
