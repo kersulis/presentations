@@ -204,7 +204,8 @@ _What is the optimal decomposition?_
 # Main takeaways
 
 1. Topological graph metrics are powerful in the right settings
-    - Context highlights network reduction in PEGASE networks
-2. Clique composition tied to SDP OPF solver performance
+2. Context highlights network reduction in PEGASE networks
+3. Clique composition tied to SDP OPF solver performance
+4. Potential for finding better semidefinite constraint decompositions
 
 # References
