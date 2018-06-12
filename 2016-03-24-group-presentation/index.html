@@ -1,474 +1,470 @@
 <!doctype html>
 <html lang="en">
 
-	<head>
-		<meta charset="utf-8">
+    <head>
+    <meta charset="utf-8">
 
-		<title>Group Presentation, 2016-03-24</title>
+    <title>Group Presentation, 2016-03-24</title>
 
-		<meta name="description" content="Group presentation, 2016-03-24">
-		<meta name="author" content="Jonas Kersulis">
+    <meta name="description" content="Group presentation, 2016-03-24">
+    <meta name="author" content="Jonas Kersulis">
 
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
 
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
-		<link rel="stylesheet" href="../css/reveal.css">
-		<link rel="stylesheet" href="../css/theme/sky.css" id="theme">
+    <!-- General and theme style sheets -->
+    <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/reveal.css">
+    <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/theme/sky.css" id="theme">
+    <link rel="stylesheet" href="custom.css">
 
-		<!-- Code syntax highlighting -->
-		<link rel="stylesheet" href="../lib/css/zenburn.css">
+    <!-- Printing and PDF exports -->
+    <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'http://lab.hakim.se/reveal-js/css/print/pdf.css' : 'http://lab.hakim.se/reveal-js/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+    </script>
+    </head>
 
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
-	</head>
+    <body>
 
-	<body>
+    <div class="reveal">
 
-		<div class="reveal">
+    <div class="slides">
+    <!-- slides-title -->
+    <section>
+    <section data-background="images/rain.gif">
+    <h1 style="color: #111">Group Presentation</h1>
+    <h3 style="color: #bbb">March 24, 2016</h3>
+    <p>
+    <small><a href="http://kersulis.github.io/">Jonas Kersulis</a></small>
+    </p>
+    </section>
+    <section>
+    <h3>Using these slides</h3>
+    <p>
+     <a href="http://kersulis.github.io/presentations/2016-03-24-group-presentation/">Hosted online</a>
+    </p>
 
-			<div class="slides">
-				<!-- slides-title -->
-				<section>
-					<section data-background="images/rain.gif">
-						<h1 style="color: #111">Group Presentation</h1>
-						<h3 style="color: #bbb">March 24, 2016</h3>
-						<p>
-							<small><a href="http://kersulis.github.io/">Jonas Kersulis</a></small>
-						</p>
-					</section>
-					<section>
-						<h3>Using these slides</h3>
-						<p>
-						 <a href="http://kersulis.github.io/presentations/2016-03-24-group-presentation/">Hosted online</a>
-						</p>
+    <div class="fragment">
+    <p>Controls:</p>
+    <table>
+    <tr>
+    <td>Arrows/swiping</td>
+    <td>Navigation</td>
+    </tr>
+    <tr>
+    <td>Home/End</td>
+    <td>Goto first/last slide</td>
+    </tr>
+    <tr>
+    <td>Escape</td>
+    <td>See slide overview</td>
+    </tr>
+    </table>
+    </div>
+    </section>
+    </section>
 
-						<div class="fragment">
-							<p>Controls:</p>
-							<table>
-								<tr>
-									<td>Arrows/swiping</td>
-									<td>Navigation</td>
-								</tr>
-								<tr>
-									<td>Home/End</td>
-									<td>Goto first/last slide</td>
-								</tr>
-								<tr>
-									<td>Escape</td>
-									<td>See slide overview</td>
-								</tr>
-							</table>
-						</div>
-					</section>
-				</section>
+    <!-- slides-goal -->
+    <section>
+    <h2>Goals</h2>
+    <ol>
+    <div class="fragment">
+    <li>Discuss project organization.</li>
+    <ul>
+    <li>Where stuff goes</li>
+    <li>What to call it</li>
+    </ul>
+    </div>
+    <div class="fragment">
+    <li>Show you some tools.</li>
+    <ul>
+    <li>Free</li>
+    <li>Stable</li>
+    <li>Cross-platform</li>
+    </ul>
+    </div>
+    </ol>
+    <p></p>
+    <div class="fragment">
+    <h3>This is not</h3>
+    <p>"Open-source rules, blah blah etc."</p>
+    </div>
+    <p class="fragment">But you know where to find me. :)</p>
+    </section>
 
-				<!-- slides-goal -->
-				<section>
-					<h2>Goals</h2>
-					<ol>
-						<div class="fragment">
-							<li>Discuss project organization.</li>
-							<ul>
-								<li>Where stuff goes</li>
-								<li>What to call it</li>
-							</ul>
-						</div>
-						<div class="fragment">
-							<li>Show you some tools.</li>
-								<ul>
-									<li>Free</li>
-									<li>Stable</li>
-									<li>Cross-platform</li>
-								</ul>
-						</div>
-					</ol>
-					<p></p> 
-					<div class="fragment">
-						<h3>This is not</h3>
-						<p>"Open-source rules, blah blah etc."</p>
-					</div>
-					<p class="fragment">But you know where to find me. :)</p>
-				</section>
+    <!-- slides-project -->
+    <section>
+    <h2>Project <b style="float: right">/</b></h2>
+    <table>
+    <tr>
+    <td><b><a href="#/3">/nb/</a></b>      </td>
+    <td>Notebooks                          </td>
+    </tr>
+    <tr>
+    <td><b><a href="#/4">/src/</a></b>     </td>
+    <td>Source code                        </td>
+    </tr>
+    <tr>
+    <td><b><a href="#/5">/data/</a></b>    </td>
+    <td>Data                               </td>
+    </tr>
+    <tr>
+    <td><b><a href="#/6">/images/</a></b>  </td>
+    <td>Images                             </td>
+    </tr>
+    <tr>
+    <td><b><a href="#/7">/papers/</a></b>  </td>
+    <td>Papers                             </td>
+    </tr>
+    <tr>
+    <td><b><a href="#/7">/posters/</a></b> </td>
+    <td>     Posters                       </td>
+    </tr>
+    <tr>
+    <td><b><a href="#/7">/present/</a></b> </td>
+    <td> Presentations                     </td>
+    </tr>
+    </table>
+    </section>
 
-				<!-- slides-project -->
-				<section>
-					<h2>Project <b style="float: right">/</b></h2>
-					<table>
-						<tr>
-							<td><b><a href="#/3">/nb/</a></b>      </td>
-							<td>Notebooks                          </td>
-						</tr>
-						<tr>
-							<td><b><a href="#/4">/src/</a></b>     </td>
-							<td>Source code                        </td>
-						</tr>
-						<tr>
-							<td><b><a href="#/5">/data/</a></b>    </td>
-							<td>Data                               </td>
-						</tr>
-						<tr>
-							<td><b><a href="#/6">/images/</a></b>  </td>
-							<td>Images                             </td>
-						</tr>
-						<tr>
-							<td><b><a href="#/7">/papers/</a></b>  </td>
-							<td>Papers                             </td>
-						</tr>
-						<tr>
-							<td><b><a href="#/7">/posters/</a></b> </td>
-							<td>     Posters                       </td>
-						</tr>
-						<tr>
-							<td><b><a href="#/7">/present/</a></b> </td>
-							<td> Presentations                     </td>
-						</tr>
-					</table>
-				</section>
-
-				<!-- slides-nb -->
-				<section>
-					<h2>Notebooks <b style="float: right">/nb/</b></h2>
-					<pre><code class="hljs" data-trim contenteditable>
+    <!-- slides-nb -->
+    <section>
+    <h2>Notebooks <b style="float: right">/nb/</b></h2>
+    <pre><code class="hljs" data-trim contenteditable>
 nb/
-	2016-02-03-change-line-data-input.ipynb
-	2016-02-04-updating-figures.ipynb
-	2016-02-05-normalized-performance-figure.ipynb
-	2016-02-09-abstraction.ipynb
-	2016-02-10-new-interface.md
-	2016-02-18-clean-start.md
-	2016-02-22-parametric-analysis.ipynb
-	2016-02-22-translation-revisited.ipynb
-	report-2016-01-19.ipynb
-					</code></pre>
-							<ul>
-								<li class="fragment">Each file is a <a href="#/9">Jupyter</a> notebook.
-								<ul>
-									<li>Named by date.</li>
-									<li>Mixture of documentation and code.</li>
-								</ul></li>
-								<li class="fragment">Reports less frequent
-								<ul>
-									<li>Semi-formal summary of several notebooks.</li>
-									<li>Pieces often make it into papers.</li>
-								</ul>
-							</li>
-						</ul>
-			 	</section>
+    2016-02-03-change-line-data-input.ipynb
+    2016-02-04-updating-figures.ipynb
+    2016-02-05-normalized-performance-figure.ipynb
+    2016-02-09-abstraction.ipynb
+    2016-02-10-new-interface.md
+    2016-02-18-clean-start.md
+    2016-02-22-parametric-analysis.ipynb
+    2016-02-22-translation-revisited.ipynb
+    report-2016-01-19.ipynb
+    </code></pre>
+    <ul>
+    <li class="fragment">Each file is a <a href="#/9">Jupyter</a> notebook.
+    <ul>
+    <li>Named by date.</li>
+    <li>Mixture of documentation and code.</li>
+    </ul></li>
+    <li class="fragment">Reports less frequent
+    <ul>
+    <li>Semi-formal summary of several notebooks.</li>
+    <li>Pieces often make it into papers.</li>
+    </ul>
+    </li>
+    </ul>
+     	</section>
 
-				<!-- slides-src -->
-				<section>
-					<h2> Code <b style="float: right">/src/</b> </h2>
-					<pre><code class="hljs" data-trim contenteditable>
+    <!-- slides-src -->
+    <section>
+    <h2> Code <b style="float: right">/src/</b> </h2>
+    <pre><code class="hljs" data-trim contenteditable>
 src/
-	TemporalInstanton.jl
-	dataload.jl
-	matrixbuilding.jl
-	solvetmpinst.jl
-	manipulations.jl
-	thermalmodel.jl
-	powerflow.jl
-	plot.jl
-					</code></pre>
-					<ul class="fragment">
-						<li>Self-contained.</li>
-						<li>Version-controlled. (More on that <a href="#/12">later</a>.)</li>
-						<li>Files below roughly 200 lines.</li>
-					</ul>
-				</section>
+    TemporalInstanton.jl
+    dataload.jl
+    matrixbuilding.jl
+    solvetmpinst.jl
+    manipulations.jl
+    thermalmodel.jl
+    powerflow.jl
+    plot.jl
+    </code></pre>
+    <ul class="fragment">
+    <li>Self-contained.</li>
+    <li>Version-controlled. (More on that <a href="#/12">later</a>.)</li>
+    <li>Files below roughly 200 lines.</li>
+    </ul>
+    </section>
 
-				<!-- slides-data -->
-				<section>
-					<h2> Data <b style="float: right">/data/</b> </h2>
-					<ul>
-						<li>All data goes here: csv, txt, mat, jld, hdf5...</li>
-						<li>Independent from source code!</li>
-						<li>Plaintext &gt; binary.</li>
-					</ul>
-				</section>
+    <!-- slides-data -->
+    <section>
+    <h2> Data <b style="float: right">/data/</b> </h2>
+    <ul>
+    <li>All data goes here: csv, txt, mat, jld, hdf5...</li>
+    <li>Independent from source code!</li>
+    <li>Plaintext &gt; binary.</li>
+    </ul>
+    </section>
 
-				<!-- slides-images -->
-				<section>
-					<h2> Images <b style="float: right">/images/</b> </h2>
-					<ul>
-						<li>All generated figures go here.</li>
-						<li>A paper/poster has its own /images/.</li>
-						<li>Once an image is publication-quality, copy it to the individual paper/poster's folder.</li>
-					</ul>
-				</section>
+    <!-- slides-images -->
+    <section>
+    <h2> Images <b style="float: right">/images/</b> </h2>
+    <ul>
+    <li>All generated figures go here.</li>
+    <li>A paper/poster has its own /images/.</li>
+    <li>Once an image is publication-quality, copy it to the individual paper/poster's folder.</li>
+    </ul>
+    </section>
 
-				<!-- slides-papers -->
-				<section>
-				 <table>
-				 	<tr>
-				 		<td><h2>Papers</h2> </td>
-				 		<td><h2><b>/papers/</b> </h2></td>
-				 	</tr>
-				 	<tr>
-				 		<td><h2>Posters</h2> </td>
-				 		<td><h2><b>/posters/</b></h2></td>
-				 	</tr>
-				 	<tr>
-				 		<td><h2>Presentations</h2> </td>
-				 		<td><h2><b>/present/</b></h2></td>
-				 	</tr>
-				 </table>
-				 <ul class="fragment">
-				 	<li>Each paper, poster, and presentation has its own directory.</li>
-				 	<li>Contents self-explanatory.</li>
-				 	<li>Keep images in their own sub-directory.</li>
-				 </ul>
-				</section>
+    <!-- slides-papers -->
+    <section>
+     <table>
+     	<tr>
+     		<td><h2>Papers</h2> </td>
+     		<td><h2><b>/papers/</b> </h2></td>
+     	</tr>
+     	<tr>
+     		<td><h2>Posters</h2> </td>
+     		<td><h2><b>/posters/</b></h2></td>
+     	</tr>
+     	<tr>
+     		<td><h2>Presentations</h2> </td>
+     		<td><h2><b>/present/</b></h2></td>
+     	</tr>
+     </table>
+     <ul class="fragment">
+     	<li>Each paper, poster, and presentation has its own directory.</li>
+     	<li>Contents self-explanatory.</li>
+     	<li>Keep images in their own sub-directory.</li>
+     </ul>
+    </section>
 
-				<!-- slides-demos -->
-				<section>
-				<h2> Demos </h2>
-				<table>
-					<tr>
-						<td><a href="#/9">Jupyter</a></td>
-						<td>Tool for interlacing code, code output, documentation, typeset math</td>
-					</tr>
-					<tr>
-						<td><a href="#/10">TeXstudio</a></td>
-						<td>LaTeX editing environment with drag-and-drop, autocomplete, bidirectional sync, and integrated PDF viewer</td>
-					</tr>
-					<tr>
-						<td><a href="#/11">Atom</a></td>
-						<td>Free text editor commissioned by GitHub</td>
-					</tr>
-					<tr>
-						<td><a href="#/12">Git</a></td>
-						<td>Version control software of choice for Linux kernel development, major tech companies, and ten million GitHub users </td>
-					</tr>
-				</table>
-				</section>
+    <!-- slides-demos -->
+    <section>
+    <h2> Demos </h2>
+    <table>
+    <tr>
+    <td><a href="#/9">Jupyter</a></td>
+    <td>Tool for interlacing code, code output, documentation, typeset math</td>
+    </tr>
+    <tr>
+    <td><a href="#/10">TeXstudio</a></td>
+    <td>LaTeX editing environment with drag-and-drop, autocomplete, bidirectional sync, and integrated PDF viewer</td>
+    </tr>
+    <tr>
+    <td><a href="#/11">Atom</a></td>
+    <td>Free text editor commissioned by GitHub</td>
+    </tr>
+    <tr>
+    <td><a href="#/12">Git</a></td>
+    <td>Version control software of choice for Linux kernel development, major tech companies, and ten million GitHub users </td>
+    </tr>
+    </table>
+    </section>
 
-				<!-- slides-jupyter -->
-				<section>
-						<section>
-							<h2>Jupyter</h2>
-							<i>Tool for interlacing code, code output, and documentation (including typeset math)</i>
-							<ul>
-								<li>My tool for keeping a lab notebook.</li>
-								<li>Stable, not mature (15 yrs for <a href="https://en.wikipedia.org/wiki/IPython">IPython</a>, 2 for "Project Jupyter").</li>
-							</ul>
-							<p></p>
-							<h3>Getting started</h3>
-							<a href="https://jupyter.org/">Project homepage</a>						
-						</section>
-					<section>
-						<h3>Demo</h3>
-						<ul>
-							<li>Interface</li>
-							<li>Math + documentation + code</li>
-							<li>Language-agnostic</li>
-							<li>Export to PDF</li>
-						</ul>
-					</section>
-					<section>
-						<h3>Ecosystem</h3>
-						<ul>
-							<li><a href="http://nbviewer.jupyter.org/">nbviewer</a>: free notebook rendering and discovery service.</li>
-							<li><a href="http://mybinder.org/">binder</a>: Allow others to run your notebooks even if they don't have Jupyter installed!
-								<ul>
-									<li class="fragment">Example: click <a href="http://mybinder.org/repo/kersulis/SVD-background-subtract">here</a> from any device to work through <a href="http://web.eecs.umich.edu/~rajnrao/">Raj's</a> EECS 551 background subtraction demo.</li>
-								</ul> 
-							</li>
-							<li class="fragment">Here's <a href="http://blog.ibmjstart.net/2016/03/21/powered-by-jupyter/">a recent post</a> about the state of Jupyter's ecosystem.</li>
-						</ul>
-					</section>
-				</section>
+    <!-- slides-jupyter -->
+    <section>
+    <section>
+    <h2>Jupyter</h2>
+    <i>Tool for interlacing code, code output, and documentation (including typeset math)</i>
+    <ul>
+    <li>My tool for keeping a lab notebook.</li>
+    <li>Stable, not mature (15 yrs for <a href="https://en.wikipedia.org/wiki/IPython">IPython</a>, 2 for "Project Jupyter").</li>
+    </ul>
+    <p></p>
+    <h3>Getting started</h3>
+    <a href="https://jupyter.org/">Project homepage</a>
+    </section>
+    <section>
+    <h3>Demo</h3>
+    <ul>
+    <li>Interface</li>
+    <li>Math + documentation + code</li>
+    <li>Language-agnostic</li>
+    <li>Export to PDF</li>
+    </ul>
+    </section>
+    <section>
+    <h3>Ecosystem</h3>
+    <ul>
+    <li><a href="http://nbviewer.jupyter.org/">nbviewer</a>: free notebook rendering and discovery service.</li>
+    <li><a href="http://mybinder.org/">binder</a>: Allow others to run your notebooks even if they don't have Jupyter installed!
+    <ul>
+    <li class="fragment">Example: click <a href="http://mybinder.org/repo/kersulis/SVD-background-subtract">here</a> from any device to work through <a href="http://web.eecs.umich.edu/~rajnrao/">Raj's</a> EECS 551 background subtraction demo.</li>
+    </ul>
+    </li>
+    <li class="fragment">Here's <a href="http://blog.ibmjstart.net/2016/03/21/powered-by-jupyter/">a recent post</a> about the state of Jupyter's ecosystem.</li>
+    </ul>
+    </section>
+    </section>
 
-				<!-- slides-texstudio -->
-				<section>
-					<section>
-						<h2>TeXstudio</h2>
-						<i>LaTeX editing environment with drag-and-drop, autocomplete, bidirectional sync, and integrated PDF viewer</i>
-						<ul>
-							<li>Stable. Recent releases have been mostly bugfixes.</li>
-						</ul>
-						<p></p>
-						<h3>Getting started</h3>
-						<a href="http://www.texstudio.org/#download">Download</a>
-					</section>
-					<section>
-						<h3>Demo</h3>
-						<ul>
-							<li>Interface</li>
-							<li>Macros</li>
-							<li>Autocomplete environments + references</li>
-						</ul>
-					</section>
-				</section>
+    <!-- slides-texstudio -->
+    <section>
+    <section>
+    <h2>TeXstudio</h2>
+    <i>LaTeX editing environment with drag-and-drop, autocomplete, bidirectional sync, and integrated PDF viewer</i>
+    <ul>
+    <li>Stable. Recent releases have been mostly bugfixes.</li>
+    </ul>
+    <p></p>
+    <h3>Getting started</h3>
+    <a href="http://www.texstudio.org/#download">Download</a>
+    </section>
+    <section>
+    <h3>Demo</h3>
+    <ul>
+    <li>Interface</li>
+    <li>Macros</li>
+    <li>Autocomplete environments + references</li>
+    </ul>
+    </section>
+    </section>
 
-				<!-- slides-atom -->
-				<section>
-						<section>
-							<h2>Atom</h2>
-							<i>Free text editor commissioned by GitHub</i>
-							<ul>
-								<li>Written in HTML, CSS, and JavaScript.</li>
-								<li>Stable.</li>
-								<li>Widely used. Tons of <a href="https://atom.io/packages">packages</a> available.</li>
-							</ul>
-							<p></p>
-							<h3>Getting started</h3>
-							<a href="https://atom.io/">Download</a>
-						</section>
-					<section>
-						<h3>Demo</h3>
-						<ul>
-							<li>Search tags</li>
-							<li>Search commands</li>
-							<li>Multi-cursor</li>
-						</ul>
-					</section>
-				</section>
+    <!-- slides-atom -->
+    <section>
+    <section>
+    <h2>Atom</h2>
+    <i>Free text editor commissioned by GitHub</i>
+    <ul>
+    <li>Written in HTML, CSS, and JavaScript.</li>
+    <li>Stable.</li>
+    <li>Widely used. Tons of <a href="https://atom.io/packages">packages</a> available.</li>
+    </ul>
+    <p></p>
+    <h3>Getting started</h3>
+    <a href="https://atom.io/">Download</a>
+    </section>
+    <section>
+    <h3>Demo</h3>
+    <ul>
+    <li>Search tags</li>
+    <li>Search commands</li>
+    <li>Multi-cursor</li>
+    </ul>
+    </section>
+    </section>
 
-				<!-- slides-git -->
-				<section>
-					<section>
-						<h2>Git</h2>
-						<p> <i>Version control software of choice for Linux kernel development, major tech companies, ten million <a href="https://github.com/home">GitHub</a> users...</i> </p>
-						<ul>
-						<li> Stable and mature.  </li>
-						</ul>
-						<p></p>
-						<h3>Gitting started</h3>					
-						<ul>
-							<li><a href="https://git-scm.com/downloads">Downloads</a></li>
-							<li><a href="https://gitlab.eecs.umich.edu/">Private repos for umich students</a></li>
-						</ul>
-					</section>
-					<section>
-						<h3>Git philosophy</h3>
-						<ul>
-							<li class="fragment">Every file and folder has a hash.</li>
-							<li class="fragment">Every change you make has a hash.</li>
-							<li class="fragment">Every project state has a hash.</li>
-							<li class="fragment">.git holds all the hashes.</li>
-							<li class="fragment">Restore any state, compare states, etc.</li>
-						</ul>
-					</section>
-						<section>
-							<h3>Why?</h3>
-							<ul>
-								<li class="fragment">Say you
-									<ul>
-										<li>profile your code, </li>
-										<li>make changes for a month,</li>
-										<li>profile again.</li>
-									</ul></li>
-								<li class="fragment">Suppose your code performs worse after the changes.</li>
-								<p class="fragment">If you recorded the git hash when you first profiled, you can use <b>git diff</b> to see a neat summary of all changes you made.</p>
-								<p class="fragment">You could also check out several code states to figure out which change caused the regression.</p>
-							</ul>
-						</section>
-					<section>
-							<h3>Caution</h3>
-							<ul>
-								<li>Learning curve</li>
-								<li>Overkill for small bits of code (use <a href="https://gist.github.com/">gists</a> to publish tidbits).</li>
-							</ul>
-					</section>
-				</section>
+    <!-- slides-git -->
+    <section>
+    <section>
+    <h2>Git</h2>
+    <p> <i>Version control software of choice for Linux kernel development, major tech companies, ten million <a href="https://github.com/home">GitHub</a> users...</i> </p>
+    <ul>
+    <li> Stable and mature.  </li>
+    </ul>
+    <p></p>
+    <h3>Gitting started</h3>
+    <ul>
+    <li><a href="https://git-scm.com/downloads">Downloads</a></li>
+    <li><a href="https://gitlab.eecs.umich.edu/">Private repos for umich students</a></li>
+    </ul>
+    </section>
+    <section>
+    <h3>Git philosophy</h3>
+    <ul>
+    <li class="fragment">Every file and folder has a hash.</li>
+    <li class="fragment">Every change you make has a hash.</li>
+    <li class="fragment">Every project state has a hash.</li>
+    <li class="fragment">.git holds all the hashes.</li>
+    <li class="fragment">Restore any state, compare states, etc.</li>
+    </ul>
+    </section>
+    <section>
+    <h3>Why?</h3>
+    <ul>
+    <li class="fragment">Say you
+    <ul>
+    <li>profile your code, </li>
+    <li>make changes for a month,</li>
+    <li>profile again.</li>
+    </ul></li>
+    <li class="fragment">Suppose your code performs worse after the changes.</li>
+    <p class="fragment">If you recorded the git hash when you first profiled, you can use <b>git diff</b> to see a neat summary of all changes you made.</p>
+    <p class="fragment">You could also check out several code states to figure out which change caused the regression.</p>
+    </ul>
+    </section>
+    <section>
+    <h3>Caution</h3>
+    <ul>
+    <li>Learning curve</li>
+    <li>Overkill for small bits of code (use <a href="https://gist.github.com/">gists</a> to publish tidbits).</li>
+    </ul>
+    </section>
+    </section>
 
-				<!-- slides-motivation -->
-				<section>
-					<section data-markdown>
-						<script type="text/template">
-							## Motivation
+    <!-- slides-motivation -->
+    <section>
+    <section data-markdown>
+    <h2>Motivation</h2>
 
-							[Jason Moore's dissertation](http://moorepants.github.io/dissertation/)
+    <p><a href="http://moorepants.github.io/dissertation/">Jason Moore's dissertation</a></p>
 
-							* Website
-							* PDF
-							* Research code
-							* Code to generate figures
+    <ul>
+        <li>Website</li>
+        <li>PDF</li>
+        <li>Research code</li>
+        <li>Code to generate figures</li>
+    </ul>
+    </section>
+    <section data-markdown>
+    <p>A page from <a href="http://moorepants.github.io/dissertation/extensions.html#rider-arms">the website</a>:</p>
+    <img src="images/moore.png" style="float: right" width=500px>
+    </section>
+    <section data-markdown>
+    <p>
+    A page from <a href="https://scholar.google.com/scholar?cluster=464382521065568158&hl=en&as_sdt=0,23">the PDF</a>:
+    </p>
+    <img src="images/moore.svg" style="float:right" width=400px>
+    </section>
+    <section>
+    <p>
+    <a href="https://github.com/moorepants/dissertation">What Jason wrote</a>
+    </p>
 
-							One [source](https://github.com/moorepants/dissertation), many outputs.
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							A page from <a href="http://moorepants.github.io/dissertation/extensions.html#rider-arms">the website</a>:
-							<img src="images/moore.png" style="float: right" width=500px>
-						</script>
-					</section>
-					<section data-markdown>
-						<script type="text/template">
-							A page from <a href="https://scholar.google.com/scholar?cluster=464382521065568158&hl=en&as_sdt=0,23">the PDF</a>:
-							<img src="images/moore.svg" style="float:right" width=500px>
-						</script>
+    <p class="fragment">Bonus: complete history of the project, <a href="https://github.com/moorepants/dissertation/commits/master?page=10">start</a> to finish.</p>
+    </section>
+    </section>
 
-					</section>
-					<section>
-						<a href="https://github.com/moorepants/dissertation">What Jason wrote</a>
-						
-						<p class="fragment">Bonus: complete history of the project, <a href="https://github.com/moorepants/dissertation/commits/master?page=10">start</a> to finish.</p>
-					</section>
-				</section>
+    <!-- slides-conclusion -->
+    <section>
+    <h2>Summary</h2>
+    <div class="fragment">
+    <p>Have a reason for</p>
+    <ul>
+    <li>Where you put folders and files</li>
+    <li>What you call stuff</li>
+    </ul>
+    </div>
 
-				<!-- slides-conclusion -->
-				<section>
-						<h2>Summary</h2>
-						<div class="fragment">
-							<p>Have a reason for</p>
-							<ul>
-								<li>Where you put folders and files</li>
-								<li>What you call stuff</li>
-							</ul>
-						</div>
-						
-						<div class="fragment">
-							<p>Try the one that sounds most useful:</p>
-							<ul>
-								<li>Jupyter: notes and code development</li>
-								<li>TeXstudio: LaTeX editing</li>
-								<li>Atom: text editing</li>
-								<li>Git: version control</li>
-							</ul>
-						</div>
-				</section>
+    <div class="fragment">
+    <p>Try the one that sounds most useful:</p>
+    <ul>
+    <li>Jupyter: notes and code development</li>
+    <li>TeXstudio: LaTeX editing</li>
+    <li>Atom: text editing</li>
+    <li>Git: version control</li>
+    </ul>
+    </div>
+    </section>
 
-			</div>
-		</div>
+    </div>
+    </div>
 
-		<script src="../lib/js/head.min.js"></script>
-		<script src="../js/reveal.js"></script>
+    <script src="http://lab.hakim.se/reveal-js/lib/js/head.min.js"></script>
+    <script src="http://lab.hakim.se/reveal-js/js/reveal.js"></script>
 
-		<script>
+    <script>
 
-			// Full list of configuration options available at:
-			// https://github.com/hakimel/reveal.js#configuration
-			Reveal.initialize({
-				controls: false,
-				slideNumber: true,
-				progress: true,
-				history: true,
-				center: false,
+    // Full list of configuration options available at:
+    // https://github.com/hakimel/reveal.js#configuration
+    Reveal.initialize({
+    controls: false,
+    slideNumber: true,
+    progress: true,
+    history: true,
+    center: false,
 
-				transition: 'slide', // none/fade/slide/convex/concave/zoom
+    transition: 'slide', // none/fade/slide/convex/concave/zoom
 
-				// Optional reveal.js plugins
-				dependencies: [
-					{ src: '../lib/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: '../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: '../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-					//{ src: '../plugin/zoom-js/zoom.js', async: true },
-					//{ src: '../plugin/notes/notes.js', async: true }
-				]
-			});
+    // Optional reveal.js plugins
+    dependencies: [
+    { src: '../lib/js/classList.js', condition: function() { return !document.body.classList; } },
+    { src: '../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+    { src: '../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+    { src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+    //{ src: '../plugin/zoom-js/zoom.js', async: true },
+    //{ src: '../plugin/notes/notes.js', async: true }
+    ]
+    });
 
-		</script>
+    </script>
 
-	</body>
+    </body>
 </html>
