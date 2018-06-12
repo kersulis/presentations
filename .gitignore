@@ -22,3 +22,4 @@ node_modules/
 .ipynb_checkpoints/
 /2018-06-01-arpa-e/reveal.js
 .tags*
+revealjs
