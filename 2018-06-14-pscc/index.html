@@ -1,0 +1,323 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <title>Topological Graph Metrics</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="./revealjs/css/reveal.css">
+  <style type="text/css">
+      code{white-space: pre-wrap;}
+      span.smallcaps{font-variant: small-caps;}
+      span.underline{text-decoration: underline;}
+      div.column{display: inline-block; vertical-align: top; width: 50%;}
+  </style>
+  <link rel="stylesheet" href="./revealjs/css/theme/pscc.css" id="theme">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? './revealjs/css/print/pdf.css' : './revealjs/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+  <!--[if lt IE 9]>
+  <script src="./revealjs/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+
+<section class="slide level1">
+
+<h1>
+Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms
+</h1>
+<p><em>Power system reliability and security session, PSCC session 27</em></p>
+<p><em>June 14, 2018</em></p>
+<div class="columns authortable">
+<div class="column" style="width:38%;">
+<h3 id="jonas-a.-kersulis-ian-a.-hiskens">Jonas A. Kersulis, Ian A. Hiskens</h3>
+<h4 id="electrical-engineering-and-computer-science">Electrical Engineering and Computer Science</h4>
+<h4 id="university-of-michigan">University of Michigan</h4>
+<p>Ann Arbor, MI, USA</p>
+</div><div class="column" style="width:28%;">
+<h3 id="carleton-coffrin">Carleton Coffrin</h3>
+<h4 id="advanced-network-science-initiative">Advanced Network Science Initiative</h4>
+<h4 id="los-alamos-national-laboratory">Los Alamos National Laboratory</h4>
+<p>Los Alamos, NM, USA</p>
+</div><div class="column" style="width:28%;">
+<h3 id="daniel-k.-molzahn">Daniel K. Molzahn</h3>
+<h4 id="energy-systems-division">Energy Systems Division</h4>
+<h4 id="argonne-national-laboratory">Argonne National Laboratory</h4>
+<p>Argonne, IL, USA</p>
+</div>
+</div>
+<h5 id="work-supported-by-us-arpa-e-grid-data-program">Work supported by US ARPA-E GRID DATA program</h5>
+</section>
+<section id="why-graph-structure" class="slide level1">
+<h1>Why graph structure?</h1>
+<ul>
+<li>Key reliability consideration</li>
+<li>Quickly detect unusual connectivity patterns</li>
+<li>Algorithm performance implications</li>
+</ul>
+</section>
+<section id="detecting-structural-anomalies" class="slide level1">
+<h1>Detecting structural anomalies</h1>
+<h3 id="ingredients">Ingredients</h3>
+<ul>
+<li>Many potential graph-theoretical metrics</li>
+<li>Context provided by broad network set</li>
+<li>Literature on known unusual topologies</li>
+</ul>
+<h3 id="results">Results</h3>
+<ul>
+<li>Systematic identification of anomalous structure</li>
+<li>Effective set of topological graph metrics; intuitive warnings</li>
+<li>SDP OPF solver performance implications</li>
+</ul>
+</section>
+<section id="networks" class="slide level1">
+<h1>Networks</h1>
+<figure>
+<img data-src="images/size-classes.svg" alt="41 networks spanning a broad size range, and divided into four categories by horizontal lines." style="width:80.0%" /><figcaption>41 networks spanning a broad size range, and divided into four categories by horizontal lines.</figcaption>
+</figure>
+<ul>
+<li>33 community test cases from NESTA <span class="citation" data-cites="coffrin2014">[1]</span></li>
+<li>5 PEGASE variants <span class="citation" data-cites="josz2016">[2]</span></li>
+<li>4 RTE networks from recent partnership</li>
+<li>4 synthetic test cases from Overbye group <span class="citation" data-cites="birchfield2016">[3]</span></li>
+</ul>
+</section>
+<section id="metrics" class="slide level1">
+<h1>Metrics</h1>
+<h2 id="maximum-node-degree">Maximum node degree</h2>
+<figure>
+<img data-src="images/size-vs-max-degree.svg" alt="The size trend should not be extrapolated for arbitrarily large networks." style="width:80.0%" /><figcaption>The size trend should not be extrapolated for arbitrarily large networks.</figcaption>
+</figure>
+<ul>
+<li>High max degree of large PEGASE cases has been pointed out <span class="citation" data-cites="cuffe2016">[4]</span></li>
+<li>case89 max degree is unusual for its size</li>
+</ul>
+</section>
+<section class="slide level1">
+
+<h2 id="degree-assortativity">Degree assortativity</h2>
+<div class="columns">
+<div class="column" style="width:40%;">
+<ul>
+<li>Extent to which nodes of like degree connect to each other</li>
+<li>Coefficient <span class="math inline">\(r\in (-1, 1)\)</span></li>
+</ul>
+</div><div class="column" style="width:30%;">
+<p><img data-src="images/assortativity-case9-case6.svg" style="width:80.0%" /></p>
+</div>
+</div>
+<figure>
+<img data-src="images/degree-assortativity-vs-size.svg" alt="Power grids tend to be disassortative." /><figcaption>Power grids tend to be disassortative.</figcaption>
+</figure>
+<p>Just 3 networks with <span class="math inline">\(|r|&gt;0.5\)</span> (2 PEGASE + trivial example)</p>
+</section>
+<section class="slide level1">
+
+<h2 id="rich-club-effect">Rich-club effect</h2>
+<ul>
+<li>If a graph has 90% of all possible edges between nodes of degree 10 or greater, the rich club coefficient for <span class="math inline">\(k=10\)</span> is 0.9.</li>
+<li>Detects “hub of hubs” suggested by high <span class="math inline">\(r\)</span>.</li>
+</ul>
+<p>All rich clubs with more than 80% of potential edges and at least 3 nodes:</p>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th>Nodes involved</th>
+<th>Degree</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>case9241 pegase</td>
+<td>28</td>
+<td>&gt;25</td>
+</tr>
+<tr class="even">
+<td>case13659 pegase</td>
+<td>19</td>
+<td>&gt;29</td>
+</tr>
+<tr class="odd">
+<td>case89 pegase</td>
+<td>11</td>
+<td>&gt;11</td>
+</tr>
+<tr class="even">
+<td>case2869 pegase</td>
+<td>5</td>
+<td>&gt;13</td>
+</tr>
+<tr class="odd">
+<td>case3 lmbd</td>
+<td>3</td>
+<td>&gt;0</td>
+</tr>
+</tbody>
+</table>
+<p>Four PEGASE cases and one trivial case</p>
+</section>
+<section class="slide level1">
+
+<h2 id="maximum-clique-size">Maximum clique size</h2>
+<figure>
+<img data-src="images/max_clique_vs_size.svg" alt="The vast majority of maximal cliques contain just two nodes, with the maximum clique having three." /><figcaption>The vast majority of maximal cliques contain just two nodes, with the maximum clique having three.</figcaption>
+</figure>
+<p>All four outliers are PEGASE cases.</p>
+</section>
+<section class="slide level1">
+
+<h2 id="adjacency-matrix-spectral-radius">Adjacency matrix spectral radius</h2>
+<figure>
+<img data-src="images/adj-spectral-radius-vs-size.svg" alt="A more computationally expensive way to expose anomalous structure." /><figcaption>A more computationally expensive way to expose anomalous structure.</figcaption>
+</figure>
+<p>Again, reasonable spread with PEGASE outliers</p>
+</section>
+<section class="slide level1">
+
+<h2 id="summary">Summary</h2>
+<ul>
+<li>Corroboration, contextualization of grid quirks; reference dataset</li>
+<li>Computationally efficient set of graph metrics</li>
+<li>Tool that analyzes networks and generates messages</li>
+</ul>
+</section>
+<section id="improving-sdp-opf-performance" class="slide level1">
+<h1>Improving SDP OPF performance</h1>
+<ul>
+<li>OPF relaxation: replace power flow constraints with semidefinite constraint</li>
+<li>Promising despite computational intensity <span class="citation" data-cites="lesieutre2011">[5]</span></li>
+<li>Use matrix completion theorem <span class="citation" data-cites="jabr2012">[6]</span> to replace big constraint with one small constraint per maximal clique</li>
+<li>Then merge those cliques together to eliminate overlap <span class="citation" data-cites="molzahn2013">[7]</span></li>
+</ul>
+<p>Tradeoff: many linking constraints vs large constraint matrices</p>
+<p><em>What is the optimal decomposition?</em></p>
+</section>
+<section class="slide level1">
+
+<h2 id="clique-merge-game">Clique merge game</h2>
+<ol type="1">
+<li>Form a chordal graph extension</li>
+<li>Identify maximal cliques (linear-time algorithm)</li>
+<li>Merge cliques according to overlap (eliminate linking constraints)</li>
+<li>Stop merging cliques before submatrix size grows too large</li>
+</ol>
+</section>
+<section class="slide level1">
+
+<h2 id="what-clique-merge-looks-like">What clique merge looks like</h2>
+<figure>
+<img data-src="images/clique-merge.png" alt="One would think" style="width:80.0%" /><figcaption>One would think</figcaption>
+</figure>
+</section>
+<section class="slide level1">
+
+<p>Largest submatrix size is bottleneck</p>
+<p><img data-src="images/ieee-300-merge.svg" /></p>
+</section>
+<section class="slide level1">
+
+<p><img data-src="images/merge-fractions.svg" /></p>
+</section>
+<section id="main-takeaways" class="slide level1">
+<h1>Main takeaways</h1>
+<ol type="1">
+<li>Topological graph metrics are powerful in the right setting
+<ul>
+<li>Context highlights network reduction in PEGASE networks</li>
+</ul></li>
+<li>Clique composition tied to SDP OPF solver performance
+<ul>
+<li>Worth exploring further</li>
+</ul></li>
+</ol>
+</section>
+<section id="references" class="slide level1 unnumbered">
+<h1>References</h1>
+<div id="refs" class="references">
+<div id="ref-coffrin2014">
+<p>[1] C. Coffrin, D. Gordon, and P. Scott, “NESTA, The NICTA Energy System Test Case Archive,” <em>arXiv:1411.0359 [cs]</em>, Nov. 2014.</p>
+</div>
+<div id="ref-josz2016">
+<p>[2] C. Josz, S. Fliscounakis, J. Maeght, and P. Panciatici, “AC Power Flow Data in MATPOWER and QCQP Format: iTesla, RTE Snapshots, and PEGASE,” <em>arXiv:1603.01533 [math]</em>, Mar. 2016.</p>
+</div>
+<div id="ref-birchfield2016">
+<p>[3] A. B. Birchfield, T. Xu, K. M. Gegner, K. S. Shetye, and T. J. Overbye, “Grid Structural Characteristics as Validation Criteria for Synthetic Networks,” <em>IEEE Trans. Power Syst.</em>, vol. PP, no. 99, pp. 1–1, 2016.</p>
+</div>
+<div id="ref-cuffe2016">
+<p>[4] P. Cuffe, “Assortativity Anomalies in a Large Test System,” <em>IEEE Trans. Power Syst.</em>, vol. 31, no. 5, pp. 4169–4170, Sep. 2016.</p>
+</div>
+<div id="ref-lesieutre2011">
+<p>[5] B. C. Lesieutre, D. K. Molzahn, A. R. Borden, and C. L. DeMarco, “Examining the limits of the application of semidefinite programming to power flow problems,” in <em>2011 49th Annual Allerton Conference on Communication, Control, and Computing (Allerton)</em>, 2011, pp. 1492–1499.</p>
+</div>
+<div id="ref-jabr2012">
+<p>[6] R. A. Jabr, “Exploiting Sparsity in SDP Relaxations of the OPF Problem,” <em>IEEE Transactions on Power Systems</em>, vol. 27, no. 2, pp. 1138–1139, May 2012.</p>
+</div>
+<div id="ref-molzahn2013">
+<p>[7] D. K. Molzahn, J. T. Holzer, B. C. Lesieutre, and C. L. DeMarco, “Implementation of a Large-Scale Optimal Power Flow Solver Based on Semidefinite Programming,” <em>IEEE Transactions on Power Systems</em>, vol. 28, no. 4, pp. 3987–3998, Nov. 2013.</p>
+</div>
+<div id="ref-cotilla-sanchez2012">
+<p>[8] E. Cotilla-Sanchez, P. D. H. Hines, C. Barrows, and S. Blumsack, “Comparing the Topological and Electrical Structure of the North American Electric Power Infrastructure,” <em>IEEE Systems Journal</em>, vol. 6, no. 4, pp. 616–626, Dec. 2012.</p>
+</div>
+<div id="ref-pagani2013">
+<p>[9] G. A. Pagani and M. Aiello, “The Power Grid  as a complex network: A survey,” <em>Physica A: Statistical Mechanics and its Applications</em>, vol. 392, no. 11, pp. 2688–2700, Jun. 2013.</p>
+</div>
+</div>
+</section>
+    </div>
+  </div>
+
+  <script src="./revealjs/lib/js/head.min.js"></script>
+  <script src="./revealjs/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: false,
+        // Display the page number of the current slide
+        slideNumber: true,
+        // Push each slide change to the browser history
+        history: true,
+        math: {
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          tex2jax: {
+            inlineMath: [['\\(','\\)']],
+            displayMath: [['\\[','\\]']],
+            balanceBraces: true,
+            processEscapes: false,
+            processRefs: true,
+            processEnvironments: true,
+            preview: 'TeX',
+            skipTags: ['script','noscript','style','textarea','pre','code'],
+            ignoreClass: 'tex2jax_ignore',
+            processClass: 'tex2jax_process'
+          },
+        },
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: './revealjs/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: './revealjs/plugin/zoom-js/zoom.js', async: true },
+          { src: './revealjs/plugin/math/math.js', async: true },
+          { src: './revealjs/plugin/notes/notes.js', async: true }
+        ]
+      });
+    </script>
+    </body>
+</html>
