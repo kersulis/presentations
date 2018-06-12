@@ -58,7 +58,7 @@ Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms
 <p>Argonne, IL, USA</p>
 </div>
 </div>
-<h5 id="work-supported-by-us-arpa-e-grid-data-program">Work supported by US ARPA-E GRID DATA program</h5>
+<p>Work supported by US ARPA-E GRID DATA program</p>
 </section>
 <section id="why-graph-structure" class="slide level1">
 <h1>Why graph structure?</h1>
@@ -97,6 +97,30 @@ Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms
 </section>
 <section id="metrics" class="slide level1">
 <h1>Metrics</h1>
+<ul>
+<li>Degree distribution
+<ul>
+<li><strong>Max</strong>, median, mean</li>
+</ul></li>
+<li><strong>Degree assortativity</strong></li>
+<li><strong>Rich-club coefficient</strong></li>
+<li>Clique composition
+<ul>
+<li><strong>Maximum clique size</strong></li>
+</ul></li>
+<li><strong>Adjacency matrix spectral radius</strong></li>
+<li>Fiedler value</li>
+<li>Sensitivity matrix analysis
+<ul>
+<li>Admittance matrix</li>
+<li>Injection shift factors</li>
+</ul></li>
+<li>Thevenin impedance distances</li>
+</ul>
+<p><em>Reduce to set of fast, intuitive checks</em></p>
+</section>
+<section class="slide level1">
+
 <h2 id="maximum-node-degree">Maximum node degree</h2>
 <figure>
 <img data-src="images/size-vs-max-degree.svg" alt="The size trend should not be extrapolated for arbitrarily large networks." style="width:80.0%" /><figcaption>The size trend should not be extrapolated for arbitrarily large networks.</figcaption>
@@ -113,7 +137,7 @@ Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms
 <div class="column" style="width:40%;">
 <ul>
 <li>Extent to which nodes of like degree connect to each other</li>
-<li>Coefficient <span class="math inline">\(r\in (-1, 1)\)</span></li>
+<li>Coefficient <span class="math inline"><em>r</em> ∈ ( − 1, 1)</span></li>
 </ul>
 </div><div class="column" style="width:30%;">
 <p><img data-src="images/assortativity-case9-case6.svg" style="width:80.0%" /></p>
@@ -122,15 +146,17 @@ Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms
 <figure>
 <img data-src="images/degree-assortativity-vs-size.svg" alt="Power grids tend to be disassortative." /><figcaption>Power grids tend to be disassortative.</figcaption>
 </figure>
-<p>Just 3 networks with <span class="math inline">\(|r|&gt;0.5\)</span> (2 PEGASE + trivial example)</p>
+<p>Just 3 networks with <span class="math inline">|<em>r</em>| &gt; 0.5</span> (2 PEGASE + trivial example)</p>
 </section>
 <section class="slide level1">
 
 <h2 id="rich-club-effect">Rich-club effect</h2>
+<div class="column" style="width:75%;">
 <ul>
-<li>If a graph has 90% of all possible edges between nodes of degree 10 or greater, the rich club coefficient for <span class="math inline">\(k=10\)</span> is 0.9.</li>
-<li>Detects “hub of hubs” suggested by high <span class="math inline">\(r\)</span>.</li>
+<li>If a graph has 90% of all possible edges between nodes of degree 10 or greater, the rich club coefficient for <span class="math inline"><em>k</em> = 10</span> is 0.9.</li>
+<li>Detects “hub of hubs” suggested by high <span class="math inline"><em>r</em></span>.</li>
 </ul>
+</div>
 <p>All rich clubs with more than 80% of potential edges and at least 3 nodes:</p>
 <table>
 <thead>
@@ -191,7 +217,7 @@ Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms
 <h2 id="summary">Summary</h2>
 <ul>
 <li>Corroboration, contextualization of grid quirks; reference dataset</li>
-<li>Computationally efficient set of graph metrics</li>
+<li>Computationally efficient, intuitive graph metrics</li>
 <li>Tool that analyzes networks and generates messages</li>
 </ul>
 </section>
@@ -201,14 +227,14 @@ Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms
 <li>OPF relaxation: replace power flow constraints with semidefinite constraint</li>
 <li>Promising despite computational intensity <span class="citation" data-cites="lesieutre2011">[5]</span></li>
 <li>Use matrix completion theorem <span class="citation" data-cites="jabr2012">[6]</span> to replace big constraint with one small constraint per maximal clique</li>
-<li>Then merge those cliques together to eliminate overlap <span class="citation" data-cites="molzahn2013">[7]</span></li>
+<li>Greedily merge some cliques together to eliminate overlap <span class="citation" data-cites="molzahn2013">[7]</span></li>
 </ul>
 <p>Tradeoff: many linking constraints vs large constraint matrices</p>
 <p><em>What is the optimal decomposition?</em></p>
 </section>
 <section class="slide level1">
 
-<h2 id="clique-merge-game">Clique merge game</h2>
+<h2 id="clique-merge">Clique merge</h2>
 <ol type="1">
 <li>Form a chordal graph extension</li>
 <li>Identify maximal cliques (linear-time algorithm)</li>
@@ -220,29 +246,26 @@ Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms
 
 <h2 id="what-clique-merge-looks-like">What clique merge looks like</h2>
 <figure>
-<img data-src="images/clique-merge.png" alt="One would think" style="width:80.0%" /><figcaption>One would think</figcaption>
+<img data-src="images/clique-merge.png" alt="Minimize the effective number of variables by stopping at the white rectangle." style="width:80.0%" /><figcaption>Minimize the effective number of variables by stopping at the white rectangle.</figcaption>
 </figure>
 </section>
 <section class="slide level1">
 
-<p>Largest submatrix size is bottleneck</p>
+<h2 id="potential-for-improvement">Potential for improvement</h2>
 <p><img data-src="images/ieee-300-merge.svg" /></p>
-</section>
-<section class="slide level1">
-
-<p><img data-src="images/merge-fractions.svg" /></p>
+<ul>
+<li>Effective problem size is minimized <em>before</em> solution time</li>
+<li>Solution time is minimized roughly when the last clique is merged into another group</li>
+</ul>
 </section>
 <section id="main-takeaways" class="slide level1">
 <h1>Main takeaways</h1>
 <ol type="1">
-<li>Topological graph metrics are powerful in the right setting
+<li>Topological graph metrics are powerful in the right settings
 <ul>
 <li>Context highlights network reduction in PEGASE networks</li>
 </ul></li>
-<li>Clique composition tied to SDP OPF solver performance
-<ul>
-<li>Worth exploring further</li>
-</ul></li>
+<li>Clique composition tied to SDP OPF solver performance</li>
 </ol>
 </section>
 <section id="references" class="slide level1 unnumbered">
@@ -294,28 +317,11 @@ Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms
         slideNumber: true,
         // Push each slide change to the browser history
         history: true,
-        math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
-          config: 'TeX-AMS_HTML-full',
-          tex2jax: {
-            inlineMath: [['\\(','\\)']],
-            displayMath: [['\\[','\\]']],
-            balanceBraces: true,
-            processEscapes: false,
-            processRefs: true,
-            processEnvironments: true,
-            preview: 'TeX',
-            skipTags: ['script','noscript','style','textarea','pre','code'],
-            ignoreClass: 'tex2jax_ignore',
-            processClass: 'tex2jax_process'
-          },
-        },
 
         // Optional reveal.js plugins
         dependencies: [
           { src: 'http://lab.hakim.se/reveal-js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
           { src: 'http://lab.hakim.se/reveal-js/plugin/zoom-js/zoom.js', async: true },
-          { src: 'http://lab.hakim.se/reveal-js/plugin/math/math.js', async: true },
           { src: 'http://lab.hakim.se/reveal-js/plugin/notes/notes.js', async: true }
         ]
       });

@@ -44,7 +44,7 @@ Argonne, IL, USA
 :::
 :::::::::::
 
-##### Work supported by US ARPA-E GRID DATA program
+Work supported by US ARPA-E GRID DATA program
 
 # Why graph structure?
 
@@ -77,6 +77,23 @@ Argonne, IL, USA
 
 # Metrics
 
+- Degree distribution
+    - **Max**, median, mean
+- **Degree assortativity**
+- **Rich-club coefficient**
+- Clique composition
+    - **Maximum clique size**
+- **Adjacency matrix spectral radius**
+- Fiedler value
+- Sensitivity matrix analysis
+    - Admittance matrix
+    - Injection shift factors
+- Thevenin impedance distances
+
+_Reduce to set of fast, intuitive checks_
+
+---
+
 ## Maximum node degree
 
 ![The size trend should not be extrapolated for arbitrarily large networks.](images/size-vs-max-degree.svg){ width="80%" }
@@ -106,8 +123,10 @@ Just 3 networks with $|r|>0.5$ (2 PEGASE + trivial example)
 
 ## Rich-club effect
 
+::: {.column width="75%"}
 - If a graph has 90% of all possible edges between nodes of degree 10 or greater, the rich club coefficient for $k=10$ is 0.9.
 - Detects "hub of hubs" suggested by high $r$.
+:::
 
 All rich clubs with more than 80% of potential edges and at least 3 nodes:
 
@@ -142,7 +161,7 @@ Again, reasonable spread with PEGASE outliers
 ## Summary
 
 - Corroboration, contextualization of grid quirks; reference dataset
-- Computationally efficient set of graph metrics
+- Computationally efficient, intuitive graph metrics
 - Tool that analyzes networks and generates messages
 
 # Improving SDP OPF performance
@@ -150,7 +169,7 @@ Again, reasonable spread with PEGASE outliers
 - OPF relaxation: replace power flow constraints with semidefinite constraint
 - Promising despite computational intensity [@lesieutre2011]
 - Use matrix completion theorem [@jabr2012] to replace big constraint with one small constraint per maximal clique
-- Then merge those cliques together to eliminate overlap [@molzahn2013]
+- Greedily merge some cliques together to eliminate overlap [@molzahn2013]
 
 Tradeoff: many linking constraints vs large constraint matrices
 
@@ -158,7 +177,7 @@ _What is the optimal decomposition?_
 
 ---
 
-## Clique merge game
+## Clique merge
 
 1. Form a chordal graph extension
 2. Identify maximal cliques (linear-time algorithm)
@@ -169,25 +188,23 @@ _What is the optimal decomposition?_
 
 ## What clique merge looks like
 
-![One would think ](images/clique-merge.png){width="80%"}
+![Minimize the effective number of variables by stopping at the white rectangle.](images/clique-merge.png){width="80%"}
 
 ---
 
-Largest submatrix size is bottleneck
+## Potential for improvement
 
 ![](images/ieee-300-merge.svg)
 
----
-
-![](images/merge-fractions.svg)
+- Effective problem size is minimized _before_ solution time
+- Solution time is minimized roughly when the last clique is merged into another group
 
 ---
 
 # Main takeaways
 
-1. Topological graph metrics are powerful in the right setting
+1. Topological graph metrics are powerful in the right settings
     - Context highlights network reduction in PEGASE networks
 2. Clique composition tied to SDP OPF solver performance
-    - Worth exploring further
 
 # References
