@@ -67,7 +67,10 @@ html, body {
   overflow-y: auto;
 }
 .reveal {
-  font-size: 160%;
+  font-size: 140%;
+}
+div.text_cell_render {
+    padding: 0;
 }
 .reveal pre {
   width: inherit;
@@ -81,8 +84,12 @@ html, body {
   padding: 0px;
 }
 .reveal section img {
+  margin: 0;
   border: 0px solid black;
   box-shadow: 0 0 10px rgba(0, 0, 0, 0);
+}
+.reveal p {
+  margin: 10px 0;
 }
 .reveal i {
   font-style: normal;
