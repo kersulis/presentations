@@ -2,6 +2,9 @@
 pagetitle: Topological Graph Metrics
 nocite: |
   @cuffe2016, @cotilla-sanchez2012, @pagani2013
+revealjs-url: http://lab.hakim.se/reveal-js
+controls: 'false'
+slideNumber: 'true'
 ---
 
 <h1>Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms</h1>
