@@ -10,19 +10,19 @@
 
 <title>EECS 498 Lecture</title>
 
-<script src="../lib/js/head.min.js"></script>
-<script src="../js/reveal.min.js"></script>
+<script src="http://lab.hakim.se/reveal-js/lib/js/head.min.js"></script>
+<script src="http://lab.hakim.se/reveal-js/js/reveal.js"></script>
 
 <!-- General and theme style sheets -->
-<link rel="stylesheet" href="../css/reveal.css">
-<link rel="stylesheet" href="../css/theme/white.css" id="theme">
+<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/reveal.css">
+<link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/theme/white.css" id="theme">
 
 <!-- Printing and PDF exports -->
 <script>
   var link = document.createElement( 'link' );
   link.rel = 'stylesheet';
   link.type = 'text/css';
-  link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+  link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : 'http://lab.hakim.se/reveal-js/css/print/paper.css';
   document.getElementsByTagName( 'head' )[0].appendChild( link );
 </script>
 
@@ -889,15 +889,16 @@
       transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/none
 
       math: {
-          mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
           config: 'TeX-AMS_HTML-full'
       },
 
       // Optional libraries used to extend on reveal.js
       dependencies: [
-      { src: "script/reveal.js/lib/js/classList.js", condition: function() { return !document.body.classList; } },
-      { src: '../plugin/math/math.js', async: true },
-      { src: "script/reveal.js/plugin/notes/notes.js", async: true, condition: function() { return !!document.body.classList; } }
+          { src: 'http://lab.hakim.se/reveal-js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'http://lab.hakim.se/reveal-js/plugin/math/math.js', async: true },
+          { src: 'http://lab.hakim.se/reveal-js/plugin/zoom-js/zoom.js', async: true },
+          { src: 'http://lab.hakim.se/reveal-js/plugin/notes/notes.js', async: true }
       ]
       });
     </script>
