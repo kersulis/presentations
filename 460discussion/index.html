@@ -14,18 +14,25 @@
 
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
-    <link rel="stylesheet" href="../css/reveal.css">
-    <link rel="stylesheet" href="../css/theme/white.css" id="theme">
-
+    <!-- <link rel="stylesheet" href="../css/reveal.css">
+    <link rel="stylesheet" href="../css/theme/white.css" id="theme"> -->
+      <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/reveal.css">
+      <style type="text/css">
+          code{white-space: pre-wrap;}
+          span.smallcaps{font-variant: small-caps;}
+          span.underline{text-decoration: underline;}
+          div.column{display: inline-block; vertical-align: top; width: 50%;}
+      </style>
+      <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/theme/white.css" id="theme">
+      <link rel="stylesheet" href="custom.css">
     <!-- Code syntax highlighting -->
-    <link rel="stylesheet" href="../lib/css/zenburn.css">
 
     <!-- Printing and PDF exports -->
     <script>
       var link = document.createElement( 'link' );
       link.rel = 'stylesheet';
       link.type = 'text/css';
-      link.href = window.location.search.match( /print-pdf/gi ) ? '../css/print/pdf.css' : '../css/print/paper.css';
+      link.href = window.location.search.match( /print-pdf/gi ) ? 'http://lab.hakim.se/reveal-js/css/print/pdf.css' : 'http://lab.hakim.se/reveal-js/css/print/paper.css';
       document.getElementsByTagName( 'head' )[0].appendChild( link );
     </script>
   </head>
@@ -234,11 +241,11 @@ $$
           <section>
             <h2>Problem 1</h2>
               <p>Find the transfer function $\frac{E(s)}{U(s)}$.</p>
-                    <img src="images/d3/p1.png" width=800px" style="border:none">
+                    <img src="images/d3/p1.png" width="800px" style="border:none">
           </section>
           <section>
             <h2>Problem 2</h2>
-            <h3>Part A</h3> 
+            <h3>Part A</h3>
             <p>Use block diagram reduction to find the transfer function $\frac{Y(s)}{U(s)}$.</p>
             <img src="images/d3/p2.png" width=800px style="border:none">
           </section>
@@ -300,7 +307,7 @@ i(t) &= 2e^{0.1V_R(t)}.
           <section>
              <h2>Part C</h3>
              <img src="images/d4p1e.png" width=500px, style="border:none">
-              where $G_2(s) = \frac{7K}{2s+1}$ (answer should be in terms of $K$).
+              <p>where $G_2(s) = \frac{7K}{2s+1}$ (answer should be in terms of $K$).</p>
           </section>
 
           <section>
@@ -1067,8 +1074,9 @@ $$ G_c(s) = \frac{1+aTs}{1+Ts},\quad a > 1 $$
       </div>
     </div>
 
-    <script src="../lib/js/head.min.js"></script>
-    <script src="../js/reveal.js"></script>
+  <script src="http://lab.hakim.se/reveal-js/lib/js/head.min.js"></script>
+  <script src="http://lab.hakim.se/reveal-js/js/reveal.js"></script>
+
 
     <script>
 
@@ -1084,19 +1092,16 @@ $$ G_c(s) = \frac{1+aTs}{1+Ts},\quad a > 1 $$
         transition: 'slide', // none/fade/slide/convex/concave/zoom
 
         math: {
-          mathjax: 'https://cdn.mathjax.org/mathjax/latest/MathJax.js',
+          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
           config: 'TeX-AMS_HTML-full'
         },
 
         // Optional reveal.js plugins
         dependencies: [
-          { src: '../lib/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: '../plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: '../plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-          { src: '../plugin/math/math.js', async: true },
-          { src: '../plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-          //{ src: '../plugin/zoom-js/zoom.js', async: true },
-          //{ src: '../plugin/notes/notes.js', async: true }
+          { src: 'http://lab.hakim.se/reveal-js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'http://lab.hakim.se/reveal-js/plugin/math/math.js', async: true },
+          { src: 'http://lab.hakim.se/reveal-js/plugin/zoom-js/zoom.js', async: true },
+          { src: 'http://lab.hakim.se/reveal-js/plugin/notes/notes.js', async: true }
         ]
       });
 
