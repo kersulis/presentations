@@ -23,4 +23,13 @@ node_modules/
 /2018-06-01-arpa-e/reveal.js
 .tags*
 revealjs
+reveal-js
 MathJax
+images-png
+*.pptx
+*.ppt
+*.tex
+*.out
+*.snm
+*.nav
+*.toc
