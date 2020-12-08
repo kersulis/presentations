@@ -21,7 +21,7 @@
     var link = document.createElement( 'link' );
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = window.location.search.match( /print-pdf/gi ) ? '../reveal/css/pdf.css' : '../reveal/css/paper.css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? '../reveal/css/print/pdf.css' : '../reveal/css/print/paper.css';
     document.getElementsByTagName( 'head' )[0].appendChild( link );
   </script>
 </head>
@@ -299,7 +299,7 @@ Topological Graph Metrics for Detecting Grid Anomalies and Improving Algorithms
     </div>
   </div>
 
-  <script src="../reveal/js/head.min.js"></script>
+  <script src="../reveal/lib/js/head.min.js"></script>
   <script src="../reveal/js/reveal.js"></script>
 
   <script>

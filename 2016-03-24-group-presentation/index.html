@@ -15,8 +15,8 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
 
     <!-- General and theme style sheets -->
-    <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/reveal.css">
-    <link rel="stylesheet" href="http://lab.hakim.se/reveal-js/css/theme/sky.css" id="theme">
+    <link rel="stylesheet" href="../reveal/css/reveal.css">
+    <link rel="stylesheet" href="../reveal/css/theme/sky.css" id="theme">
     <link rel="stylesheet" href="custom.css">
 
     <!-- Printing and PDF exports -->
@@ -24,7 +24,7 @@
     var link = document.createElement( 'link' );
     link.rel = 'stylesheet';
     link.type = 'text/css';
-    link.href = window.location.search.match( /print-pdf/gi ) ? 'http://lab.hakim.se/reveal-js/css/print/pdf.css' : 'http://lab.hakim.se/reveal-js/css/print/paper.css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? '../reveal/css/print/pdf.css' : '../reveal/css/print/paper.css';
     document.getElementsByTagName( 'head' )[0].appendChild( link );
     </script>
     </head>
@@ -437,8 +437,8 @@ src/
     </div>
     </div>
 
-    <script src="http://lab.hakim.se/reveal-js/lib/js/head.min.js"></script>
-    <script src="http://lab.hakim.se/reveal-js/js/reveal.js"></script>
+    <script src="../reveal/lib/js/head.min.js"></script>
+    <script src="../reveal/js/reveal.js"></script>
 
     <script>
 
@@ -455,10 +455,10 @@ src/
 
     // Optional reveal.js plugins
     dependencies: [
-    { src: 'http://lab.hakim.se/reveal-js/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-    { src: 'http://lab.hakim.se/reveal-js/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-    { src: 'http://lab.hakim.se/reveal-js/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-    { src: 'http://lab.hakim.se/reveal-js/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+    { src: '../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+    { src: '../reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+    { src: '../reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+    { src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
     //{ src: '../plugin/zoom-js/zoom.js', async: true },
     //{ src: '../plugin/notes/notes.js', async: true }
     ]

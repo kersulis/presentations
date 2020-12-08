@@ -2,7 +2,7 @@
 pagetitle: Topological Graph Metrics
 nocite: |
   @cuffe2016, @cotilla-sanchez2012, @pagani2013
-revealjs-url: http://lab.hakim.se/reveal-js
+revealjs-url: ../reveal
 controls: 'false'
 slideNumber: 'true'
 ---
