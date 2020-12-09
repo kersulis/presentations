@@ -2,33 +2,13 @@
 <html lang="en">
 
 	<head>
-		<meta name="theme-color" content="black">
 		<meta charset="utf-8">
 
 		<title>Presentations of Jonas Kersulis</title>
 
-		<meta name="description" content="Presentations of Jonas Kersulis">
-		<meta name="author" content="Jonas Kersulis">
-
-		<meta name="apple-mobile-web-app-capable" content="yes">
-		<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
-
-		<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
-
 		<link rel="stylesheet" href="reveal/css/reveal.css">
-		<link rel="stylesheet" href="reveal/css/black.css" id="theme">
+		<link rel="stylesheet" href="reveal/css/theme/night.css" id="theme">
 
-		<!-- Code syntax highlighting -->
-		<link rel="stylesheet" href="reveal/plugin/highlight/zenburn.css">
-
-		<!-- Printing and PDF exports -->
-		<script>
-			var link = document.createElement( 'link' );
-			link.rel = 'stylesheet';
-			link.type = 'text/css';
-			link.href = window.location.search.match( /print-pdf/gi ) ? 'reveal/css/print/pdf.css' : 'reveal/css/print/paper.css';
-			document.getElementsByTagName( 'head' )[0].appendChild( link );
-		</script>
 	</head>
 
 	<body>
@@ -36,55 +16,27 @@
 		<div class="reveal">
 
 			<div class="slides">
-				<section>
-					<section style="overflow-y:auto !important; overflow-x:hidden !important; height:700px;">
-						<h2>Presentations of Jonas Kersulis</h2>
-						<ul>
-						<li>
-							<h3><a href="498lecture">EECS 498 Lecture</a></h3>
-							<p><b>Topic: Integration of renewable energy</b></p>
-							<p>I filled in for Dr. Hiskens on Jan. 13. This presentation introduces AC power flow and the DC approximation, along with a few line rating methods. Next, I show how to identify small wind forecast deviations that bring a line flow or temperature to an unacceptable level.</p></li>
-							<li>
-								<h3><a href="460discussion">EECS 460 Weekly Discussions</a></h3>
-								<p><b>Topic: Intro to control systems</b></p>
-								<p>As a GSI for EECS 460, I worked with Dr. Ozay to introduce roughly 80 students to control systems. I used these slides to begin each week's discussion sessions.</p>
-							</li>
-					<li>
-						<h3><a href="2016-03-24-group-presentation">2016-03-24 Research Group Presentation</a></h3>
-						<p><b>Topic: research tools and project organization</b></p>
-						<p>What does Power and Energy research output look like? I don't spend time in a lab, so all my work lives in files on my computer. In this talk I describe how I organize my folders and files. I then introduce four free, stable, cross-platform tools I use all the time. My investment in each has paid off handsomely over the last couple years. If your work is a mixture of scientific computing and LaTeX editing, I recommend trying them all!</p>
-					</li>
-					</ul>
-					</section>
-				</section>
-			</div>
+
+                <!-- Use external markdown resource, separate slides by three newlines; vertical slides by two newlines -->
+                <section data-markdown="presentation_list.md" data-separator="^\n\n\n" data-separator-vertical="^\n\n"></section>
+
+            </div>
 		</div>
 
-		<script src="reveal/lib/js/head.min.js"></script>
 		<script src="reveal/js/reveal.js"></script>
+        <script src="reveal/plugin/markdown/markdown.js"></script>
+        <script src="reveal/plugin/highlight/highlight.js"></script>
+        <script src="reveal/plugin/notes/notes.js"></script>
 
 		<script>
 
-			// Full list of configuration options available at:
-			// https://github.com/hakimel/reveal.js#configuration
 			Reveal.initialize({
-				controls: false,
-				slideNumber: true,
+				controls: true,
 				progress: true,
 				history: true,
-				center: false,
+				center: true,
 
-				transition: 'slide', // none/fade/slide/convex/concave/zoom
-
-				// Optional reveal.js plugins
-				dependencies: [
-					{ src: 'reveal/js/classList.js', condition: function() { return !document.body.classList; } },
-					{ src: 'reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-					{ src: 'reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
-					//{ src: '../plugin/zoom-js/zoom.js', async: true },
-					//{ src: '../plugin/notes/notes.js', async: true }
-				]
+				plugins: [ RevealMarkdown, RevealHighlight, RevealNotes ]
 			});
 
 		</script>
