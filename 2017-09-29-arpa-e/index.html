@@ -1351,8 +1351,9 @@
     </div>
   </div>
 
-    <script src="../reveal/lib/js/head.min.js"></script>
-    <script src="../reveal/js/reveal.js"></script>
+  <script src="../reveal/lib/js/head.min.js"></script>
+  <script src="../reveal/js/reveal.js"></script>
+  <script src="../reveal/plugin/math/math.js"></script>
 
   <script>
 
@@ -1372,16 +1373,17 @@
       config: 'TeX-AMS_HTML-full'
     },
 
+    plugins: [ RevealMath ]
     // Optional reveal.js plugins
-    dependencies: [
-      { src: '../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-      { src: '../reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      { src: '../reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
-      { src: '../reveal/plugin/math/math.js', async: true },
-      { src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
+    // dependencies: [
+      // { src: '../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+      // { src: '../reveal/plugin/markdown/marked.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      // { src: '../reveal/plugin/markdown/markdown.js', condition: function() { return !!document.querySelector( '[data-markdown]' ); } },
+      // { src: '../reveal/plugin/math/math.js', async: true },
+      // { src: '../reveal/plugin/highlight/highlight.js', async: true, callback: function() { hljs.initHighlightingOnLoad(); } },
       //{ src: '../plugin/zoom-js/zoom.js', async: true },
       //{ src: '../plugin/notes/notes.js', async: true }
-    ]
+    // ]
   });
   </script>
 

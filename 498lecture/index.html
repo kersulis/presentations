@@ -875,6 +875,7 @@
     </section>
         </section>
 
+    <script src="../reveal/plugin/math/math.js"></script>
     <script>
       // Full list of configuration options available here: https://github.com/hakimel/reveal.js#configuration
       Reveal.initialize({
@@ -885,21 +886,27 @@
       // previewLinks: true,
       slideNumber: true,
 
-      theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
-      transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/none
+      // theme: Reveal.getQueryHash().theme, // available themes are in /css/theme
+      // transition: Reveal.getQueryHash().transition || 'linear', // default/cube/page/concave/zoom/linear/none
 
       math: {
-          mathjax: 'https://cdnjs.cloudflare.com/ajax/libs/mathjax/2.7.0/MathJax.js',
-          config: 'TeX-AMS_HTML-full'
+          // mathjax: 'https://cdn.jsdelivr.net/gh/mathjax/mathjax@2.7.8/MathJax.js',
+          config: 'TeX-AMS_HTML-full',
+          TeX: {
+            inlineMath: [['$', '$'], ['\\(', '\\)']],
+            displayMath: [['$$', '$$'], ['\\[', '\\]']],
+          },
       },
 
+      plugins: [ RevealMath ]
+
       // Optional libraries used to extend on reveal.js
-      dependencies: [
-          { src: '../reveal/js/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: '../reveal/plugin/math/math.js', async: true },
-          { src: '../reveal/plugin/zoom-js/zoom.js', async: true },
-          { src: '../reveal/plugin/notes/notes.js', async: true }
-      ]
+      // dependencies: [
+      //     { src: '../reveal/js/js/classList.js', condition: function() { return !document.body.classList; } },
+      //     { src: '../reveal/plugin/math/math.js', async: true },
+      //     { src: '../reveal/plugin/zoom/zoom.js', async: true },
+      //     { src: '../reveal/plugin/notes/notes.js', async: true }
+      // ]
       });
     </script>
 

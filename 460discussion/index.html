@@ -1073,7 +1073,7 @@ $$ G_c(s) = \frac{1+aTs}{1+Ts},\quad a > 1 $$
 
   <script src="../reveal/lib/js/head.min.js"></script>
   <script src="../reveal/js/reveal.js"></script>
-
+  <script src="../reveal/plugin/math/math.js"></script>
 
     <script>
 
@@ -1093,13 +1093,15 @@ $$ G_c(s) = \frac{1+aTs}{1+Ts},\quad a > 1 $$
           config: 'TeX-AMS_HTML-full'
         },
 
+        plugins: [ RevealMath ]
+
         // Optional reveal.js plugins
-        dependencies: [
-          { src: '../reveal/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: '../reveal/plugin/math/math.js', async: true },
-          { src: '../reveal/plugin/zoom/zoom.js', async: true },
-          { src: '../reveal/plugin/notes/notes.js', async: true }
-        ]
+        // dependencies: [
+        //   { src: '../reveal/js/classList.js', condition: function() { return !document.body.classList; } },
+        //   { src: '../reveal/plugin/math/math.js', async: true },
+        //   { src: '../reveal/plugin/zoom/zoom.js', async: true },
+        //   { src: '../reveal/plugin/notes/notes.js', async: true }
+        // ]
       });
 
     </script>

@@ -531,6 +531,7 @@
 
   <script src="../reveal/lib/js/head.min.js"></script>
   <script src="../reveal/js/reveal.js"></script>
+  <script src="../reveal/plugin/math/math.js"></script>
 
   <script>
 
@@ -560,13 +561,14 @@
           },
         },
 
+        plugins: [ RevealMath ]
         // Optional reveal.js plugins
-        dependencies: [
-          { src: '../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
-          { src: '../reveal/plugin/zoom-js/zoom.js', async: true },
-          { src: '../reveal/plugin/math/math.js', async: true },
-          { src: '../reveal/plugin/notes/notes.js', async: true }
-        ]
+        // dependencies: [
+        //   { src: '../reveal/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+        //   { src: '../reveal/plugin/zoom-js/zoom.js', async: true },
+        //   { src: '../reveal/plugin/math/math.js', async: true },
+        //   { src: '../reveal/plugin/notes/notes.js', async: true }
+        // ]
       });
     </script>
     </body>
